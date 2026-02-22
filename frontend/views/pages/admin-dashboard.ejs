@@ -1,0 +1,404 @@
+<%- include('../partials/header', { title: 'Admin Dashboard' }) %>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --forest-dark: #1a3c31; --forest-medium: #2d5a4a; --gold-accent: #c4a962;
+    --gold-light: #d4bc7c; --cream: #faf8f3; --slate-50: #f8fafc;
+    --slate-100: #f1f5f9; --slate-200: #e2e8f0; --slate-300: #cbd5e1;
+    --slate-600: #475569; --slate-700: #334155;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; background:var(--cream); color:var(--slate-700); line-height:1.6; -webkit-font-smoothing:antialiased; margin-top:4.5rem; }
+  .dashboard-container { max-width:1600px; margin:0 auto; padding:3rem 2rem; }
+  .page-title { font-family:'Playfair Display',serif; font-size:3rem; font-weight:700; color:var(--forest-dark); line-height:1.1; letter-spacing:-0.03em; }
+  .page-subtitle { color:var(--slate-600); font-size:1.05rem; margin-top:0.5rem; }
+  .header-accent { width:80px; height:4px; background:linear-gradient(90deg,var(--gold-accent),var(--gold-light)); border-radius:2px; margin-top:1.5rem; margin-bottom:3rem; }
+  .section-heading { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:700; color:var(--forest-dark); margin-bottom:0.3rem; }
+  .section-sub { color:var(--slate-600); font-size:0.95rem; margin-bottom:1.5rem; }
+  .section-divider { height:1px; background:var(--slate-200); margin:3rem 0; }
+
+  /* Metrics */
+  .metrics-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.5rem; margin-bottom:3rem; }
+  .metric-card { background:white; border:1px solid var(--slate-200); border-radius:14px; padding:1.75rem; transition:all 0.25s ease; position:relative; overflow:hidden; }
+  .metric-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--gold-accent),var(--gold-light)); transform:scaleX(0); transform-origin:left; transition:transform 0.3s ease; }
+  .metric-card:hover { border-color:var(--gold-accent); transform:translateY(-3px); box-shadow:0 12px 24px -10px rgba(26,60,49,0.15); }
+  .metric-card:hover::before { transform:scaleX(1); }
+  .metric-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; }
+  .metric-icon-wrapper { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; }
+  .metric-icon-blue { background:linear-gradient(135deg,#dbeafe,#bfdbfe); }
+  .metric-icon-purple { background:linear-gradient(135deg,#e9d5ff,#d8b4fe); }
+  .metric-icon-green { background:linear-gradient(135deg,#d1fae5,#a7f3d0); }
+  .metric-icon-amber { background:linear-gradient(135deg,#fef3c7,#fde68a); }
+  .metric-value { font-size:2.75rem; font-weight:700; color:var(--forest-dark); line-height:1; margin-bottom:0.5rem; }
+  .metric-label { color:var(--slate-600); font-size:0.95rem; font-weight:500; }
+
+  /* Table */
+  .data-table-wrapper { background:white; border:1px solid var(--slate-200); border-radius:14px; overflow:hidden; margin-bottom:0; }
+  .data-table { width:100%; border-collapse:collapse; }
+  .data-table thead { background:linear-gradient(180deg,var(--slate-50) 0%,white 100%); border-bottom:2px solid var(--slate-200); }
+  .data-table th { padding:1rem 1.25rem; text-align:left; font-weight:600; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--slate-600); white-space:nowrap; }
+  .data-table tbody tr { border-bottom:1px solid var(--slate-100); transition:background 0.15s ease; }
+  .data-table tbody tr:hover { background:var(--slate-50); }
+  .data-table tbody tr:last-child { border-bottom:none; }
+  .data-table td { padding:1rem 1.25rem; color:var(--slate-700); font-size:0.9rem; vertical-align:middle; }
+
+  /* Filters */
+  .filters-panel { background:white; border:1px solid var(--slate-200); border-radius:14px; padding:1.75rem; margin-bottom:2rem; }
+  .filters-header { display:flex; align-items:center; gap:10px; margin-bottom:1.5rem; color:var(--forest-dark); font-weight:600; font-size:1.05rem; }
+  .filters-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; }
+  .filter-input, .filter-select { padding:12px 16px; border:1.5px solid var(--slate-200); border-radius:10px; font-family:'Inter',sans-serif; font-size:0.95rem; color:var(--slate-700); transition:all 0.2s ease; background:white; width:100%; }
+  .filter-input:focus, .filter-select:focus { outline:none; border-color:var(--gold-accent); box-shadow:0 0 0 3px rgba(196,169,98,0.1); }
+  .filter-input::placeholder { color:var(--slate-300); }
+
+  /* Buttons */
+  .status-select { padding:8px 12px; border:1.5px solid var(--slate-200); border-radius:8px; font-size:0.875rem; font-weight:500; color:var(--slate-700); cursor:pointer; transition:all 0.2s ease; background:white; min-width:140px; }
+  .status-select:focus { border-color:var(--gold-accent); outline:none; }
+  .btn-delete { padding:7px 13px; border-radius:8px; border:1.5px solid #fee2e2; background:#fff5f5; color:#dc2626; font-size:0.8rem; font-weight:600; cursor:pointer; transition:all 0.2s ease; font-family:'Inter',sans-serif; display:inline-flex; align-items:center; gap:5px; }
+  .btn-delete:hover { background:#dc2626; color:white; border-color:#dc2626; }
+  .btn-unsub { padding:6px 12px; border-radius:8px; border:1.5px solid #fde68a; background:#fffbeb; color:#92400e; font-size:0.78rem; font-weight:600; cursor:pointer; transition:all 0.2s ease; font-family:'Inter',sans-serif; }
+  .btn-unsub:hover { background:#f59e0b; color:white; border-color:#f59e0b; }
+
+  /* Badges */
+  .cat-badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:0.72rem; font-weight:700; text-transform:uppercase; background:linear-gradient(135deg,var(--forest-dark),var(--forest-medium)); color:white; }
+  .status-badge { display:inline-block; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:600; }
+  .status-active { background:#d1fae5; color:#065f46; }
+  .status-unsubscribed { background:#fee2e2; color:#991b1b; }
+  .topics-pill { display:inline-block; background:var(--slate-100); color:var(--slate-600); padding:2px 8px; border-radius:10px; font-size:0.73rem; margin:1px; }
+
+  /* Subscriber stats */
+  .sub-stats { display:flex; gap:1.5rem; flex-wrap:wrap; margin-bottom:1.5rem; }
+  .sub-stat { background:white; border:1px solid var(--slate-200); border-radius:12px; padding:1rem 1.5rem; text-align:center; min-width:100px; }
+  .sub-stat-value { font-size:1.8rem; font-weight:700; color:var(--forest-dark); }
+  .sub-stat-label { font-size:0.8rem; color:var(--slate-600); margin-top:2px; }
+
+  /* Insights cards */
+  .insights-mgmt-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1.5rem; }
+  .insight-mgmt-card { background:white; border:1px solid var(--slate-200); border-radius:14px; overflow:hidden; transition:all 0.25s ease; }
+  .insight-mgmt-card:hover { border-color:var(--gold-accent); box-shadow:0 8px 24px rgba(26,60,49,0.1); transform:translateY(-2px); }
+  .insight-card-img { height:150px; overflow:hidden; background:linear-gradient(135deg,var(--forest-dark),var(--forest-medium)); }
+  .insight-card-img img { width:100%; height:100%; object-fit:cover; }
+  .insight-card-img-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:3rem; opacity:0.3; }
+  .insight-card-body { padding:16px; }
+  .insight-card-title { font-weight:700; color:var(--forest-dark); font-size:0.92rem; line-height:1.4; margin:8px 0 12px; }
+  .insight-card-footer { display:flex; align-items:center; justify-content:space-between; padding-top:10px; border-top:1px solid var(--slate-100); }
+  .insight-card-date { font-size:0.76rem; color:#94a3b8; }
+
+  /* Loading/Empty */
+  .loading-display { text-align:center; padding:3rem 2rem; }
+  .loading-spinner { display:inline-block; width:40px; height:40px; border:4px solid var(--slate-200); border-top-color:var(--gold-accent); border-radius:50%; animation:spin 0.8s linear infinite; }
+  .loading-text { font-size:1rem; margin-top:1rem; color:var(--slate-600); }
+  .empty-display { text-align:center; padding:3rem 2rem; }
+  .empty-icon { font-size:3.5rem; margin-bottom:1rem; opacity:0.3; }
+  .empty-title { font-size:1.1rem; font-weight:600; color:var(--slate-700); }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  /* Toast */
+  .toast-message { position:fixed; bottom:2rem; right:2rem; padding:1rem 1.5rem; border-radius:10px; font-weight:500; font-size:0.95rem; box-shadow:0 10px 40px -10px rgba(0,0,0,0.3); z-index:9999; animation:slideUp 0.3s ease; display:flex; align-items:center; gap:10px; min-width:280px; }
+  .toast-success { background:#10b981; color:white; }
+  .toast-error { background:#ef4444; color:white; }
+  @keyframes slideUp { from { transform:translateY(100px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+
+  /* Admin nav */
+  .admin-topbar { background:white; border-bottom:1px solid var(--slate-200); padding:0.75rem 2rem; display:flex; justify-content:flex-end; align-items:center; gap:12px; position:sticky; top:4.5rem; z-index:50; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .nav-btn { padding:8px 16px; border-radius:10px; font-size:0.85rem; font-weight:500; text-decoration:none; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s ease; }
+  .nav-btn-secondary { background:var(--slate-100); color:var(--slate-700); }
+  .nav-btn-secondary:hover { background:var(--slate-200); }
+  .nav-btn-danger { background:#fef2f2; color:#dc2626; }
+  .nav-btn-danger:hover { background:#fee2e2; }
+
+  @media(max-width:768px) {
+    .dashboard-container { padding:2rem 1rem; }
+    .page-title { font-size:2rem; }
+    .metrics-grid { grid-template-columns:1fr; }
+    .filters-grid { grid-template-columns:1fr; }
+    .data-table-wrapper { overflow-x:auto; }
+    .insights-mgmt-grid { grid-template-columns:1fr; }
+    .toast-message { right:1rem; left:1rem; bottom:1rem; }
+  }
+</style>
+
+<div class="admin-topbar">
+  <a href="/admin" class="nav-btn nav-btn-secondary"><i class="fas fa-pen"></i> New Insight</a>
+  <button onclick="handleLogout()" class="nav-btn nav-btn-danger"><i class="fas fa-arrow-right-from-bracket"></i> Sign Out</button>
+</div>
+
+<div class="dashboard-container">
+
+  <h1 class="page-title">Admin Dashboard</h1>
+  <p class="page-subtitle">Leads, subscribers, and published insights — all in one place</p>
+  <div class="header-accent"></div>
+
+  <!-- LEAD METRICS -->
+  <div class="metrics-grid">
+    <div class="metric-card"><div class="metric-header"><div class="metric-icon-wrapper metric-icon-blue"><i class="fas fa-users"></i></div></div><div class="metric-value" id="totalLeads">0</div><div class="metric-label">Total Leads</div></div>
+    <div class="metric-card"><div class="metric-header"><div class="metric-icon-wrapper metric-icon-purple"><i class="fas fa-star"></i></div></div><div class="metric-value" id="newLeads">0</div><div class="metric-label">New Inquiries</div></div>
+    <div class="metric-card"><div class="metric-header"><div class="metric-icon-wrapper metric-icon-amber"><i class="fas fa-phone"></i></div></div><div class="metric-value" id="contactedLeads">0</div><div class="metric-label">In Contact</div></div>
+    <div class="metric-card"><div class="metric-header"><div class="metric-icon-wrapper metric-icon-green"><i class="fas fa-check-circle"></i></div></div><div class="metric-value" id="convertedLeads">0</div><div class="metric-label">Converted</div></div>
+  </div>
+  <div class="metrics-grid" style="margin-top:-1rem;margin-bottom:3rem;">
+    <div class="metric-card" style="border-left:3px solid #3b82f6;"><div class="metric-label" style="margin-bottom:0.5rem;">Avg. Desired Investment</div><div class="metric-value" style="font-size:2rem;color:#3b82f6;" id="avgInvestment">₹0</div></div>
+    <div class="metric-card" style="border-left:3px solid #8b5cf6;"><div class="metric-label" style="margin-bottom:0.5rem;">Has Existing SIP</div><div class="metric-value" style="font-size:2rem;color:#8b5cf6;" id="hasExistingSIP">0</div></div>
+    <div class="metric-card" style="border-left:3px solid #10b981;"><div class="metric-label" style="margin-bottom:0.5rem;">Potential Monthly AUM</div><div class="metric-value" style="font-size:2rem;color:#10b981;" id="potentialAUM">₹0</div></div>
+    <div class="metric-card" style="border-left:3px solid #f59e0b;"><div class="metric-label" style="margin-bottom:0.5rem;">Conversion Rate</div><div class="metric-value" style="font-size:2rem;color:#f59e0b;" id="conversionRate">0%</div></div>
+  </div>
+
+  <!-- LEADS TABLE -->
+  <h2 class="section-heading">Lead Management</h2>
+  <p class="section-sub">Monitor and track customer inquiries</p>
+  <div class="filters-panel">
+    <div class="filters-header"><i class="fas fa-sliders"></i><span>Filters</span></div>
+    <div class="filters-grid">
+      <input type="text" id="searchInput" class="filter-input" placeholder="Search by name or email...">
+      <select id="statusFilter" class="filter-select"><option value="">All Statuses</option><option value="new">New</option><option value="contacted">Contacted</option><option value="converted">Converted</option><option value="rejected">Rejected</option></select>
+      <select id="ageGroupFilter" class="filter-select"><option value="">All Age Groups</option><option value="25-35">25-35 years</option><option value="35-45">35-45 years</option><option value="45-55">45-55 years</option><option value="55+">55+ years</option></select>
+      <select id="hasSIPFilter" class="filter-select"><option value="">All Investors</option><option value="yes">Has Existing SIP</option><option value="no">New to SIP</option></select>
+      <select id="cityFilter" class="filter-select"><option value="">All Locations</option></select>
+    </div>
+  </div>
+  <div class="data-table-wrapper">
+    <table class="data-table">
+      <thead><tr><th>Name</th><th>Contact</th><th>Age</th><th>Has SIP?</th><th>Current SIP</th><th>Desired Amt</th><th>Objective</th><th>Goal</th><th>Timeline</th><th>Status</th><th>Date</th></tr></thead>
+      <tbody id="leadsTableBody"><tr><td colspan="11"><div class="loading-display"><div class="loading-spinner"></div><div class="loading-text">Loading leads...</div></div></td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- NEWSLETTER SUBSCRIBERS -->
+  <div class="section-divider"></div>
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
+    <div>
+      <h2 class="section-heading">Newsletter Subscribers</h2>
+      <p class="section-sub">Active subscribers receiving your broadcast emails</p>
+    </div>
+    <input type="text" id="subSearch" class="filter-input" style="width:260px;" placeholder="Search subscribers..." oninput="filterSubscribers()">
+  </div>
+  <div class="sub-stats">
+    <div class="sub-stat"><div class="sub-stat-value" id="totalSubs">0</div><div class="sub-stat-label">Total Active</div></div>
+    <div class="sub-stat"><div class="sub-stat-value" id="weeklySubs">0</div><div class="sub-stat-label">Weekly</div></div>
+    <div class="sub-stat"><div class="sub-stat-value" id="biweeklySubs">0</div><div class="sub-stat-label">Biweekly</div></div>
+    <div class="sub-stat"><div class="sub-stat-value" id="monthlySubs">0</div><div class="sub-stat-label">Monthly</div></div>
+  </div>
+  <div class="data-table-wrapper">
+    <table class="data-table">
+      <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Frequency</th><th>Topics</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody id="subsTableBody"><tr><td colspan="7"><div class="loading-display"><div class="loading-spinner"></div><div class="loading-text">Loading subscribers...</div></div></td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- INSIGHTS MANAGEMENT -->
+  <div class="section-divider"></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;">
+    <div>
+      <h2 class="section-heading">Published Insights</h2>
+      <p class="section-sub">Showing <span id="insightCount">0</span> insight(s)</p>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <select id="insightCategoryFilter" class="filter-select" style="width:auto;" onchange="filterInsights()">
+        <option value="">All Categories</option>
+        <option value="SIP">SIP</option><option value="Retirement">Retirement</option>
+        <option value="Tax">Tax Savings</option><option value="Market Insight">Market Insight</option>
+        <option value="Mutual Fund">Mutual Fund</option><option value="Goal Planning">Goal Planning</option>
+        <option value="Market Update">Market Update</option><option value="Risk & Planning">Risk & Planning</option>
+      </select>
+      <a href="/admin" class="nav-btn nav-btn-secondary" style="white-space:nowrap;"><i class="fas fa-plus"></i> New</a>
+    </div>
+  </div>
+  <div class="insights-mgmt-grid" id="insightsGrid">
+    <div style="grid-column:1/-1;"><div class="loading-display"><div class="loading-spinner"></div><div class="loading-text">Loading insights...</div></div></div>
+  </div>
+
+</div>
+
+<script>
+  let leadsData=[], filteredData=[], subsData=[], filteredSubs=[], insightsData=[];
+
+  function formatDate(d) { return new Date(d).toLocaleDateString('en-IN',{year:'numeric',month:'short',day:'numeric'}); }
+
+  function displayToast(msg, type='success') {
+    const t=document.createElement('div'); t.className=`toast-message toast-${type}`;
+    t.innerHTML=`${type==='success'?'<i class="fas fa-check-circle"></i>':'<i class="fas fa-exclamation-circle"></i>'}<span>${msg}</span>`;
+    document.body.appendChild(t);
+    setTimeout(()=>{ t.style.animation='slideUp 0.3s ease reverse'; setTimeout(()=>t.remove(),300); },2800);
+  }
+
+  async function handleLogout() {
+    if(confirm('Sign out?')) { await fetch('/api/admin/logout',{method:'POST',credentials:'include'}); window.location.href='/admin-login'; }
+  }
+
+  // ── LEADS ──
+  async function updateStatus(id, status) {
+    try {
+      const r=await fetch(`/api/leads/${id}`,{method:'PUT',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({status})});
+      if(r.ok){ const l=leadsData.find(x=>x.id===id); if(l) l.status=status; applyFilters(); updateMetrics(); displayToast(`Status → ${status}`); }
+      else displayToast('Failed','error');
+    } catch { displayToast('Error','error'); }
+  }
+
+  function renderLeadsTable() {
+    const tbody=document.getElementById('leadsTableBody');
+    if(!filteredData.length){ tbody.innerHTML=`<tr><td colspan="11"><div class="empty-display"><div class="empty-icon">📭</div><div class="empty-title">No leads found</div></div></td></tr>`; return; }
+    const fG=s=>s?s.replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase()):'—';
+    const fA=a=>a?`₹${parseInt(a).toLocaleString('en-IN')}`:'—';
+    tbody.innerHTML=filteredData.map(l=>`
+      <tr>
+        <td><strong>${l.name}</strong></td>
+        <td><div style="font-size:0.85rem;">${l.phone}<div style="color:#94a3b8;font-size:0.8rem;">${l.email}</div></div></td>
+        <td>${l.age_group||'—'}</td><td>${l.has_existing_sip==='yes'?'✅ Yes':l.has_existing_sip==='no'?'❌ No':'—'}</td>
+        <td>${l.current_sip_amount||'—'}</td><td><strong>${fA(l.desired_investment_amount)}</strong></td>
+        <td style="font-size:0.85rem;">${fG(l.objective)}</td><td style="font-size:0.85rem;">${fG(l.financial_goal)}</td>
+        <td>${l.goal_timeline||'—'}</td>
+        <td><select class="status-select" onchange="updateStatus(${l.id},this.value)">
+          <option value="new" ${l.status==='new'||!l.status?'selected':''}>🆕 New</option>
+          <option value="contacted" ${l.status==='contacted'?'selected':''}>📞 Contacted</option>
+          <option value="converted" ${l.status==='converted'?'selected':''}>✅ Converted</option>
+          <option value="rejected" ${l.status==='rejected'?'selected':''}>❌ Rejected</option>
+        </select></td>
+        <td style="white-space:nowrap;">${formatDate(l.created_at)}</td>
+      </tr>`).join('');
+  }
+
+  function applyFilters() {
+    const q=document.getElementById('searchInput').value.toLowerCase();
+    const status=document.getElementById('statusFilter').value;
+    const age=document.getElementById('ageGroupFilter').value;
+    const sip=document.getElementById('hasSIPFilter').value;
+    const city=document.getElementById('cityFilter').value;
+    filteredData=leadsData.filter(l=>(!q||l.name.toLowerCase().includes(q)||l.email.toLowerCase().includes(q))&&(!status||l.status===status)&&(!age||l.age_group===age)&&(!sip||l.has_existing_sip===sip)&&(!city||l.city===city));
+    renderLeadsTable();
+  }
+
+  function updateMetrics() {
+    const total=leadsData.length, conv=leadsData.filter(l=>l.status==='converted').length;
+    const totAmt=leadsData.reduce((s,l)=>s+(parseInt(l.desired_investment_amount)||0),0);
+    document.getElementById('totalLeads').textContent=total;
+    document.getElementById('newLeads').textContent=leadsData.filter(l=>l.status==='new'||!l.status).length;
+    document.getElementById('contactedLeads').textContent=leadsData.filter(l=>l.status==='contacted').length;
+    document.getElementById('convertedLeads').textContent=conv;
+    document.getElementById('avgInvestment').textContent=`₹${total>0?Math.round(totAmt/total).toLocaleString('en-IN'):0}`;
+    document.getElementById('hasExistingSIP').textContent=leadsData.filter(l=>l.has_existing_sip==='yes').length;
+    document.getElementById('potentialAUM').textContent=`₹${totAmt.toLocaleString('en-IN')}`;
+    document.getElementById('conversionRate').textContent=`${total>0?((conv/total)*100).toFixed(1):0}%`;
+  }
+
+  async function fetchLeads() {
+    try {
+      const r=await fetch('/api/leads',{credentials:'include'});
+      if(r.status===401||r.status===403){window.location.href='/admin-login';return;}
+      const d=await r.json(); leadsData=d.data||[];
+      updateMetrics();
+      const cities=[...new Set(leadsData.map(l=>l.city).filter(Boolean))].sort();
+      const cs=document.getElementById('cityFilter');
+      cities.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;cs.appendChild(o);});
+      applyFilters();
+    } catch { document.getElementById('leadsTableBody').innerHTML=`<tr><td colspan="11"><div class="empty-display"><div class="empty-icon">⚠️</div><div class="empty-title">Unable to load leads</div></div></td></tr>`; }
+  }
+
+  // ── SUBSCRIBERS ──
+  function filterSubscribers() {
+    const q=document.getElementById('subSearch').value.toLowerCase();
+    filteredSubs=q?subsData.filter(s=>s.full_name.toLowerCase().includes(q)||s.email.toLowerCase().includes(q)):[...subsData];
+    renderSubscribers();
+  }
+
+  function renderSubscribers() {
+    const tbody=document.getElementById('subsTableBody');
+    if(!filteredSubs.length){ tbody.innerHTML=`<tr><td colspan="7"><div class="empty-display"><div class="empty-icon">📭</div><div class="empty-title">No subscribers found</div></div></td></tr>`; return; }
+    tbody.innerHTML=filteredSubs.map((s,i)=>{
+      const topics=s.topics?s.topics.split(',').map(t=>`<span class="topics-pill">${t.trim()}</span>`).join(''):'—';
+      return `<tr>
+        <td style="color:#94a3b8;">${i+1}</td>
+        <td><strong>${s.full_name}</strong></td>
+        <td>${s.email}</td>
+        <td style="text-transform:capitalize;">${s.frequency||'weekly'}</td>
+        <td style="max-width:200px;">${topics}</td>
+        <td><span class="status-badge status-${s.status||'active'}">${s.status||'active'}</span></td>
+        <td><button class="btn-unsub" onclick="unsubscribeUser('${s.email}',${s.id})"><i class="fas fa-user-minus"></i> Unsub</button></td>
+      </tr>`;
+    }).join('');
+  }
+
+  function updateSubStats() {
+    document.getElementById('totalSubs').textContent=subsData.length;
+    document.getElementById('weeklySubs').textContent=subsData.filter(s=>s.frequency==='weekly').length;
+    document.getElementById('biweeklySubs').textContent=subsData.filter(s=>s.frequency==='biweekly').length;
+    document.getElementById('monthlySubs').textContent=subsData.filter(s=>s.frequency==='monthly').length;
+  }
+
+  async function unsubscribeUser(email, id) {
+    if(!confirm(`Unsubscribe ${email}?`)) return;
+    try {
+      const r=await fetch('/api/newsletter/unsubscribe',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({email})});
+      if(r.ok){ subsData=subsData.filter(s=>s.id!==id); filteredSubs=filteredSubs.filter(s=>s.id!==id); renderSubscribers(); updateSubStats(); displayToast(`${email} unsubscribed`); }
+      else displayToast('Failed','error');
+    } catch { displayToast('Error','error'); }
+  }
+
+  async function fetchSubscribers() {
+    try {
+      const r=await fetch('/api/newsletter/subscribers',{credentials:'include'});
+      subsData=await r.json(); filteredSubs=[...subsData];
+      updateSubStats(); renderSubscribers();
+    } catch { document.getElementById('subsTableBody').innerHTML=`<tr><td colspan="7"><div class="empty-display"><div class="empty-icon">⚠️</div><div class="empty-title">Unable to load subscribers</div></div></td></tr>`; }
+  }
+
+  // ── INSIGHTS ──
+  async function deleteInsight(id, title) {
+    if(!confirm(`Delete "${title}"?\n\nThis cannot be undone.`)) return;
+    try {
+      const r=await fetch(`/api/blogs/${id}`,{method:'DELETE',credentials:'include'});
+      if(r.ok){ insightsData=insightsData.filter(b=>b.id!==id); filterInsights(); displayToast('Insight deleted'); }
+      else displayToast('Failed','error');
+    } catch { displayToast('Error','error'); }
+  }
+
+  function filterInsights() {
+    const cat=document.getElementById('insightCategoryFilter').value;
+    const filtered=cat?insightsData.filter(b=>b.category===cat):insightsData;
+    document.getElementById('insightCount').textContent=filtered.length;
+    renderInsights(filtered);
+  }
+
+  function renderInsights(blogs) {
+    const grid=document.getElementById('insightsGrid');
+    if(!blogs.length){ grid.innerHTML=`<div style="grid-column:1/-1"><div class="empty-display"><div class="empty-icon">📭</div><div class="empty-title">No insights yet</div></div></div>`; return; }
+    grid.innerHTML=blogs.map(b=>{
+      const excerpt=b.content.replace(/<[^>]*>/g,'').substring(0,90)+'...';
+      const img=b.image_url?`<img src="${b.image_url}" alt="${b.title}" onerror="this.style.display='none'">`:`<div class="insight-card-img-placeholder">📊</div>`;
+      return `<div class="insight-mgmt-card">
+        <div class="insight-card-img">${img}</div>
+        <div class="insight-card-body">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <span class="cat-badge">${b.category||'Insight'}</span>
+            <span style="font-size:0.75rem;color:#94a3b8;">#${b.id}</span>
+          </div>
+          <div class="insight-card-title">${b.title}</div>
+          <div style="font-size:0.82rem;color:#94a3b8;margin-bottom:10px;">${excerpt}</div>
+          <div class="insight-card-footer">
+            <span class="insight-card-date"><i class="fas fa-calendar" style="color:var(--gold-accent);margin-right:4px;"></i>${formatDate(b.created_at)}</span>
+            <button class="btn-delete" onclick="deleteInsight(${b.id},'${b.title.replace(/'/g,"\\'")}')"><i class="fas fa-trash-alt"></i> Delete</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  async function fetchInsights() {
+    try {
+      const r=await fetch('/api/blogs',{credentials:'include'});
+      insightsData=await r.json();
+      insightsData.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+      filterInsights();
+    } catch { document.getElementById('insightsGrid').innerHTML=`<div style="grid-column:1/-1"><div class="empty-display"><div class="empty-icon">⚠️</div><div class="empty-title">Unable to load</div></div></div>`; }
+  }
+
+  document.getElementById('searchInput').addEventListener('input',applyFilters);
+  document.getElementById('statusFilter').addEventListener('change',applyFilters);
+  document.getElementById('ageGroupFilter').addEventListener('change',applyFilters);
+  document.getElementById('hasSIPFilter').addEventListener('change',applyFilters);
+  document.getElementById('cityFilter').addEventListener('change',applyFilters);
+
+  fetchLeads(); fetchSubscribers(); fetchInsights();
+</script>
+
+<%- include('../partials/footer') %>

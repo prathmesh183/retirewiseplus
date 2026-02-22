@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RetireWise+ | Investment Clarity for Every Indian Family</title>
+  <meta name="description" content="Trusted mutual fund advisors in Pune helping families build wealth through SIPs. SEBI registered. No pushy sales, just clear guidance.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+  <!-- FIX 1: Added leading slash so CSS loads correctly from Express -->
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <style>
+    body {
+      margin-top: 4.5rem;
+      font-family: 'Inter', sans-serif;
+    }
+    @media (max-width: 576px) {
+      body { margin-top: 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="rw-fixed-header">
+  <div class="rw-nav-container">
+    <div class="rw-logo-group">
+      <a href="/" class="rw-logo rw-logo-svg-wrap" aria-label="RetireWise+ Home">
+        <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="38" height="38" rx="10" fill="#1a3c31"/>
+          <rect x="7"  y="22" width="5" height="9"  rx="1.5" fill="#b59b5d"/>
+          <rect x="14" y="16" width="5" height="15" rx="1.5" fill="#b59b5d" opacity="0.75"/>
+          <rect x="21" y="10" width="5" height="21" rx="1.5" fill="#ffffff"/>
+          <polyline points="7,24 14,18 21,12 31,7" stroke="#b59b5d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline points="26,6 31,7 30,12" stroke="#b59b5d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="rw-logo-text">RetireWise<span class="rw-gold-plus">+</span></span>
+      </a>
+      <span class="rw-header-tagline">Investment with clarity</span>
+    </div>
+
+    <nav class="rw-desktop-nav">
+      <a href="/learn">Learn</a>
+      <a href="/calculators">Calculators</a>
+      <a href="/newsletter">Newsletter</a>
+      <a href="/about">About</a>
+      <a href="/funds">Funds</a>
+      <a href="/lead" class="rw-cta-btn">Request a Call</a>
+    </nav>
+
+    <button class="rw-menu-toggle" id="rw-menu-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="rw-mobile-menu" id="rw-mobile-menu">
+    <div class="rw-mobile-header">
+      <a href="/" class="rw-brand">RetireWise<span class="rw-plus">+</span></a>
+      <button class="rw-close-menu" id="rw-close-menu">✕</button>
+    </div>
+    <nav class="rw-mobile-nav">
+      <a href="/"><i class="fas fa-home"></i> Home</a>
+      <a href="/learn"><i class="fas fa-graduation-cap"></i> Learn</a>
+      <a href="/calculators"><i class="fas fa-calculator"></i> Calculators</a>
+      <a href="/newsletter"><i class="fas fa-lightbulb"></i> Newsletter</a>
+      <a href="/about"><i class="fas fa-info-circle"></i> About</a>
+      <a href="/funds"><i class="fas fa-chart-line"></i> Funds</a>
+      <a href="/lead" class="rw-mobile-cta"><i class="fas fa-phone-alt"></i> Request a Call</a>
+    </nav>
+  </div>
+
+  <div class="rw-menu-backdrop" id="rw-menu-backdrop"></div>
+</header>
+
+<style>
+/* ====== CSS VARIABLES ====== */
+:root {
+  --rw-green: #1a3c31;
+  --rw-gold: #b59b5d;
+  --rw-dark: #0f2820;
+  --rw-text: #1c1917;
+  --bg-primary: #f8f7f6;
+  --bg-secondary: #eeebe6;
+}
+
+/* ====== HEADER BASE ====== */
+.rw-fixed-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1020;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  height: 4.5rem;
+  display: flex;
+  align-items: center;
+}
+/* Legacy alias */
+.retirewise-header { position: fixed; top: 0; left: 0; right: 0; z-index: 1020; height: 4.5rem; }
+.rw-nav-container,
+.rw-header-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.rw-logo-group { display: flex; align-items: center; gap: 1rem; }
+.rw-header-left { display: flex; align-items: center; gap: 1rem; }
+
+/* Logo — SVG wrap style */
+.rw-logo-svg-wrap {
+  display: flex; align-items: center; gap: 0.6rem;
+  text-decoration: none;
+}
+.rw-logo-svg-wrap svg {
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 6px rgba(26,60,49,0.25));
+  transition: transform 0.2s ease;
+}
+.rw-logo-svg-wrap:hover svg { transform: scale(1.05); }
+.rw-logo-text {
+  font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1.45rem; font-weight: 800;
+  color: var(--rw-green);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.rw-gold-plus { color: var(--rw-gold); }
+
+/* Legacy text-only brand */
+.rw-brand {
+  font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1.5rem; font-weight: 800;
+  color: var(--rw-green) !important;
+  text-decoration: none;
+  letter-spacing: -0.02em; white-space: nowrap;
+}
+.rw-plus { color: var(--rw-gold); }
+
+.rw-header-tagline,
+.rw-tagline {
+  font-size: 0.75rem; color: #78716c;
+  font-weight: 500; text-transform: uppercase;
+  letter-spacing: 1px; white-space: nowrap;
+}
+.rw-desktop-nav { display: flex; gap: 2rem; align-items: center; margin-left: auto; }
+.rw-desktop-nav a {
+  font-size: 0.9375rem; font-weight: 500;
+  color: #57534e; text-decoration: none; transition: color 0.2s;
+}
+.rw-desktop-nav a:hover { color: var(--rw-green); }
+.rw-cta-btn {
+  background: var(--rw-green); color: white !important;
+  padding: 0.5rem 1.25rem; border-radius: 0.5rem; font-weight: 600;
+  box-shadow: 0 4px 10px rgba(26, 60, 49, 0.2); transition: all 0.2s;
+}
+.rw-cta-btn:hover {
+  background: var(--rw-dark);
+  box-shadow: 0 6px 15px rgba(26, 60, 49, 0.3);
+  transform: translateY(-2px);
+}
+.rw-menu-toggle {
+  display: none; flex-direction: column; gap: 5px;
+  background: none; border: 1px solid #ddd;
+  padding: 8px 10px; border-radius: 5px;
+  cursor: pointer; transition: all 0.2s;
+}
+.rw-menu-toggle:hover { background: #f5f5f5; border-color: var(--rw-green); }
+.rw-menu-toggle span { width: 24px; height: 2px; background: var(--rw-text); border-radius: 2px; transition: all 0.3s; }
+.rw-mobile-menu {
+  position: fixed; top: 0; right: -100%;
+  width: 280px; height: 100vh; background: white;
+  z-index: 1050; transition: right 0.3s ease;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+  overflow-y: auto; display: flex; flex-direction: column;
+}
+.rw-mobile-menu.active { right: 0; }
+.rw-mobile-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1rem 1.5rem; border-bottom: 1px solid #eee; flex-shrink: 0;
+}
+.rw-mobile-header .rw-brand { font-size: 1.25rem; }
+.rw-close-menu { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--rw-text); padding: 5px; transition: color 0.2s; }
+.rw-close-menu:hover { color: var(--rw-green); }
+.rw-mobile-nav { display: flex; flex-direction: column; padding: 1rem 0; flex: 1; overflow-y: auto; }
+.rw-mobile-nav a {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1rem 1.5rem; color: var(--rw-text) !important;
+  text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: all 0.2s;
+}
+.rw-mobile-nav a:hover { background: #f9f9f9; color: var(--rw-green) !important; }
+.rw-mobile-nav i { color: var(--rw-gold); width: 20px; text-align: center; flex-shrink: 0; }
+.rw-mobile-cta {
+  background: var(--rw-green); color: white !important;
+  margin: 1rem 1.5rem; border-radius: 8px; font-weight: 600;
+}
+.rw-mobile-cta:hover { background: var(--rw-dark); }
+.rw-mobile-cta i { color: white; }
+.rw-menu-backdrop {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5); z-index: 1040; display: none; transition: all 0.3s;
+}
+.rw-menu-backdrop.active { display: block; }
+
+@media (max-width: 991px) { .rw-desktop-nav { display: none; } .rw-menu-toggle { display: flex !important; } }
+@media (max-width: 768px) { .rw-header-tagline, .rw-tagline { display: none; } }
+@media (max-width: 576px) {
+  .rw-fixed-header, .retirewise-header { height: 4rem; }
+  .rw-nav-container, .rw-header-container { padding: 0 1rem; }
+  .rw-logo-text, .rw-brand { font-size: 1.25rem; }
+  .rw-tagline { font-size: 0.7rem; margin-left: 0.25rem; letter-spacing: 0.5px; }
+  .rw-mobile-menu { width: 100%; }
+  .rw-menu-toggle { padding: 6px 8px; }
+  .rw-menu-toggle span { width: 20px; }
+}
+</style>
+
+<!-- ================= HERO SECTION ================= -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <h1>
+        Stop overthinking your money.<br>
+        <span class="gradient-text">Start building wealth, simply.</span>
+      </h1>
+      <p class="hero-subtext">
+        We turn complicated investing into clear, confident decisions. No jargon. No pressure.
+        Just real guidance from Pune's trusted mutual fund advisors.
+      </p>
+      <div class="mt-4">
+        <a href="/lead" class="btn btn-primary btn-lg">
+          <i class="fas fa-phone-alt"></i>
+          Get Free Consultation
+        </a>
+        <a href="/learn" class="btn btn-outline-primary btn-lg ms-3">
+          <i class="fas fa-graduation-cap"></i>
+          Learn First
+        </a>
+      </div>
+      <p class="small text-muted mt-4">
+        <i class="fas fa-shield-alt"></i> AMFI Registered • ARN-330249 • 10+ Families Guided
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TRUST BAR ================= -->
+<section class="py-5" style="background: var(--bg-secondary);">
+  <div class="container">
+    <div class="trust-bar">
+      <div class="stat">
+        <span class="number">10+</span>
+        <span class="label">Families Guided</span>
+      </div>
+      <div class="stat">
+        <span class="number">₹3lakh+</span>
+        <span class="label">Invested via SIPs</span>
+      </div>
+      <div class="stat">
+        <span class="number">8+ months</span>
+        <span class="label">Experience</span>
+      </div>
+      <div class="stat">
+        <span class="number">AMFI Registered</span>
+        <span class="label">ARN-330249</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHY CHOOSE US ================= -->
+<section class="tools">
+  <div class="container">
+    <h2 class="section-title">Why Families Trust RetireWise+</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="tool-card">
+          <i class="fas fa-user-shield"></i>
+          <h3>No Pushy Sales</h3>
+          <p>We educate first. You invest only when YOU feel ready and confident. No pressure, no targets.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="tool-card">
+          <i class="fas fa-map-marker-alt"></i>
+          <h3>Pune-Based, Always Reachable</h3>
+          <p>Meet us in person, video call, or WhatsApp. Real humans, real support whenever you need it.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="tool-card">
+          <i class="fas fa-book-open"></i>
+          <h3>Learn Before You Invest</h3>
+          <p>Free educational tools and calculators. Understand exactly what you're investing in.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="tool-card">
+          <i class="fas fa-certificate"></i>
+          <h3>AMFI Registered Mutual Fund Distributors</h3>
+          <p>Fully compliant, NISM certified professionals. Your trust is our responsibility.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="tool-card">
+          <i class="fas fa-chart-line"></i>
+          <h3>NJ E-Wealth Platform</h3>
+          <p>Track all investments in one place. Automated rebalancing. Complete transparency.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="tool-card">
+          <i class="fas fa-users"></i>
+          <h3>Family-First Approach</h3>
+          <p>We understand Indian families. From education goals to retirement planning.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW IT WORKS ================= -->
+<section class="py-5" style="background: var(--bg-primary);">
+  <div class="container">
+    <h2 class="section-title">How It Works</h2>
+    <div class="row g-5 align-items-center">
+      <div class="col-md-3 text-center">
+        <div class="step-icon mb-3">
+          <i class="fas fa-clipboard-list" style="font-size: 3rem; color: var(--rw-green);"></i>
+        </div>
+        <h4>1. Share Your Goals</h4>
+        <p class="text-muted">Tell us about your income, expenses, and financial goals. Takes 5 minutes.</p>
+      </div>
+      <div class="col-md-3 text-center">
+        <div class="step-icon mb-3">
+          <i class="fas fa-phone-volume" style="font-size: 3rem; color: var(--rw-gold);"></i>
+        </div>
+        <h4>2. Advisor Connects</h4>
+        <p class="text-muted">Our SEBI-registered advisor calls you to understand your situation better.</p>
+      </div>
+      <div class="col-md-3 text-center">
+        <div class="step-icon mb-3">
+          <i class="fas fa-lightbulb" style="font-size: 3rem; color: #27ae60;"></i>
+        </div>
+        <h4>3. Get Your Plan</h4>
+        <p class="text-muted">Receive a personalized wealth roadmap based on your goals and risk comfort.</p>
+      </div>
+      <div class="col-md-3 text-center">
+        <div class="step-icon mb-3">
+          <i class="fas fa-rocket" style="font-size: 3rem; color: #3498db;"></i>
+        </div>
+        <h4>4. Start Investing</h4>
+        <p class="text-muted">Begin your SIP journey via NJ E-Wealth with full support and tracking.</p>
+      </div>
+    </div>
+    <div class="text-center mt-5">
+      <a href="/lead" class="btn btn-primary btn-lg">
+        <i class="fas fa-calendar-alt me-2"></i>
+        Schedule Your Consultation Today
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FREE TOOLS ================= -->
+<section class="tools">
+  <div class="container">
+    <h2 class="section-title">Free Investment Tools</h2>
+    <p class="text-center text-muted mb-5" style="max-width: 700px; margin: 0 auto;">
+      Try our calculators to understand how investing works. No signup required.
+    </p>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <a href="/calculator/sip" class="tool-link">
+          <div class="tool-card">
+            <i class="fas fa-calendar-check"></i>
+            <h3>SIP Calculator</h3>
+            <p>See how monthly investments grow over time with compounding.</p>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="/calculator/retirement" class="tool-link">
+          <div class="tool-card">
+            <i class="fas fa-umbrella-beach"></i>
+            <h3>Retirement Planner</h3>
+            <p>Calculate how much you need for a comfortable retirement.</p>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="/calculator/goal" class="tool-link">
+          <div class="tool-card">
+            <i class="fas fa-bullseye"></i>
+            <h3>Goal Planner</h3>
+            <p>Plan monthly investments for education, house, or any goal.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <a href="/calculators" class="btn btn-outline-primary">
+        View All Calculators <i class="fas fa-arrow-right ms-2"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LEARN SECTION ================= -->
+<section class="tools">
+  <div class="container">
+    <h2 class="section-title">Start Learning Today</h2>
+    <div class="row g-4 align-items-center">
+      <div class="col-md-6">
+        <h4 class="mb-4">📚 Wealth Academy Modules</h4>
+        <ul class="list-unstyled">
+          <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> What is a Mutual Fund?</li>
+          <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> How SIP Works</li>
+          <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Understanding Risk</li>
+          <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Power of Compounding</li>
+        </ul>
+        <a href="/learn" class="btn btn-primary">
+          Start Learning <i class="fas fa-graduation-cap ms-2"></i>
+        </a>
+      </div>
+      <div class="col-md-6">
+        <div class="card p-4">
+          <h4 class="mb-3">📚 Featured Module</h4>
+          <h5>What is SIP?</h5>
+          <p class="text-muted small">
+            Learn how Systematic Investment Plans help you invest regularly without timing the market.
+            Includes real examples and common mistakes to avoid.
+          </p>
+          <a href="/learn" class="btn btn-sm btn-outline-primary">Read Now →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FUND LOGOS ================= -->
+<section class="trust-ecosystem">
+  <div class="trust-container">
+    <h2>Popular mutual fund houses in the Indian investment ecosystem</h2>
+    <div class="logo-grid">
+      <!-- FIX 3: All asset paths now have leading slash -->
+      <div class="logo-box"><img src="/public/assets/logos/SBI_Mutual_Fund_Logo (1).svg" alt="SBI Mutual Fund"></div>
+      <div class="logo-box"><img src="/public/assets/logos/Hdfc-Logo-Main.svg" alt="HDFC Mutual Fund"></div>
+      <div class="logo-box"><img src="/public/assets/logos/icici prudential.jpg" alt="ICICI Prudential"></div>
+      <div class="logo-box"><img src="/public/assets/logos/nipponindia-mutual-fund-logo.webp" alt="Nippon India"></div>
+      <div class="logo-box"><img src="/public/assets/logos/kotak-mf-logo.svg" alt="Kotak Mutual Fund"></div>
+      <div class="logo-box"><img src="/public/assets/logos/Axis-Mutual-Fund1-copy.jpg" alt="Axis Mutual Fund"></div>
+      <div class="logo-box"><img src="/public/assets/logos/uti.jpg" alt="UTI Mutual Fund"></div>
+      <div class="logo-box"><img src="/public/assets/logos/adityabirla.png" alt="Aditya Birla Sun Life"></div>
+      <div class="logo-box"><img src="/public/assets/logos/dspmf.webp" alt="DSP Mutual Fund"></div>
+      <div class="logo-box"><img src="/public/assets/logos/mirae-asset-mutual-fund-logo.jpg" alt="Mirae Asset"></div>
+    </div>
+    <p class="and-more">+ many more</p>
+    <div class="nj-disclaimer">
+      <p>Funds in which you can invest through us via NJ Wealth</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TESTIMONIALS ================= -->
+<section class="tools">
+  <div class="container">
+    <h2 class="section-title">What Our Clients Say</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="mb-3">
+            <i class="fas fa-star" style="color: var(--rw-gold);"></i>
+            <i class="fas fa-star" style="color: var(--rw-gold);"></i>
+            <i class="fas fa-star" style="color: var(--rw-gold);"></i>
+            <i class="fas fa-star" style="color: var(--rw-gold);"></i>
+            <i class="fas fa-star" style="color: var(--rw-gold);"></i>
+          </div>
+          <p class="text-muted">
+            "RetireWise helped me understand SIPs without any pushy sales. Started with ₹3,000/month,
+            now confidently investing ₹10,000. Thank you!"
+          </p>
+          <div class="mt-auto">
+            <strong>Priya M.</strong><br>
+            <small class="text-muted">Software Engineer, Kothrud</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="mb-3">
+            <i class="fas fa-star" style="color: var(--rw-gold);"></i>
+            <i class="fas fa-star" style="color: var(--rw-gold);"></i>
+            <i class="fas fa-star" style="color: var(--rw-gold);"></i>
+            <i class="fas fa-star" style="color: var(--rw-gold);"></i>
+            <i class="fas fa-star" style="color: var(--rw-gold);"></i>
+          </div>
+          <p class="text-muted">
+            "Finally found advisors who educate first. They explained everything clearly before
+            recommending anything. Very professional and patient."
+          </p>
+          <div class="mt-auto">
+            <strong>Rajesh K.</strong><br>
+            <small class="text-muted">Business Owner, Wakad</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="mb-3">
+            <i class="fas fa-star" style="color: var(--rw-gold);"></i>
+            <i class="fas fa-star" style="color: var(--rw-gold);"></i>
+            <i class="fas fa-star" style="color: var(--rw-gold);"></i>
+            <i class="fas fa-star" style="color: var(--rw-gold);"></i>
+            <i class="fas fa-star" style="color: var(--rw-gold);"></i>
+          </div>
+          <p class="text-muted">
+            "Great support for retirement planning. They considered my age, goals, and family
+            situation before suggesting anything. Highly recommend!"
+          </p>
+          <div class="mt-auto">
+            <strong>Aniket Adak.</strong><br>
+            <small class="text-muted">Broker, Thane</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FINAL CTA ================= -->
+<section class="py-5" style="background: linear-gradient(135deg, var(--rw-green) 0%, var(--rw-dark) 100%); color: white;">
+  <div class="container text-center">
+    <h2 class="text-white mb-3">Ready to Start Your Investment Journey?</h2>
+    <p class="mb-4" style="max-width: 600px; margin: 0 auto; opacity: 0.9;">
+      Share your details and our advisor will call you within 24 hours.
+      No obligation. Just a friendly conversation.
+    </p>
+    <a href="/lead" class="btn btn-lg" style="background: white; color: var(--rw-green); font-weight: 600;">
+      Request Free Consultation
+    </a>
+    <p class="small mt-3" style="opacity: 0.8;">
+      Or reach us directly:
+      <a href="https://www.instagram.com/retirewiseplus" target="_blank" style="color: white; text-decoration: underline;">Instagram</a> |
+      <a href="/cdn-cgi/l/email-protection#7103140518031406180214011d040231161c10181d5f121e1c" style="color: white; text-decoration: underline;">Email</a>
+    </p>
+  </div>
+</section>
+
+<!-- ================= DISCLAIMER ================= -->
+<section class="py-4" style="background: var(--bg-secondary);">
+  <div class="container">
+    <div class="disclaimer-strip">
+      <div>
+        <span class="disclaimer-title">Important Disclosure</span>
+      </div>
+      <div class="disclaimer-text">
+        Mutual fund investments are subject to market risks. Read all scheme-related documents carefully.
+        Past performance is not indicative of future returns. Information provided on this website is for
+        educational purposes only and should not be construed as investment advice or recommendations.
+        All investments are facilitated through AMFI-registered mutual fund distributors after proper consultation.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="app-footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <p class="brand">RetireWise+</p>
+        <p class="small">
+          Making investing accessible for every Indian family.
+          AMFI-registered mutual fund distributor based in Pune.
+        </p>
+        <p>NISM VA Certified | AMFI Registered | ARN-330249 |<br>Partner: NJ E Wealth 
+        </p>
+        <div class="mt-3">
+          <p class="small mb-1"><strong>ARN:</strong> 330249</p>
+          <p class="small mb-0"><strong>NISM Certified</strong></p>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <h6 class="mb-3">Quick Links</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="/learn">Learn</a></li>
+          <li class="mb-2"><a href="/calculators">Calculators</a></li>
+          <li class="mb-2"><a href="/newsletter">Newsletter</a></li>
+          <li class="mb-2"><a href="/about">About Us</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-2">
+        <h6 class="mb-3">Tools</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="/calculator/sip">SIP Calculator</a></li>
+          <li class="mb-2"><a href="/calculator/retirement">Retirement</a></li>
+          <li class="mb-2"><a href="/calculator/goal">Goal Planner</a></li>
+          <li class="mb-2"><a href="/calculator/swp">SWP Calculator</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4">
+        <h6 class="mb-3">Contact</h6>
+        <p class="small">
+          <i class="fas fa-map-marker-alt me-2"></i>Pune, Maharashtra, India<br>
+          <i class="fas fa-envelope me-2 mt-2"></i>
+     <a href="mailto:retirewiseplus@gmail.com">retirewiseplus@gmail.com</a></span><br>
+          <i class="fab fa-instagram me-2 mt-2"></i>
+          <a href="https://www.instagram.com/retirewiseplus" target="_blank">@retirewiseplus</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="disclaimer mt-4">
+      <p class="mb-1">
+        <strong>Regulatory Disclaimer:</strong> Mutual fund investments are subject to market risks.
+        Read all scheme-related documents carefully before investing. Past performance is not indicative of future returns.
+      </p>
+      <p class="mb-0">
+        &copy; <span id="year"></span> RetireWise+. All rights reserved. |
+        <a href="/terms">Terms & Conditions</a> |
+        <a href="/privacy">Privacy Policy</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= SCRIPTS ================= -->
+<script>
+  document.getElementById("year").innerText = new Date().getFullYear();
+
+  // Mobile Menu
+  (function() {
+    const toggle = document.getElementById('rw-menu-toggle');
+    const menu = document.getElementById('rw-mobile-menu');
+    const close = document.getElementById('rw-close-menu');
+    const backdrop = document.getElementById('rw-menu-backdrop');
+    const links = menu.querySelectorAll('a');
+
+    if (!toggle || !menu) return;
+
+    function openMenu() {
+      menu.classList.add('active');
+      backdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      menu.classList.remove('active');
+      backdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+toggle.addEventListener('click', openMenu);
+    close.addEventListener('click', closeMenu);
+    backdrop.addEventListener('click', closeMenu);
+    links.forEach(link => link.addEventListener('click', closeMenu));
+  })();
+</script>
+</body>
+</html>

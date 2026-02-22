@@ -1,0 +1,440 @@
+<%- include('../partials/header', { title: 'Newsletter', description: 'Get practical insights on SIPs, retirement planning, and wealth building. No jargon, no spam.' }) %>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --forest-dark: #1a3c31;
+    --forest-medium: #2d5a4a;
+    --gold-accent: #c4a962;
+    --gold-light: #d4bc7c;
+    --cream: #faf8f3;
+    --slate-50: #f8fafc;
+    --slate-100: #f1f5f9;
+    --slate-700: #334155;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--slate-700); line-height: 1.6; -webkit-font-smoothing: antialiased; margin-top: 4.5rem; }
+
+  /* HERO */
+  .hero-section { background: linear-gradient(135deg, var(--forest-dark) 0%, #0f2620 100%); color: white; padding: 100px 20px 80px; position: relative; overflow: hidden; }
+  .hero-section::before { content: ''; position: absolute; top: -30%; right: -15%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(196,169,98,0.15) 0%, transparent 70%); border-radius: 50%; }
+  .hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; text-align: center; }
+  .hero-badge { display: inline-block; background: rgba(196,169,98,0.2); color: var(--gold-light); padding: 8px 20px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 25px; border: 1px solid rgba(196,169,98,0.3); }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: 3.8rem; font-weight: 700; margin-bottom: 20px; line-height: 1.1; }
+  .hero-description { font-size: 1.15rem; opacity: 0.92; margin-bottom: 35px; line-height: 1.7; max-width: 620px; margin-left: auto; margin-right: auto; }
+  .hero-stats { display: flex; justify-content: center; gap: 50px; margin-top: 40px; }
+  .stat-item { text-align: center; }
+  .stat-number { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 700; color: var(--gold-accent); display: block; line-height: 1; }
+  .stat-label  { font-size: 0.82rem; opacity: 0.75; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* SIGNUP */
+  .signup-section { padding: 80px 20px; background: white; margin-top: -50px; position: relative; z-index: 10; }
+  .signup-container { max-width: 650px; margin: 0 auto; }
+  .signup-card { background: white; border-radius: 20px; padding: 50px; box-shadow: 0 30px 80px rgba(0,0,0,0.08); border: 1px solid var(--slate-100); }
+  .card-header { text-align: center; margin-bottom: 40px; }
+  .card-title { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 700; color: var(--forest-dark); margin-bottom: 10px; }
+  .card-subtitle { color: #64748b; font-size: 1rem; }
+  .form-group { margin-bottom: 25px; }
+  .form-label { display: block; margin-bottom: 10px; font-weight: 600; color: var(--forest-dark); font-size: 0.9rem; }
+  .form-control { width: 100%; padding: 14px 18px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; transition: all 0.2s ease; font-family: 'DM Sans', sans-serif; }
+  .form-control:focus { border-color: var(--gold-accent); box-shadow: 0 0 0 4px rgba(196,169,98,0.1); outline: none; }
+  .topics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 12px; }
+  .topic-checkbox { display: flex; align-items: center; padding: 11px 14px; border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; background: var(--slate-50); }
+  .topic-checkbox:hover { border-color: var(--gold-accent); background: white; }
+  .topic-checkbox input[type="checkbox"] { width: 17px; height: 17px; margin-right: 10px; cursor: pointer; accent-color: var(--forest-dark); }
+  .topic-checkbox label { margin: 0; cursor: pointer; font-size: 0.9rem; color: var(--slate-700); font-weight: 500; }
+  .topic-checkbox input:checked + label { color: var(--forest-dark); font-weight: 600; }
+  .btn-subscribe { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--forest-dark) 0%, var(--forest-medium) 100%); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: all 0.3s ease; margin-top: 10px; box-shadow: 0 4px 14px rgba(26,60,49,0.3); font-family: 'DM Sans', sans-serif; }
+  .btn-subscribe:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,60,49,0.4); }
+  .btn-subscribe:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .form-footer { text-align: center; margin-top: 18px; font-size: 0.82rem; color: #94a3b8; }
+  .success-alert { background: linear-gradient(135deg, #d1fae5, #a7f3d0); color: #065f46; padding: 16px 20px; border-radius: 12px; margin-bottom: 25px; display: none; font-weight: 600; align-items: center; gap: 12px; border: 1px solid #6ee7b7; }
+  .success-alert.show { display: flex; animation: slideDown 0.4s ease; }
+  @keyframes slideDown { from { opacity:0; transform:translateY(-15px); } to { opacity:1; transform:translateY(0); } }
+
+  /* BENEFITS */
+  .benefits-section { padding: 80px 20px; background: var(--slate-50); }
+  .section-header { text-align: center; max-width: 700px; margin: 0 auto 60px; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 700; color: var(--forest-dark); margin-bottom: 15px; }
+  .section-subtitle { font-size: 1.05rem; color: #64748b; }
+  .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px; max-width: 1200px; margin: 0 auto; }
+  .benefit-card { background: white; padding: 32px; border-radius: 16px; text-align: center; border: 1px solid #e2e8f0; transition: all 0.3s ease; }
+  .benefit-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: var(--gold-accent); }
+  .benefit-icon { width: 64px; height: 64px; background: linear-gradient(135deg, var(--forest-dark), var(--gold-accent)); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.7rem; margin: 0 auto 18px; }
+  .benefit-title { font-size: 1.1rem; font-weight: 700; color: var(--forest-dark); margin-bottom: 10px; }
+  .benefit-text { color: #64748b; line-height: 1.7; font-size: 0.9rem; }
+
+  /* INSIGHTS SECTION */
+  .insights-section { padding: 90px 20px; background: white; }
+
+  /* ── CATEGORY FILTER TABS ── */
+  .category-filters {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    justify-content: center; margin-bottom: 40px;
+  }
+  .cat-tab {
+    padding: 9px 20px; border-radius: 50px;
+    border: 2px solid #e2e8f0; background: white;
+    color: var(--slate-700); font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s ease; font-family: 'DM Sans', sans-serif;
+  }
+  .cat-tab:hover { border-color: var(--gold-accent); color: var(--forest-dark); }
+  .cat-tab.active {
+    background: var(--forest-dark); color: white;
+    border-color: var(--forest-dark);
+  }
+  .cat-tab .cat-count {
+    display: inline-block; background: rgba(255,255,255,0.25);
+    border-radius: 50px; padding: 1px 7px; font-size: 0.75rem;
+    margin-left: 5px;
+  }
+  .cat-tab:not(.active) .cat-count { background: var(--slate-100); color: #94a3b8; }
+
+  /* Insights grid */
+  .insights-grid-3 {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 28px; max-width: 1200px; margin: 0 auto;
+  }
+  .ic2 {
+    background: white; border: 1px solid #e8edf2; border-radius: 16px;
+    overflow: hidden; display: flex; flex-direction: column;
+    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+  .ic2:hover { transform: translateY(-7px); box-shadow: 0 24px 50px rgba(26,60,49,0.13); border-color: var(--gold-accent); }
+  .ic2-img { position: relative; height: 195px; overflow: hidden; background: linear-gradient(135deg, var(--forest-dark), var(--forest-medium)); flex-shrink: 0; }
+  .ic2-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; display: block; }
+  .ic2:hover .ic2-img img { transform: scale(1.06); }
+  .ic2-img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3rem; opacity: 0.35; }
+  .ic2-cat { position: absolute; top: 12px; left: 12px; background: var(--gold-accent); color: white; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; padding: 4px 11px; border-radius: 20px; }
+  .ic2-body { padding: 22px; display: flex; flex-direction: column; flex: 1; }
+  .ic2-date { font-size: 0.76rem; color: var(--gold-accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 9px; }
+  .ic2-title { font-family: 'Cormorant Garamond', serif; font-size: 1.28rem; font-weight: 700; color: var(--forest-dark); margin-bottom: 10px; line-height: 1.35; }
+  .ic2-excerpt { color: #64748b; font-size: 0.88rem; line-height: 1.65; margin-bottom: 18px; flex: 1; }
+  .ic2-author { display: flex; align-items: center; gap: 9px; margin-bottom: 16px; }
+  .ic2-avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--forest-dark), var(--gold-accent)); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.68rem; font-weight: 700; flex-shrink: 0; }
+  .ic2-author-name { font-size: 0.8rem; font-weight: 600; color: var(--forest-dark); display: block; }
+  .ic2-author-cred { font-size: 0.7rem; color: var(--gold-accent); font-weight: 500; }
+  .ic2-actions { display: flex; gap: 9px; }
+  .btn-rm { flex: 1; padding: 9px 12px; border-radius: 9px; background: transparent; border: 1.5px solid var(--forest-dark); color: var(--forest-dark); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-family: 'DM Sans', sans-serif; }
+  .btn-rm:hover { background: var(--forest-dark); color: white; }
+  .btn-sip { flex: 1; padding: 9px 12px; border-radius: 9px; background: linear-gradient(135deg, var(--gold-accent), var(--gold-light)); border: none; color: var(--forest-dark); font-size: 0.83rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease; font-family: 'DM Sans', sans-serif; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 5px; box-shadow: 0 3px 10px rgba(196,169,98,0.3); }
+  .btn-sip:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(196,169,98,0.45); color: var(--forest-dark); text-decoration: none; }
+
+  /* No results */
+  .empty-state { text-align: center; padding: 60px 20px; background: var(--slate-50); border-radius: 16px; grid-column: 1 / -1; }
+  .empty-icon { font-size: 4rem; margin-bottom: 20px; opacity: 0.3; }
+  .empty-text { color: #94a3b8; font-size: 1rem; }
+
+  /* MODAL */
+  #insightModal .modal-content { border-radius: 20px; border: none; overflow: hidden; }
+  #insightModal .modal-header { background: linear-gradient(135deg, var(--forest-dark), var(--forest-medium)); padding: 26px 30px; border: none; }
+  #insightModal .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 700; color: white; }
+  #insightModal .btn-close { filter: invert(1); opacity: 0.8; }
+  #insightModal .modal-body { padding: 30px; }
+  .modal-hero-img { width: 100%; height: 240px; object-fit: cover; border-radius: 12px; margin-bottom: 22px; }
+  .modal-nism-bar { display: flex; align-items: center; gap: 10px; background: #f0f4f2; border-left: 3px solid var(--gold-accent); padding: 11px 16px; border-radius: 0 8px 8px 0; margin-bottom: 22px; font-size: 0.84rem; color: var(--forest-dark); font-weight: 500; }
+  .modal-sip-cta { display: flex; align-items: center; gap: 16px; background: linear-gradient(135deg, var(--forest-dark), var(--forest-medium)); padding: 20px 24px; border-radius: 14px; margin-top: 28px; }
+  .modal-sip-cta .ct { flex: 1; }
+  .modal-sip-cta .ct-title { color: white; font-weight: 700; font-size: 0.95rem; display: block; }
+  .modal-sip-cta .ct-sub   { color: rgba(255,255,255,0.7); font-size: 0.82rem; }
+  .modal-sip-btn { background: linear-gradient(135deg, var(--gold-accent), var(--gold-light)); color: var(--forest-dark); border: none; padding: 12px 20px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; cursor: pointer; white-space: nowrap; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-family: 'DM Sans', sans-serif; }
+  .modal-sip-btn:hover { color: var(--forest-dark); text-decoration: none; }
+
+  @media (max-width: 1024px) { .insights-grid-3 { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) {
+    .hero-title { font-size: 2.4rem; }
+    .hero-stats { flex-direction: column; gap: 25px; }
+    .signup-card { padding: 30px 20px; }
+    .section-title { font-size: 2.1rem; }
+    .topics-grid { grid-template-columns: 1fr; }
+    .insights-grid-3 { grid-template-columns: 1fr; }
+    .category-filters { gap: 8px; }
+    .cat-tab { padding: 7px 14px; font-size: 0.8rem; }
+    .modal-sip-cta { flex-direction: column; text-align: center; }
+  }
+</style>
+
+<!-- HERO -->
+<section class="hero-section">
+  <div class="hero-content">
+    <div class="hero-badge">📬 Market Intelligence</div>
+    <h1 class="hero-title">Financial Clarity,<br>Delivered Weekly</h1>
+    <p class="hero-description">Expert SIP analysis and retirement strategies from a SEBI-regulated NISM-certified Mutual Fund Distributor — no jargon, just clear guidance for Indian investors.</p>
+    <div class="hero-stats">
+      <div class="stat-item"><span class="stat-number">5 min</span><span class="stat-label">Weekly reads</span></div>
+      <div class="stat-item"><span class="stat-number">100%</span><span class="stat-label">Free forever</span></div>
+      <div class="stat-item"><span class="stat-number">0</span><span class="stat-label">Spam, ever</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNUP -->
+<section class="signup-section">
+  <div class="signup-container">
+    <div class="signup-card">
+      <div class="card-header">
+        <h2 class="card-title">Subscribe to Our Newsletter</h2>
+        <p class="card-subtitle">Stay updated with the latest financial insights</p>
+      </div>
+      <div id="successMessage" class="success-alert">
+        <i class="fas fa-check-circle"></i>
+        <span>Successfully subscribed! Check your email for confirmation.</span>
+      </div>
+      <form id="newsletterForm" onsubmit="handleSubscribe(event)">
+        <div class="form-group">
+          <label for="fullName" class="form-label">Full Name</label>
+          <input type="text" class="form-control" id="fullName" placeholder="Enter your full name" required>
+        </div>
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">What interests you? (Optional)</label>
+          <div class="topics-grid">
+            <div class="topic-checkbox"><input type="checkbox" id="sip" name="topics" value="SIP & Mutual Funds" checked><label for="sip">SIP &amp; Mutual Funds</label></div>
+            <div class="topic-checkbox"><input type="checkbox" id="retirement" name="topics" value="Retirement Planning" checked><label for="retirement">Retirement Planning</label></div>
+            <div class="topic-checkbox"><input type="checkbox" id="taxes" name="topics" value="Tax Savings"><label for="taxes">Tax Savings</label></div>
+            <div class="topic-checkbox"><input type="checkbox" id="markets" name="topics" value="Market Updates"><label for="markets">Market Updates</label></div>
+          </div>
+        </div>
+        <button type="submit" class="btn-subscribe" id="subscribeBtn">
+          <i class="fas fa-envelope"></i> Subscribe Now — It's Free
+        </button>
+        <p class="form-footer"><i class="fas fa-shield-alt"></i> No spam. Unsubscribe anytime. SEBI-regulated advisor.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits-section">
+  <div class="section-header">
+    <h2 class="section-title">Why Subscribe?</h2>
+    <p class="section-subtitle">Join smart Indian investors building wealth the right way</p>
+  </div>
+  <div class="benefits-grid">
+    <div class="benefit-card"><div class="benefit-icon"><i class="fas fa-graduation-cap"></i></div><div class="benefit-title">NISM-Certified Guidance</div><div class="benefit-text">Analysis from a registered MFD, not a random blogger. Every insight is professionally grounded.</div></div>
+    <div class="benefit-card"><div class="benefit-icon"><i class="fas fa-rocket"></i></div><div class="benefit-title">Actionable Every Time</div><div class="benefit-text">Not theory. Specific steps you can take this week to improve your portfolio.</div></div>
+    <div class="benefit-card"><div class="benefit-icon"><i class="fas fa-clock"></i></div><div class="benefit-title">5-Minute Reads</div><div class="benefit-text">Concise, high-signal content for busy professionals. No fluff, no padding.</div></div>
+    <div class="benefit-card"><div class="benefit-icon"><i class="fas fa-chart-line"></i></div><div class="benefit-title">Fund &amp; Market Alerts</div><div class="benefit-text">Timely updates on mutual fund ratings, SIP opportunities, and market shifts.</div></div>
+    <div class="benefit-card"><div class="benefit-icon"><i class="fas fa-shield-alt"></i></div><div class="benefit-title">SEBI Regulated</div><div class="benefit-text">ARN registered, AMFI compliant. Advice from someone accountable to a regulator.</div></div>
+    <div class="benefit-card"><div class="benefit-icon"><i class="fas fa-lock"></i></div><div class="benefit-title">Privacy First</div><div class="benefit-text">Your email is never sold or shared. Unsubscribe with one click, anytime.</div></div>
+  </div>
+</section>
+
+<!-- INSIGHTS — with category filters -->
+<section class="insights-section">
+  <div class="section-header">
+    <h2 class="section-title">Market Insights</h2>
+    <p class="section-subtitle">What our subscribers are reading — filter by topic</p>
+  </div>
+
+  <!-- Category Filter Tabs -->
+  <div class="category-filters" id="categoryTabs">
+    <button class="cat-tab active" data-cat="all" onclick="filterByCategory('all', this)">
+      All <span class="cat-count" id="count-all">0</span>
+    </button>
+    <button class="cat-tab" data-cat="SIP" onclick="filterByCategory('SIP', this)">
+      SIP <span class="cat-count" id="count-SIP">0</span>
+    </button>
+    <button class="cat-tab" data-cat="Retirement" onclick="filterByCategory('Retirement', this)">
+      Retirement <span class="cat-count" id="count-Retirement">0</span>
+    </button>
+    <button class="cat-tab" data-cat="Tax" onclick="filterByCategory('Tax', this)">
+      Tax Savings <span class="cat-count" id="count-Tax">0</span>
+    </button>
+    <button class="cat-tab" data-cat="Market Insight" onclick="filterByCategory('Market Insight', this)">
+      Market Insight <span class="cat-count" id="count-Market Insight">0</span>
+    </button>
+    <button class="cat-tab" data-cat="Mutual Fund" onclick="filterByCategory('Mutual Fund', this)">
+      Mutual Fund <span class="cat-count" id="count-Mutual Fund">0</span>
+    </button>
+    <button class="cat-tab" data-cat="Goal Planning" onclick="filterByCategory('Goal Planning', this)">
+      Goal Planning <span class="cat-count" id="count-Goal Planning">0</span>
+    </button>
+    <button class="cat-tab" data-cat="Market Update" onclick="filterByCategory('Market Update', this)">
+      Market Update <span class="cat-count" id="count-Market Update">0</span>
+    </button>
+    <button class="cat-tab" data-cat="Risk & Planning" onclick="filterByCategory('Risk & Planning', this)">
+      Risk &amp; Planning <span class="cat-count" id="count-Risk & Planning">0</span>
+    </button>
+  </div>
+
+  <div class="insights-grid-3" id="insightsList">
+    <div class="empty-state"><div class="empty-icon">📰</div><p class="empty-text">Loading insights...</p></div>
+  </div>
+</section>
+
+<!-- INSIGHT MODAL -->
+<div class="modal fade" id="insightModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const NJ_PORTAL = 'https://www.njwealth.in';
+
+  let blogsData      = [];
+  let activeCat      = 'all';
+  let filteredBlogs  = [];
+
+  // ── SUBSCRIBE ──
+  async function handleSubscribe(e) {
+    e.preventDefault();
+    const fullName = document.getElementById('fullName').value.trim();
+    const email    = document.getElementById('email').value.trim();
+    const topics   = Array.from(document.querySelectorAll('input[name="topics"]:checked')).map(cb => cb.value);
+    const btn      = document.getElementById('subscribeBtn');
+    const orig     = btn.innerHTML;
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
+    try {
+      const res  = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fullName, email, frequency: 'weekly', topics: topics.length ? topics : ['SIP & Mutual Funds', 'Retirement Planning'] })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        document.getElementById('newsletterForm').reset();
+        document.getElementById('sip').checked = document.getElementById('retirement').checked = true;
+        const sm = document.getElementById('successMessage');
+        sm.querySelector('span').textContent = data.message || 'Successfully subscribed!';
+        sm.classList.add('show'); setTimeout(() => sm.classList.remove('show'), 5000);
+      } else {
+        alert('❌ ' + (data.error || 'Subscription failed.'));
+      }
+    } catch { alert('❌ Error occurred. Please check your connection.'); }
+    finally { btn.disabled = false; btn.innerHTML = orig; }
+  }
+
+  // ── CATEGORY FILTER ──
+  function filterByCategory(cat, btn) {
+    activeCat = cat;
+
+    // Update active tab
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Filter
+    filteredBlogs = cat === 'all'
+      ? [...blogsData]
+      : blogsData.filter(b => b.category === cat);
+
+    renderInsights(filteredBlogs);
+  }
+
+  function updateCounts() {
+    const categories = ['SIP', 'Retirement', 'Tax', 'Market Insight', 'Mutual Fund', 'Goal Planning', 'Market Update', 'Risk & Planning'];
+    document.getElementById('count-all').textContent = blogsData.length;
+    categories.forEach(cat => {
+      const el = document.getElementById(`count-${cat}`);
+      if (el) el.textContent = blogsData.filter(b => b.category === cat).length;
+    });
+  }
+
+  // ── RENDER INSIGHTS ──
+  function renderInsights(blogs) {
+    const cont = document.getElementById('insightsList');
+
+    if (!blogs.length) {
+      cont.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><p class="empty-text">No insights in this category yet.</p></div>`;
+      return;
+    }
+
+    cont.innerHTML = blogs.map((blog, i) => {
+      const date    = new Date(blog.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+      const excerpt = blog.content.replace(/<[^>]*>/g, '').substring(0, 115) + '...';
+      const cat     = blog.category || 'Market Insight';
+      const imgHtml = blog.image_url
+        ? `<img src="${blog.image_url}" alt="${blog.title}" loading="lazy" onerror="this.style.display='none';this.parentNode.querySelector('.ic2-img-placeholder').style.display='flex'">`
+        : '';
+
+      // find actual index in full blogsData for modal
+      const realIndex = blogsData.findIndex(b => b.id === blog.id);
+
+      return `
+      <div class="ic2">
+        <div class="ic2-img">
+          ${imgHtml}
+          <div class="ic2-img-placeholder" style="${blog.image_url ? 'display:none' : ''}">📊</div>
+          <span class="ic2-cat">${cat}</span>
+        </div>
+        <div class="ic2-body">
+          <div class="ic2-date">${date}</div>
+          <div class="ic2-title">${blog.title}</div>
+          <div class="ic2-excerpt">${excerpt}</div>
+          <div class="ic2-author">
+            <div class="ic2-avatar">MF</div>
+            <div>
+              <span class="ic2-author-name">${blog.author || 'RetireWise+'}</span>
+              <span class="ic2-author-cred">NISM VA · ARN Registered MFD</span>
+            </div>
+          </div>
+          <div class="ic2-actions">
+            <button class="btn-rm" onclick="showInsight(${realIndex})"><i class="fas fa-book-open"></i> Read More</button>
+            <a href="/lead" class="btn-sip"><i class="fas fa-chart-line"></i> Invest Now</a>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── MODAL ──
+  function showInsight(index) {
+    const blog   = blogsData[index];
+    const date   = new Date(blog.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+    const cat    = blog.category || 'Market Insight';
+    const njLink = blog.nj_link  || NJ_PORTAL;
+
+    document.getElementById('modalTitle').innerText = blog.title;
+    document.getElementById('modalBody').innerHTML = `
+      ${blog.image_url ? `<img src="${blog.image_url}" alt="${blog.title}" class="modal-hero-img">` : ''}
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;">
+        <span style="background:var(--gold-accent);color:#fff;font-size:0.7rem;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;padding:4px 12px;border-radius:20px;">${cat}</span>
+        <span style="color:#94a3b8;font-size:0.85rem;">${date}</span>
+      </div>
+      <div class="modal-nism-bar"><i class="fas fa-shield-alt"></i> Analysis by an NISM VA Certified, ARN-registered Mutual Fund Distributor · NJ E-Wealth Partner</div>
+      <div style="line-height:1.85;color:#475569;font-size:1rem;">
+        ${blog.content}
+      </div>
+      ${blog.reference_link ? `<div style="margin-top:22px;padding-top:18px;border-top:2px solid #e2e8f0;"><a href="${blog.reference_link}" target="_blank" style="color:var(--gold-accent);font-weight:600;text-decoration:none;font-size:0.92rem;"><i class="fas fa-external-link-alt"></i> Read Source Article</a></div>` : ''}
+      <div class="modal-sip-cta">
+        <div class="ct">
+          <span class="ct-title">Ready to act on this insight?</span>
+          <span class="ct-sub">Book a free consultation with our NISM certified advisor.</span>
+        </div>
+        <a href="/lead" class="modal-sip-btn"><i class="fas fa-chart-line"></i> Start SIP Now</a>
+      </div>`;
+    new bootstrap.Modal(document.getElementById('insightModal')).show();
+  }
+
+  // ── LOAD ──
+  async function loadInsights() {
+    try {
+      const res = await fetch('/api/blogs');
+      blogsData = await res.json();
+      blogsData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+      updateCounts();
+      filteredBlogs = [...blogsData];
+      renderInsights(filteredBlogs);
+    } catch {
+      document.getElementById('insightsList').innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><p class="empty-text">Unable to load insights.</p></div>`;
+    }
+  }
+
+  loadInsights();
+</script>
+
+<%- include('../partials/footer') %>

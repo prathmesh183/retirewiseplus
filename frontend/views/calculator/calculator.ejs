@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= tool.title %> | RetireWise+</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="<%= tool.description %> Free calculator by RetireWise+.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --tool-color:   <%= tool.color %>;
+      --tool-alpha:   <%= tool.color %>18;
+      --brand-green:  #1a3c31;
+      --brand-gold:   #b59b5d;
+      --slate:        #94A3B8;
+      --emerald:      #10B981;
+      --text-dark:    #1e293b;
+      --card-shadow:  0 10px 30px rgba(0,0,0,0.04);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8f9f7;
+      color: var(--text-dark);
+      margin-top: 4.5rem;
+    }
+
+    h1, h2, h3, .sora { font-family: 'Sora', sans-serif; letter-spacing: -0.02em; }
+
+    /* ── BREADCRUMB ── */
+    .calc-breadcrumb {
+      background: white;
+      border-bottom: 1px solid #e8ede9;
+      padding: 12px 0;
+      font-size: 0.85rem;
+      color: #7a8a80;
+    }
+    .calc-breadcrumb a { color: var(--brand-green); text-decoration: none; font-weight: 600; }
+    .calc-breadcrumb a:hover { text-decoration: underline; }
+    .calc-breadcrumb .sep { margin: 0 8px; color: #c0ccc6; }
+
+    /* ── HERO ── */
+    .calc-hero {
+      background: white;
+      padding: 32px 0 28px;
+      border-bottom: 1px solid #e8ede9;
+    }
+    .calc-icon-big {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      background: var(--tool-alpha);
+      border: 1px solid var(--tool-color)22;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      color: var(--tool-color);
+      flex-shrink: 0;
+    }
+    .level-chip {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: var(--tool-alpha);
+      color: var(--tool-color);
+      border: 1px solid var(--tool-color)33;
+    }
+
+    /* ── CARDS ── */
+    .tool-card {
+      background: white;
+      border: 1px solid #e8ede9;
+      border-radius: 20px;
+      box-shadow: var(--card-shadow);
+    }
+
+    /* ── INPUTS ── */
+    .input-label {
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .custom-input {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 13px 16px;
+      width: 100%;
+      font-weight: 600;
+      font-size: 1.05rem;
+      transition: all 0.2s ease;
+      font-family: 'Inter', sans-serif;
+      color: var(--text-dark);
+    }
+    .custom-input:focus {
+      border-color: var(--tool-color);
+      background: #fff;
+      outline: none;
+      box-shadow: 0 0 0 4px var(--tool-alpha);
+    }
+
+    /* ── RESULTS ── */
+    .result-box {
+      background: #f8f9f7;
+      border: 1px solid #e8ede9;
+      border-radius: 18px;
+      padding: 24px;
+      margin-top: 20px;
+    }
+    .result-primary .result-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #7a8a80;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .result-primary .result-value {
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 2rem;
+      color: var(--tool-color);
+      line-height: 1;
+    }
+    .result-divider { height: 1px; background: #e8ede9; margin: 16px 0; }
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .result-row:last-child { margin-bottom: 0; }
+    .result-row .rl { font-size: 0.82rem; color: #7a8a80; }
+    .result-row .rv {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .rv-primary { color: var(--tool-color); }
+    .rv-slate   { color: #64748b; }
+    .rv-green   { color: #059669; }
+    .rv-gold    { color: #b59b5d; }
+
+    /* ── CHART ── */
+    .chart-box { height: 380px; padding: 8px; }
+    @media (max-width: 768px) { .chart-box { height: 280px; } }
+
+    /* ── GUIDE SECTION ── */
+    .guide-section {
+      padding: 56px 0;
+      border-top: 1px solid #e8ede9;
+      margin-top: 40px;
+    }
+    .step-pill {
+      display: inline-block;
+      padding: 3px 12px;
+      background: var(--tool-alpha);
+      color: var(--tool-color);
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.72rem;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .example-box {
+      background: white;
+      border: 1px solid #e8ede9;
+      border-left: 4px solid var(--tool-color);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-top: 20px;
+    }
+
+    /* ── BACK BUTTON ── */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border: 1.5px solid #e8ede9;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--brand-green);
+      text-decoration: none;
+      transition: all 0.2s;
+      background: white;
+    }
+    .back-btn:hover {
+      border-color: var(--brand-green);
+      background: #f0f5f2;
+      color: var(--brand-green);
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 576px) {
+      .calc-hero { padding: 24px 0 20px; }
+      .result-primary .result-value { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<%- include('../partials/header', { title: tool.title }) %>
+
+<!-- BREADCRUMB -->
+<nav class="calc-breadcrumb">
+  <div class="container">
+    <a href="/tools">Calculators</a>
+    <span class="sep">›</span>
+    <span><%= tool.category %></span>
+    <span class="sep">›</span>
+    <span style="color: var(--text-dark); font-weight:600;"><%= tool.title %></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="calc-hero">
+  <div class="container">
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <div class="calc-icon-big">
+        <i class="<%= tool.icon %>"></i>
+      </div>
+      <div>
+        <h1 class="sora fw-bold mb-1" style="font-size:clamp(1.4rem,4vw,2rem);">
+          <%= tool.title %>
+        </h1>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          <span class="level-chip"><%= tool.level %></span>
+          <span style="font-size:0.8rem; color:#7a8a80;">
+            <i class="fas fa-clock me-1"></i><%= tool.time %>
+          </span>
+          <a href="/tools" class="back-btn ms-2">
+            <i class="fas fa-arrow-left" style="font-size:0.7rem;"></i> All Tools
+          </a>
+        </div>
+      </div>
+    </div>
+    <p style="max-width:600px; color:#7a8a80; font-size:0.95rem; margin:0; margin-top:4px;">
+      <%= tool.description %>
+    </p>
+  </div>
+</section>
+
+<!-- MAIN CALCULATOR -->
+<main class="container py-4">
+  <div class="row g-4">
+
+    <!-- ── LEFT: INPUTS + RESULTS ── -->
+    <div class="col-lg-5">
+      <div class="tool-card p-4">
+        <h2 class="sora fw-bold mb-4" style="font-size:1.15rem;">Enter Your Numbers</h2>
+
+        <% tool.inputs.forEach(function(inp) { %>
+          <div class="mb-4">
+            <label class="input-label" for="<%= inp.id %>"><%= inp.label %></label>
+            <% if (inp.type === 'select') { %>
+              <select id="<%= inp.id %>" class="custom-input" onchange="calculate()">
+                <% inp.options.forEach(function(opt) { %>
+                  <option value="<%= opt.value %>" <%= opt.value === inp.defaultValue ? 'selected' : '' %>><%= opt.label %></option>
+                <% }) %>
+              </select>
+            <% } else { %>
+              <input
+                type="number"
+                id="<%= inp.id %>"
+                class="custom-input"
+                value="<%= inp.defaultValue %>"
+                oninput="calculate()"
+              >
+            <% } %>
+          </div>
+        <% }) %>
+
+        <!-- RESULTS -->
+        <div class="result-box">
+          <!-- Primary output (big number) -->
+          <% var primary = tool.outputs.find(function(o){ return o.id === tool.primaryOutput; }); %>
+          <div class="result-primary text-center mb-2">
+            <span class="result-label"><%= primary.label %></span>
+            <div id="<%= primary.id %>" class="result-value">—</div>
+          </div>
+
+          <!-- Secondary outputs -->
+          <% var secondaries = tool.outputs.filter(function(o){ return o.id !== tool.primaryOutput; }); %>
+          <% if (secondaries.length > 0) { %>
+            <div class="result-divider"></div>
+            <% secondaries.forEach(function(out) { %>
+              <div class="result-row">
+                <span class="rl"><%= out.label %></span>
+                <span id="<%= out.id %>" class="rv rv-<%= out.color %>">—</span>
+              </div>
+            <% }) %>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RIGHT: CHART ── -->
+    <div class="col-lg-7">
+      <div class="tool-card p-4 h-100">
+        <h3 class="sora fw-bold mb-3" style="font-size:1rem; color:#7a8a80; text-transform:uppercase; letter-spacing:0.06em;">
+          Visual Breakdown
+        </h3>
+        <div class="chart-box">
+          <canvas id="toolChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── HOW IT WORKS ── -->
+  <div class="guide-section">
+    <div class="row">
+
+      <div class="col-md-6 pe-lg-5 mb-5 mb-md-0">
+        <h3 class="sora fw-bold mb-3">How this tool works</h3>
+        <p style="color:#64748b; line-height:1.7;"><%= tool.about %></p>
+        <div class="example-box">
+          <p class="sora fw-bold mb-2" style="font-size:0.9rem;">
+            <i class="fas fa-lightbulb me-2" style="color:var(--tool-color);"></i>Practical Example
+          </p>
+          <p class="small mb-0" style="color:#64748b; line-height:1.6;"><%= tool.example %></p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <h3 class="sora fw-bold mb-3">Step-by-Step Logic</h3>
+        <% tool.steps.forEach(function(step, i) { %>
+          <div class="mb-4">
+            <span class="step-pill">Step <%= i+1 %></span>
+            <h6 class="fw-bold mb-1" style="font-size:0.95rem;"><%= step.title %></h6>
+            <p class="small mb-0" style="color:#64748b; line-height:1.6;"><%= step.body %></p>
+          </div>
+        <% }) %>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<%- include('../partials/footer') %>
+
+<!-- ════════════════════════════════════════════════════════════
+     CALCULATION ENGINE
+     Each tool slug maps to a calculate() function below.
+     The EJS passes tool.slug so we know which one to run.
+     ════════════════════════════════════════════════════════════ -->
+<script>
+const TOOL_SLUG = '<%= tool.slug %>';
+let toolChart;
+
+// ── Shared helpers ──────────────────────────────────────────
+function fmt(n) {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  n = Math.round(n);
+  if (Math.abs(n) >= 10000000) return '₹' + (n/10000000).toFixed(2) + ' Cr';
+  if (Math.abs(n) >= 100000)   return '₹' + (n/100000).toFixed(2) + ' L';
+  return '₹' + n.toLocaleString('en-IN');
+}
+function fmtPct(n) {
+  if (n === null || isNaN(n)) return '—';
+  return n.toFixed(2) + '%';
+}
+function fmtYrs(n) {
+  if (!n || isNaN(n)) return '—';
+  const y = Math.floor(n), m = Math.round((n - y) * 12);
+  return y + ' yrs' + (m ? ' ' + m + ' mo' : '');
+}
+function getVal(id) { return Number(document.getElementById(id)?.value) || 0; }
+function setEl(id, val) { const el = document.getElementById(id); if (el) el.innerText = val; }
+
+function renderChart(type, labels, datasets) {
+  const ctx = document.getElementById('toolChart').getContext('2d');
+  if (toolChart) toolChart.destroy();
+
+  const colors = {
+    primary:  '<%= tool.color %>',
+    primaryA: '<%= tool.color %>18',
+    green:    '#059669',
+    slate:    '#94A3B8',
+    gold:     '#b59b5d'
+  };
+
+  toolChart = new Chart(ctx, {
+    type: type,
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: datasets.length > 1,
+          position: 'top',
+          labels: { font: { family: 'Inter', weight: '600', size: 12 }, usePointStyle: true }
+        },
+        tooltip: {
+          backgroundColor: '#1e293b',
+          padding: 12,
+          titleFont: { family: 'Sora', size: 13 },
+          bodyFont: { family: 'Inter', size: 12 },
+          callbacks: {
+            label: (c) => {
+              const v = c.raw;
+              if (typeof v === 'number' && v > 1000) return ' ' + fmt(v);
+              return ' ' + v;
+            }
+          }
+        }
+      },
+      scales: type !== 'doughnut' ? {
+        y: {
+          grid: { color: '#f1f5f9' },
+          ticks: {
+            font: { family: 'Inter' },
+            callback: v => {
+              if (v >= 10000000) return (v/10000000).toFixed(1) + 'Cr';
+              if (v >= 100000)   return (v/100000).toFixed(1) + 'L';
+              return v;
+            }
+          }
+        },
+        x: { grid: { display: false }, ticks: { font: { family: 'Inter' } } }
+      } : {}
+    }
+  });
+}
+
+// ── Per-tool calculation functions ──────────────────────────
+const calculators = {
+
+  'sip': function() {
+    const monthly = getVal('monthlyAmount'), yrs = getVal('years'), ret = getVal('annualReturn');
+    if (!monthly || !yrs || !ret) return;
+    const months = yrs * 12, mr = ret / 12 / 100;
+    let fv = 0, labels = [], growth = [], invested = [];
+    for (let i = 1; i <= months; i++) {
+      fv = (fv + monthly) * (1 + mr);
+      if (i % 12 === 0) {
+        labels.push('Yr ' + (i/12));
+        growth.push(Math.round(fv));
+        invested.push(monthly * i);
+      }
+    }
+    const totalInvested = monthly * months, gain = fv - totalInvested;
+    setEl('displayTotal',    fmt(fv));
+    setEl('displayInvested', fmt(totalInvested));
+    setEl('displayGain',     fmt(gain));
+    renderChart('line', labels, [
+      { label: 'Wealth Growth', data: growth,   borderColor: '<%= tool.color %>', backgroundColor: '<%= tool.color %>12', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0 },
+      { label: 'Investment',    data: invested, borderColor: '#94A3B8', borderDash: [6,6], fill: false, tension: 0.4, borderWidth: 2, pointRadius: 0 }
+    ]);
+  },
+
+  'step-up-sip': function() {
+    const base = getVal('monthlyAmount'), stepUp = getVal('stepUp'), yrs = getVal('years'), ret = getVal('annualReturn');
+    if (!base || !yrs) return;
+    const mr = ret / 12 / 100;
+    let fv = 0, totalInvested = 0, labels = ['Start'], wealth = [0], inv = [0];
+    for (let yr = 1; yr <= yrs; yr++) {
+      const monthly = base * Math.pow(1 + stepUp/100, yr - 1);
+      for (let m = 1; m <= 12; m++) { fv = (fv + monthly) * (1 + mr); totalInvested += monthly; }
+      labels.push('Yr ' + yr); wealth.push(Math.round(fv)); inv.push(Math.round(totalInvested));
+    }
+    setEl('displayFinal',    fmt(fv));
+    setEl('displayInvested', fmt(totalInvested));
+    setEl('displayGains',    fmt(fv - totalInvested));
+    renderChart('line', labels, [
+      { label: 'Total Wealth',    data: wealth, borderColor: '<%= tool.color %>', backgroundColor: '<%= tool.color %>12', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0 },
+      { label: 'Total Invested',  data: inv,    borderColor: '#94A3B8', borderDash: [5,5], tension: 0.4, borderWidth: 2, pointRadius: 0 }
+    ]);
+  },
+
+  'swp': function() {
+    const corpus = getVal('corpus'), withdrawal = getVal('withdrawal'), ret = getVal('annualReturn');
+    if (!corpus || !withdrawal) return;
+    const mr = ret / 12 / 100;
+    let bal = corpus, months = 0, totalW = 0, labels = ['Start'], balData = [Math.round(bal)];
+    while (bal > 0 && months < 600) {
+      bal = bal * (1 + mr) - withdrawal;
+      months++;
+      totalW += withdrawal;
+      if (months % 12 === 0) { labels.push('Yr ' + (months/12)); balData.push(Math.max(0, Math.round(bal))); }
+      if (bal <= 0) break;
+    }
+    setEl('displayMonths', months + ' months');
+    setEl('displayYears',  fmtYrs(months/12));
+    setEl('displayTotal',  fmt(totalW));
+    renderChart('line', labels, [
+      { label: 'Remaining Corpus', data: balData, borderColor: '<%= tool.color %>', backgroundColor: '<%= tool.color %>12', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0 }
+    ]);
+  },
+
+  'sip-vs-lumpsum': function() {
+    const monthly = getVal('monthlyAmount'), yrs = getVal('years'), ret = getVal('annualReturn');
+    if (!monthly || !yrs || !ret) return;
+    const mr = ret / 12 / 100, annual = monthly * 12;
+    let sipFV = 0, lsFV = 0, labels = [], sipData = [], lsData = [];
+    for (let yr = 1; yr <= yrs; yr++) {
+      for (let m = 1; m <= 12; m++) sipFV = (sipFV + monthly) * (1 + mr);
+      lsFV = (lsFV + annual) * (1 + ret/100);
+      labels.push('Yr ' + yr);
+      sipData.push(Math.round(sipFV));
+      lsData.push(Math.round(lsFV));
+    }
+    setEl('displaySIP',     fmt(sipFV));
+    setEl('displayLumpsum', fmt(lsFV));
+    setEl('displayDiff',    fmt(Math.abs(lsFV - sipFV)));
+    renderChart('line', labels, [
+      { label: 'SIP',     data: sipData, borderColor: '<%= tool.color %>', backgroundColor: '<%= tool.color %>12', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0 },
+      { label: 'Lumpsum', data: lsData,  borderColor: '#059669', backgroundColor: '#05996912', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0 }
+    ]);
+  },
+
+  'lumpsum': function() {
+    const amt = getVal('lumpsumAmount'), ret = getVal('annualReturn'), yrs = getVal('years');
+    if (!amt || !yrs) return;
+    const r = ret / 100;
+    let labels = ['Start'], data = [amt];
+    for (let i = 1; i <= yrs; i++) { labels.push('Yr ' + i); data.push(Math.round(amt * Math.pow(1+r, i))); }
+    const fv = data[data.length - 1];
+    setEl('displayTotal',    fmt(fv));
+    setEl('displayInvested', fmt(amt));
+    setEl('displayGain',     fmt(fv - amt));
+    renderChart('line', labels, [
+      { label: 'Value', data, borderColor: '<%= tool.color %>', backgroundColor: '<%= tool.color %>12', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 4, pointBackgroundColor: '<%= tool.color %>' }
+    ]);
+  },
+
+  'cagr': function() {
+    const init = getVal('initialValue'), final = getVal('finalValue'), yrs = getVal('years');
+    if (!init || !final || !yrs) return;
+    const cagr = (Math.pow(final/init, 1/yrs) - 1) * 100;
+    const absGrowth = ((final - init) / init) * 100;
+    let labels = [], data = [];
+    for (let i = 0; i <= yrs; i++) { labels.push('Yr ' + i); data.push(Math.round(init * Math.pow(1 + cagr/100, i))); }
+    setEl('displayCAGR',   fmtPct(cagr));
+    setEl('displayGrowth', fmtPct(absGrowth));
+    renderChart('line', labels, [
+      { label: 'Smoothed Growth', data, borderColor: '<%= tool.color %>', backgroundColor: '<%= tool.color %>12', fill: true, tension: 0.3, borderWidth: 3, pointRadius: 4, pointBackgroundColor: '<%= tool.color %>' }
+    ]);
+  },
+
+  'xirr': function() {
+    const monthly = getVal('monthlyAmount'), yrs = getVal('years'), finalVal = getVal('finalValue');
+    if (!monthly || !yrs || !finalVal) return;
+    const totalInvested = monthly * yrs * 12, gain = finalVal - totalInvested;
+    // Simplified XIRR approximation via Newton-Raphson
+    const months = yrs * 12;
+    let rate = 0.1;
+    for (let iter = 0; iter < 100; iter++) {
+      let fv = 0;
+      for (let i = 1; i <= months; i++) fv = (fv + monthly) * (1 + rate/12);
+      const err = fv - finalVal;
+      if (Math.abs(err) < 1) break;
+      rate = rate * (finalVal / fv);
+    }
+    setEl('displayXIRR',     fmtPct(rate * 100));
+    setEl('displayInvested', fmt(totalInvested));
+    setEl('displayGain',     fmt(gain));
+    renderChart('bar', ['Total Invested', 'Gain', 'Final Value'], [{
+      data: [totalInvested, gain, finalVal],
+      backgroundColor: ['#94A3B8', '#059669', '<%= tool.color %>'],
+      borderRadius: 8
+    }]);
+  },
+
+  'retirement': function() {
+    const curAge = getVal('currentAge'), retAge = getVal('retirementAge');
+    const curSav = getVal('currentSavings'), yearlyInv = getVal('yearlyInvestment');
+    const ret = getVal('expectedReturn'), inf = getVal('inflationRate');
+    const yrs = retAge - curAge;
+    if (yrs <= 0) return;
+    const r = ret/100, infl = inf/100;
+    let corpus = curSav, labels = [], nominal = [], real = [];
+    for (let i = 0; i <= yrs; i++) {
+      labels.push('Age ' + (curAge + i));
+      nominal.push(Math.round(corpus));
+      real.push(Math.round(corpus / Math.pow(1 + infl, i)));
+      corpus = (corpus + yearlyInv) * (1 + r);
+    }
+    setEl('displayCorpus',    fmt(nominal[nominal.length-1]));
+    setEl('displayRealValue', fmt(real[real.length-1]));
+    renderChart('line', labels, [
+      { label: 'Total Wealth (Nominal)', data: nominal, borderColor: '<%= tool.color %>', backgroundColor: '<%= tool.color %>08', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0 },
+      { label: "Today's Purchasing Power", data: real, borderColor: '#b59b5d', borderDash: [5,5], tension: 0.4, borderWidth: 2, pointRadius: 0 }
+    ]);
+  },
+
+  'goal': function() {
+    const target = getVal('targetAmount'), yrs = getVal('years'), ret = getVal('annualReturn');
+    if (!target || !yrs || !ret) return;
+    const months = yrs * 12, mr = ret / 12 / 100;
+    const sipNeeded = target / (((Math.pow(1+mr, months)-1)/mr) * (1+mr));
+    const totalInvested = sipNeeded * months;
+    setEl('displaySIP',      fmt(sipNeeded));
+    setEl('displayInvested', fmt(totalInvested));
+    setEl('displayProfit',   fmt(target - totalInvested));
+    let labels = [], data = [], bal = 0;
+    for (let i = 0; i <= months; i++) {
+      if (i % 12 === 0) { labels.push('Yr ' + (i/12)); data.push(Math.round(bal)); }
+      bal = (bal + sipNeeded) * (1 + mr);
+    }
+    renderChart('line', labels, [
+      { label: 'Projected Wealth', data, borderColor: '<%= tool.color %>', backgroundColor: '<%= tool.color %>12', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0 }
+    ]);
+  },
+
+  'fire': function() {
+    const exp = getVal('monthlyExpenses'), corpus = getVal('currentCorpus');
+    const savings = getVal('monthlySavings'), ret = getVal('annualReturn'), inf = getVal('inflationRate');
+    const annualExp = exp * 12, fireNum = annualExp / 0.04;
+    const mr = ret / 12 / 100;
+    let bal = corpus, months = 0, labels = ['Now'], data = [Math.round(bal)];
+    while (bal < fireNum && months < 600) {
+      bal = (bal + savings) * (1 + mr);
+      months++;
+      if (months % 12 === 0) { labels.push('Yr ' + (months/12)); data.push(Math.round(bal)); }
+    }
+    setEl('displayFIRE',  fmt(fireNum));
+    setEl('displayYears', fmtYrs(months/12));
+    setEl('displayAge',   25 + Math.round(months/12) + ' yrs');
+    renderChart('line', labels, [
+      { label: 'Corpus Growth', data, borderColor: '<%= tool.color %>', backgroundColor: '<%= tool.color %>12', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0 }
+    ]);
+  },
+
+  'life-insurance': function() {
+    const income = getVal('annualIncome'), yrs = getVal('yearsToRetire');
+    const liab = getVal('liabilities'), assets = getVal('currentAssets');
+    const hlv = income * yrs * 0.5;
+    const cover = Math.max(hlv + liab - assets, income * 10);
+    const premium = Math.round(cover / 100000) * 300;
+    setEl('displayCover',         fmt(cover));
+    setEl('displayHLV',           fmt(hlv));
+    setEl('displayAnnualPremium', fmt(premium));
+    renderChart('bar', ['Current Assets', 'Liabilities', 'Recommended Cover'], [{
+      data: [assets, liab, cover],
+      backgroundColor: ['#059669', '#DC2626', '<%= tool.color %>'],
+      borderRadius: 8
+    }]);
+  },
+
+  'fd': function() {
+    const p = getVal('principal'), r = getVal('rate'), yrs = getVal('years');
+    if (!p || !r || !yrs) return;
+    let labels = ['Yr 0'], data = [p];
+    for (let i = 1; i <= yrs; i++) { labels.push('Yr ' + i); data.push(Math.round(p * Math.pow(1 + r/100, i))); }
+    const maturity = data[data.length-1];
+    setEl('displayMaturity',  fmt(maturity));
+    setEl('displayInvested',  fmt(p));
+    setEl('displayGain',      fmt(maturity - p));
+    renderChart('line', labels, [
+      { label: 'FD Value', data, borderColor: '<%= tool.color %>', backgroundColor: '<%= tool.color %>12', fill: true, tension: 0.3, borderWidth: 3, pointRadius: 4, pointBackgroundColor: '<%= tool.color %>' }
+    ]);
+  },
+
+  'rd': function() {
+    const d = getVal('monthlyDeposit'), r = getVal('rate'), yrs = getVal('years');
+    if (!d || !r || !yrs) return;
+    const n = yrs * 12, qr = r / 400;
+    const maturity = d * (Math.pow(1 + qr, n) - 1) / (1 - Math.pow(1 + qr, -1/3));
+    const invested = d * n;
+    setEl('displayMaturity', fmt(maturity));
+    setEl('displayInvested', fmt(invested));
+    setEl('displayInterest', fmt(maturity - invested));
+    let labels = [], data = [];
+    for (let i = 1; i <= n; i++) {
+      if (i % 3 === 0) { labels.push('Q' + (i/3)); data.push(Math.round(d * (Math.pow(1+qr, i)-1)/(1-Math.pow(1+qr,-1/3)))); }
+    }
+    renderChart('bar', labels, [{ label: 'RD Value', data, backgroundColor: '<%= tool.color %>aa', borderRadius: 6 }]);
+  },
+
+  'ppf': function() {
+    const dep = getVal('yearlyDeposit'), r = getVal('rate'), yrs = getVal('years');
+    if (!dep || !r || !yrs) return;
+    const rate = r / 100;
+    let bal = 0, labels = [], data = [], invData = [];
+    for (let i = 1; i <= yrs; i++) {
+      bal = (bal + dep) * (1 + rate);
+      labels.push('Yr ' + i);
+      data.push(Math.round(bal));
+      invData.push(dep * i);
+    }
+    setEl('displayMaturity', fmt(bal));
+    setEl('displayInvested', fmt(dep * yrs));
+    setEl('displayInterest', fmt(bal - dep * yrs));
+    renderChart('bar', labels, [
+      { label: 'PPF Balance', data, backgroundColor: '<%= tool.color %>cc', borderRadius: 6 },
+      { label: 'Deposited',   data: invData, backgroundColor: '#94A3B8aa', borderRadius: 6 }
+    ]);
+  },
+
+  'nps': function() {
+    const contrib = getVal('monthlyContrib'), curAge = getVal('currentAge'), ret = getVal('annualReturn');
+    const yrs = 60 - curAge, mr = ret / 12 / 100;
+    let fv = 0, labels = [], data = [];
+    for (let i = 1; i <= yrs * 12; i++) {
+      fv = (fv + contrib) * (1 + mr);
+      if (i % 12 === 0) { labels.push('Age ' + (curAge + i/12)); data.push(Math.round(fv)); }
+    }
+    const lumpsum = fv * 0.6, annuityCorpus = fv * 0.4, pension = (annuityCorpus * 0.06) / 12;
+    setEl('displayCorpus',  fmt(fv));
+    setEl('displayLumpsum', fmt(lumpsum));
+    setEl('displayPension', fmt(pension) + '/mo');
+    renderChart('doughnut', ['Tax-Free Lumpsum (60%)', 'Annuity (40%)'], [{
+      data: [lumpsum, annuityCorpus],
+      backgroundColor: ['<%= tool.color %>', '#94A3B8'],
+      borderWidth: 0,
+      hoverOffset: 8
+    }]);
+  },
+
+  'emi': function() {
+    const loan = getVal('loanAmount'), r = getVal('rate'), tenure = getVal('tenure');
+    if (!loan || !r || !tenure) return;
+    const mr = r / 12 / 100, n = tenure * 12;
+    const emi = loan * mr * Math.pow(1+mr, n) / (Math.pow(1+mr, n) - 1);
+    const total = emi * n, interest = total - loan;
+    setEl('displayEMI',      fmt(emi));
+    setEl('displayInterest', fmt(interest));
+    setEl('displayTotal',    fmt(total));
+    renderChart('doughnut', ['Principal', 'Total Interest'], [{
+      data: [Math.round(loan), Math.round(interest)],
+      backgroundColor: ['<%= tool.color %>', '#94A3B8'],
+      borderWidth: 0, hoverOffset: 8
+    }]);
+  },
+
+  'home-loan': function() {
+    const loan = getVal('loanAmount'), r = getVal('rate'), tenure = getVal('tenure');
+    if (!loan || !r || !tenure) return;
+    const mr = r / 12 / 100, n = tenure * 12;
+    const emi = loan * mr * Math.pow(1+mr, n) / (Math.pow(1+mr, n) - 1);
+    const total = emi * n, interest = total - loan;
+    setEl('displayEMI',      fmt(emi));
+    setEl('displayInterest', fmt(interest));
+    setEl('displayTotal',    fmt(total));
+    let labels = [], prinData = [], intData = [], bal = loan;
+    for (let yr = 1; yr <= tenure; yr++) {
+      let yearPrin = 0, yearInt = 0;
+      for (let m = 1; m <= 12; m++) {
+        const intPay = bal * mr, prinPay = emi - intPay;
+        yearPrin += prinPay; yearInt += intPay; bal -= prinPay;
+      }
+      labels.push('Yr ' + yr);
+      prinData.push(Math.round(yearPrin));
+      intData.push(Math.round(yearInt));
+    }
+    renderChart('bar', labels, [
+      { label: 'Principal', data: prinData, backgroundColor: '<%= tool.color %>cc', borderRadius: 6 },
+      { label: 'Interest',  data: intData,  backgroundColor: '#94A3B8aa', borderRadius: 6 }
+    ]);
+  },
+
+  'prepayment': function() {
+    const loan = getVal('loanAmount'), r = getVal('rate'), tenure = getVal('tenure');
+    const prepay = getVal('prepayment'), prepayYr = getVal('prepayYear');
+    if (!loan || !r || !tenure || !prepay) return;
+    const mr = r / 12 / 100, n = tenure * 12;
+    const emi = loan * mr * Math.pow(1+mr, n) / (Math.pow(1+mr, n) - 1);
+    // Without prepayment
+    const totalWithout = emi * n;
+    // With prepayment — find balance at prepayYr
+    let bal = loan;
+    for (let m = 1; m <= prepayYr * 12; m++) bal = bal * (1 + mr) - emi;
+    bal = Math.max(0, bal - prepay);
+    // Remaining months
+    let remMonths = 0;
+    let tempBal = bal;
+    while (tempBal > 0 && remMonths < 600) { tempBal = tempBal * (1 + mr) - emi; remMonths++; }
+    const totalWith = emi * (prepayYr * 12 + remMonths) + prepay;
+    const saved = totalWithout - totalWith;
+    const yrsSaved = (n - (prepayYr * 12 + remMonths)) / 12;
+    setEl('displaySaved',  fmt(saved));
+    setEl('displayYears',  fmtYrs(yrsSaved));
+    setEl('displayNewEMI', fmtYrs((prepayYr * 12 + remMonths) / 12) + ' total');
+    renderChart('bar', ['Without Prepayment', 'With Prepayment'], [{
+      data: [Math.round(totalWithout), Math.round(totalWith)],
+      backgroundColor: ['#94A3B8', '<%= tool.color %>'],
+      borderRadius: 8
+    }]);
+  },
+
+  'tax-saving': function() {
+    const income = getVal('annualIncome'), c80 = getVal('section80c');
+    const nps = getVal('nps80ccd'), health = getVal('healthInsurance');
+    function calcTax(inc) {
+      let tax = 0;
+      inc -= 50000; // Standard deduction
+      if (inc <= 250000) tax = 0;
+      else if (inc <= 500000) tax = (inc - 250000) * 0.05;
+      else if (inc <= 1000000) tax = 12500 + (inc - 500000) * 0.2;
+      else tax = 112500 + (inc - 1000000) * 0.3;
+      return tax * 1.04; // Cess
+    }
+    const taxBefore = calcTax(income);
+    const deductions = Math.min(c80, 150000) + Math.min(nps, 50000) + Math.min(health, 25000);
+    const taxAfter = calcTax(Math.max(0, income - deductions));
+    const saved = taxBefore - taxAfter;
+    setEl('displayTaxSaved',  fmt(saved));
+    setEl('displayTaxBefore', fmt(taxBefore));
+    setEl('displayTaxAfter',  fmt(taxAfter));
+    renderChart('doughnut', ['Tax Saved', 'Tax Still Payable'], [{
+      data: [Math.round(saved), Math.round(taxAfter)],
+      backgroundColor: ['<%= tool.color %>', '#e2e8f0'],
+      borderWidth: 0, hoverOffset: 8
+    }]);
+  },
+
+  'capital-gains': function() {
+    const buy = getVal('purchaseValue'), sell = getVal('saleValue'), yrs = getVal('holdingYears');
+    const profit = sell - buy;
+    let tax = 0;
+    if (yrs >= 1) {
+      const taxable = Math.max(0, profit - 125000);
+      tax = taxable * 0.125;
+    } else {
+      tax = profit * 0.20;
+    }
+    const net = sell - tax;
+    setEl('displayProfit', fmt(profit));
+    setEl('displayTax',    fmt(tax));
+    setEl('displayNet',    fmt(net));
+    renderChart('doughnut', ['Net in Hand', 'Tax Payable', 'Original Cost'], [{
+      data: [Math.round(net - buy), Math.round(tax), Math.round(buy)],
+      backgroundColor: ['<%= tool.color %>', '#DC2626', '#e2e8f0'],
+      borderWidth: 0, hoverOffset: 8
+    }]);
+  },
+
+  'inflation': function() {
+    const val = getVal('currentValue'), inf = getVal('inflationRate'), yrs = getVal('years');
+    if (!val || !inf || !yrs) return;
+    const future = val * Math.pow(1 + inf/100, yrs);
+    const realVal = val / Math.pow(1 + inf/100, yrs);
+    let labels = [], data = [];
+    for (let i = 0; i <= yrs; i++) { labels.push('Yr ' + i); data.push(Math.round(val * Math.pow(1 + inf/100, i))); }
+    setEl('displayFuture', fmt(future));
+    setEl('displayLoss',   fmt(future - val));
+    setEl('displayReal',   fmt(realVal));
+    renderChart('line', labels, [
+      { label: 'Future Cost', data, borderColor: '<%= tool.color %>', backgroundColor: '<%= tool.color %>12', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0 }
+    ]);
+  },
+
+  'real-return': function() {
+    const nom = getVal('nominalReturn'), tax = getVal('taxRate'), inf = getVal('inflationRate');
+    const postTax = nom * (1 - tax/100);
+    const realReturn = ((1 + postTax/100) / (1 + inf/100) - 1) * 100;
+    setEl('displayPostTax', fmtPct(postTax));
+    setEl('displayReal',    fmtPct(realReturn));
+    setEl('displayVerdict', realReturn >= 0 ? '✅ Building Wealth' : '⚠️ Losing to Inflation');
+    renderChart('bar', ['Nominal Return', 'Post-Tax Return', 'Real Return'], [{
+      data: [nom, postTax, realReturn],
+      backgroundColor: [
+        '#94A3B8',
+        '<%= tool.color %>aa',
+        realReturn >= 0 ? '#05996699' : '#DC262699'
+      ],
+      borderRadius: 8
+    }]);
+  },
+
+  'education': function() {
+    const cost = getVal('currentCost'), yrs = getVal('yearsToCollege');
+    const eduInf = getVal('educationInflation'), ret = getVal('investReturn');
+    const futureCost = cost * Math.pow(1 + eduInf/100, yrs);
+    const months = yrs * 12, mr = ret / 12 / 100;
+    const sip = futureCost / (((Math.pow(1+mr, months)-1)/mr) * (1+mr));
+    setEl('displayFutureCost',  fmt(futureCost));
+    setEl('displayMonthlySIP',  fmt(sip));
+    setEl('displayTotalInvest', fmt(sip * months));
+    let labels = [], data = [], bal = 0;
+    for (let i = 0; i <= months; i++) {
+      if (i % 12 === 0) { labels.push('Yr ' + (i/12)); data.push(Math.round(bal)); }
+      bal = (bal + sip) * (1 + mr);
+    }
+    renderChart('line', labels, [
+      { label: 'Education Fund', data, borderColor: '<%= tool.color %>', backgroundColor: '<%= tool.color %>12', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0 }
+    ]);
+  },
+
+  'marriage': function() {
+    const budget = getVal('currentBudget'), yrs = getVal('yearsAway');
+    const inf = getVal('lifestyle_inf'), ret = getVal('investReturn');
+    const futureCost = budget * Math.pow(1 + inf/100, yrs);
+    const months = yrs * 12, mr = ret / 12 / 100;
+    const sip = futureCost / (((Math.pow(1+mr, months)-1)/mr) * (1+mr));
+    setEl('displayFutureCost',  fmt(futureCost));
+    setEl('displayMonthlySIP',  fmt(sip));
+    setEl('displayTotalInvest', fmt(sip * months));
+    let labels = [], data = [], bal = 0;
+    for (let i = 0; i <= months; i++) {
+      if (i % 12 === 0) { labels.push('Yr ' + (i/12)); data.push(Math.round(bal)); }
+      bal = (bal + sip) * (1 + mr);
+    }
+    renderChart('line', labels, [
+      { label: 'Wedding Fund', data, borderColor: '<%= tool.color %>', backgroundColor: '<%= tool.color %>12', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0 }
+    ]);
+  },
+
+  'emergency-fund': function() {
+    const exp = getVal('monthlyExpenses'), savings = getVal('currentSavings'), months = getVal('monthsCover');
+    const target = exp * months, shortfall = Math.max(0, target - savings);
+    const monthlyToFill = shortfall > 0 ? shortfall / 6 : 0;
+    setEl('displayTarget',    fmt(target));
+    setEl('displayShortfall', fmt(shortfall));
+    setEl('displayMonthly',   fmt(monthlyToFill));
+    renderChart('doughnut', ['Already Saved', 'Still Needed'], [{
+      data: [Math.min(savings, target), shortfall],
+      backgroundColor: ['<%= tool.color %>', '#e2e8f0'],
+      borderWidth: 0, hoverOffset: 8
+    }]);
+  },
+
+  'house-purchase': function() {
+    const income = getVal('monthlyIncome'), homePrice = getVal('targetHome');
+    const yrs = getVal('yearsToSave'), ret = getVal('investReturn');
+    const downPay = homePrice * 0.20, loanAmt = homePrice * 0.80;
+    const months = yrs * 12, mr = ret / 12 / 100;
+    const sip = downPay / (((Math.pow(1+mr, months)-1)/mr) * (1+mr));
+    const homeMR = 0.085 / 12, homeN = 20 * 12;
+    const emi = loanAmt * homeMR * Math.pow(1+homeMR, homeN) / (Math.pow(1+homeMR, homeN) - 1);
+    setEl('displayDownPay', fmt(downPay));
+    setEl('displaySIP',     fmt(sip));
+    setEl('displayEMI',     fmt(emi));
+    renderChart('doughnut', ['Down Payment (20%)', 'Home Loan (80%)'], [{
+      data: [Math.round(downPay), Math.round(loanAmt)],
+      backgroundColor: ['<%= tool.color %>', '#94A3B8'],
+      borderWidth: 0, hoverOffset: 8
+    }]);
+  },
+
+  'compounding': function() {
+    const p = getVal('principal'), ret = getVal('annualReturn'), yrs = getVal('years');
+    if (!p || !yrs) return;
+    const r = ret / 100;
+    let labels = ['Start'], data = [p];
+    for (let i = 1; i <= yrs; i++) { labels.push('Yr ' + i); data.push(Math.round(p * Math.pow(1+r, i))); }
+    const fv = data[data.length-1];
+    setEl('displayFinal',  fmt(fv));
+    setEl('displayGain',   fmt(fv - p));
+    setEl('displayGrowth', fmtPct(((fv - p) / p) * 100));
+    renderChart('line', labels, [
+      { label: 'Value', data, borderColor: '<%= tool.color %>', backgroundColor: '<%= tool.color %>12', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0 }
+    ]);
+  },
+
+  'rule-of-72': function() {
+    const ret = getVal('annualReturn'), yrs = getVal('years'), p = getVal('principal');
+    const approxDouble = 72 / ret;
+    const exactDouble = Math.log(2) / Math.log(1 + ret/100);
+    const doublings = yrs / exactDouble;
+    const fv = p * Math.pow(1 + ret/100, yrs);
+    setEl('displayYearsDouble', approxDouble.toFixed(1) + ' yrs');
+    setEl('displayDoublings',   doublings.toFixed(1) + '×');
+    setEl('displayFinal',       fmt(fv));
+    renderChart('bar', ['FD 7.5%', 'PPF 7.1%', 'Your Rate', 'Equity 15%'], [{
+      label: 'Years to Double',
+      data: [72/7.5, 72/7.1, approxDouble, 72/15].map(v => +v.toFixed(1)),
+      backgroundColor: ['#94A3B8', '#94A3B8aa', '<%= tool.color %>', '#059669'],
+      borderRadius: 8
+    }]);
+  },
+
+  'delay-cost': function() {
+    const monthly = getVal('monthlyAmount'), curAge = getVal('currentAge');
+    const retAge = getVal('retireAge'), delay = getVal('delayYears'), ret = getVal('annualReturn');
+    const mr = ret / 12 / 100;
+    function sipCorpus(months) {
+      let fv = 0;
+      for (let i = 1; i <= months; i++) fv = (fv + monthly) * (1 + mr);
+      return fv;
+    }
+    const monthsNow = (retAge - curAge) * 12;
+    const monthsLater = (retAge - curAge - delay) * 12;
+    const nowCorpus = sipCorpus(monthsNow), laterCorpus = sipCorpus(monthsLater);
+    setEl('displayNow',   fmt(nowCorpus));
+    setEl('displayLater', fmt(laterCorpus));
+    setEl('displayLost',  fmt(nowCorpus - laterCorpus));
+    renderChart('bar', ['Start Now', 'Start in ' + delay + ' Years'], [{
+      data: [Math.round(nowCorpus), Math.round(laterCorpus)],
+      backgroundColor: ['<%= tool.color %>', '#94A3B8'],
+      borderRadius: 8
+    }]);
+  },
+
+  'expense-ratio': function() {
+    const monthly = getVal('monthlyAmount'), yrs = getVal('years');
+    const gross = getVal('grossReturn'), lowER = getVal('lowER'), highER = getVal('highER');
+    const retDirect = gross - lowER, retRegular = gross - highER;
+    function sipFV(ret) {
+      const mr = ret / 12 / 100, months = yrs * 12;
+      let fv = 0;
+      for (let i = 1; i <= months; i++) fv = (fv + monthly) * (1 + mr);
+      return fv;
+    }
+    const directVal = sipFV(retDirect), regularVal = sipFV(retRegular);
+    setEl('displayDirect',  fmt(directVal));
+    setEl('displayRegular', fmt(regularVal));
+    setEl('displayDiff',    fmt(directVal - regularVal));
+    const months = yrs * 12, mr = retDirect / 12 / 100;
+    let labels = [], dData = [], rData = [], dBal = 0, rBal = 0;
+    const mrR = retRegular / 12 / 100;
+    for (let i = 1; i <= months; i++) {
+      dBal = (dBal + monthly) * (1 + mr);
+      rBal = (rBal + monthly) * (1 + mrR);
+      if (i % 12 === 0) { labels.push('Yr ' + (i/12)); dData.push(Math.round(dBal)); rData.push(Math.round(rBal)); }
+    }
+    renderChart('line', labels, [
+      { label: 'Direct Plan',  data: dData, borderColor: '<%= tool.color %>', backgroundColor: '<%= tool.color %>12', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0 },
+      { label: 'Regular Plan', data: rData, borderColor: '#94A3B8', borderDash: [5,5], tension: 0.4, borderWidth: 2, pointRadius: 0 }
+    ]);
+  }
+};
+
+// ── Boot ─────────────────────────────────────────────────────
+function calculate() {
+  const fn = calculators[TOOL_SLUG];
+  if (fn) fn();
+  else console.warn('No calculator defined for slug:', TOOL_SLUG);
+}
+
+window.onload = calculate;
+</script>
+
+</body>
+</html>

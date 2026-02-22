@@ -1,0 +1,162 @@
+<%- include('../partials/header', { title: 'Terms & Conditions', description: 'RetireWise+ Terms & Conditions – Regulatory status, investment risk disclosure, and compliance information.' }) %>
+
+<style>
+  :root {
+    --brand-green: #1a3c31;
+    --brand-gold:  #b59b5d;
+    --bg-light:    #f9fbff;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-light);
+    color: #333;
+  }
+
+  .legal-hero {
+    padding: 80px 0 40px;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-weight: 800;
+    font-size: 3rem;
+    color: #111;
+    letter-spacing: -1px;
+  }
+
+  @media (max-width: 768px) { .hero-title { font-size: 2.2rem; } }
+  @media (max-width: 480px) { .hero-title { font-size: 1.8rem; } }
+
+  .gradient-text {
+    background: linear-gradient(90deg, var(--brand-green), var(--brand-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .legal-container {
+    background: #ffffff;
+    border: 1px solid #edf2f7;
+    border-radius: 24px;
+    padding: 60px;
+    margin-bottom: 80px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  }
+
+  @media (max-width: 768px) { .legal-container { padding: 30px 20px; } }
+
+  .legal-section {
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .legal-section:last-child { border-bottom: none; }
+
+  h4 {
+    color: var(--brand-green);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+  }
+
+  p, li {
+    color: #555;
+    line-height: 1.8;
+    font-size: 1.05rem;
+  }
+
+  .highlight-box {
+    background-color: #f0f4f2;
+    border-left: 4px solid var(--brand-green);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+  }
+
+  .btn-brand-outline {
+    background: transparent;
+    border: 1.5px solid var(--brand-green);
+    color: var(--brand-green);
+    padding: 12px 40px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-brand-outline:hover {
+    background: var(--brand-green);
+    color: white;
+  }
+</style>
+
+<div class="container">
+  <header class="legal-hero">
+    <h1 class="hero-title">Terms &amp; <span class="gradient-text">Conditions</span></h1>
+    <p class="text-muted mt-3">Effective Date: January 2026 &bull; RetireWise+ Compliance</p>
+  </header>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="legal-container">
+
+        <div class="legal-section">
+          <h4>01. Regulatory Status &amp; Disclaimer</h4>
+          <p>
+            RetireWise+ is a digital platform operated by a <strong>SEBI-regulated Mutual Fund Distributor</strong>.
+            We hold a valid AMFI Registration Number (ARN). We provide incidental financial analysis and product
+            recommendations based on user-inputted data and mathematical models.
+          </p>
+          <div class="highlight-box">
+            <strong>Important:</strong> We are <u>not</u> SEBI-registered Investment Advisers (RIA). Our services
+            focus on the distribution of financial products through the <strong>NJ E-Wealth platform</strong>.
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <h4>02. Investment Risk</h4>
+          <p>
+            Mutual fund investments are subject to market risks. RetireWise+ does not guarantee any specific returns.
+            By using this tool, you acknowledge that you understand that past performance is not an indicator of future results.
+          </p>
+        </div>
+
+        <div class="legal-section">
+          <h4>03. Limitation of Liability</h4>
+          <p>
+            Under no circumstances shall RetireWise+ or its owners be liable for any financial loss, damage,
+            or poor investment outcomes resulting from the use of this website. You agree that following any
+            advice provided here is entirely <strong>at your own risk and choice.</strong>
+          </p>
+        </div>
+
+        <div class="legal-section">
+          <h4>04. NJ E-Wealth Partnership</h4>
+          <p>
+            Transaction services are facilitated through our partnership with the <strong>NJ E-Wealth platform</strong>.
+            All investment executions are subject to the terms and conditions of NJ India Invest Pvt Ltd.
+            Account opening and KYC procedures will be handled via NJ's secure portal.
+          </p>
+        </div>
+
+        <div class="legal-section">
+          <h4>05. User Consent &amp; Communication</h4>
+          <p>
+            By registering on this platform, you consent to being contacted by our Pune-based team for a professional
+            consultation regarding your wealth goals. We value your privacy and will never sell your data to
+            third-party telemarketers.
+          </p>
+        </div>
+
+        <div class="mt-5 text-center">
+          <a href="/" class="btn-brand-outline">I Understand &amp; Back to Home</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

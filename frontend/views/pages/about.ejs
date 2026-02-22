@@ -1,0 +1,489 @@
+<%- include('../partials/header', { title: 'About', description: 'RetireWise+ – NISM VA Certified, AMFI Registered mutual fund distributor based in Pune. Education-first investing platform.' }) %>
+
+<style>
+  :root {
+    --brand-green: #1a3c31;
+    --brand-gold: #b59b5d;
+    --bg-light: #f9fbff;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-light);
+    color: #333;
+  }
+
+  .hero-title {
+    font-weight: 800;
+    font-size: 3.5rem;
+    color: #111;
+    letter-spacing: -1px;
+    line-height: 1.1;
+  }
+
+  @media (max-width: 768px) {
+    .hero-title { font-size: 2.4rem; }
+  }
+  @media (max-width: 480px) {
+    .hero-title { font-size: 2rem; }
+  }
+
+  .gradient-text {
+    background: linear-gradient(90deg, var(--brand-green), var(--brand-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .btn-brand-solid {
+    background-color: var(--brand-green);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: opacity 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-brand-outline {
+    background: transparent;
+    border: 1.5px solid var(--brand-green);
+    color: var(--brand-green);
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+  }
+
+  .btn-brand-solid:hover {
+    opacity: 0.9;
+    color: white;
+  }
+
+  .btn-brand-outline:hover {
+    background: var(--brand-green);
+    color: white;
+  }
+
+  .section-spacing {
+    padding: 100px 0;
+  }
+
+  .advisor-tag {
+    display: inline-block;
+    background: #e9f0ee;
+    color: var(--brand-green);
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .disclosure-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-left: 5px solid var(--brand-gold);
+    padding: 30px;
+    border-radius: 12px;
+  }
+
+  .certification-badge {
+    background: white;
+    border: 2px solid var(--brand-green);
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+    transition: all 0.3s ease;
+    height: 100%;
+  }
+
+  .certification-badge:hover {
+    box-shadow: 0 10px 30px rgba(26, 60, 49, 0.15);
+    transform: translateY(-5px);
+  }
+
+  .certification-icon {
+    font-size: 3rem;
+    color: var(--brand-green);
+    margin-bottom: 15px;
+  }
+
+  .partnership-card {
+    background: linear-gradient(135deg, rgba(26, 60, 49, 0.05) 0%, rgba(181, 155, 93, 0.05) 100%);
+    border: 2px solid var(--brand-green);
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .partnership-card:hover {
+    box-shadow: 0 15px 40px rgba(26, 60, 49, 0.1);
+    border-color: var(--brand-gold);
+  }
+
+  .partnership-logo {
+    max-width: 180px;
+    height: auto;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+  }
+
+  .partnership-card:hover .partnership-logo {
+    transform: scale(1.05);
+  }
+
+  .feature-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .feature-list li {
+    padding: 10px 0;
+    padding-left: 30px;
+    position: relative;
+    color: #555;
+  }
+
+  .feature-list li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--brand-green);
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+
+  .stat-card {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    height: 100%;
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--brand-green);
+  }
+
+  .stat-label {
+    color: #999;
+    font-size: 0.9rem;
+    margin-top: 10px;
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-left: 40px;
+    margin-bottom: 30px;
+  }
+
+  .timeline-item:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    background: var(--brand-green);
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 0 0 3px var(--brand-green);
+  }
+
+  .timeline-item:not(:last-child):after {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 25px;
+    width: 3px;
+    height: 60px;
+    background: #ddd;
+  }
+
+  .section-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--brand-green);
+    margin-bottom: 50px;
+  }
+
+  .subsection-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--brand-green);
+    margin-bottom: 30px;
+  }
+</style>
+
+<main>
+
+  <!-- ── Hero ── -->
+  <section class="section-spacing text-center">
+    <div class="container" style="max-width: 900px;">
+      <span class="advisor-tag">Investment clarity, not advice</span>
+      <h1 class="hero-title mb-4">
+        Financial education,<br>
+        <span class="gradient-text">made for humans.</span>
+      </h1>
+      <p class="lead text-muted mx-auto mb-5" style="max-width: 700px;">
+        RetireWise+ is an education-first platform. We turn complicated investing concepts
+        into clear, visual stories so you can make confident decisions about your future.
+      </p>
+      <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a href="#our-approach" class="btn-brand-solid">Our Approach</a>
+        <a href="#credentials" class="btn-brand-outline">Credentials</a>
+        <a href="/calculators" class="btn-brand-outline">Try Calculators</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Credentials ── -->
+  <section id="credentials" class="py-5" style="background: white;">
+    <div class="container">
+      <h2 class="section-title text-center mb-5">Our Credentials &amp; Partnerships</h2>
+
+      <div class="row g-4 mb-5">
+        <!-- NISM -->
+        <div class="col-md-6 col-lg-4">
+          <div class="certification-badge">
+            <div class="certification-icon"><i class="fas fa-certificate"></i></div>
+            <h6 class="fw-bold mb-2">NISM VA Certified</h6>
+            <p class="small text-muted mb-0">National Institute of Securities Markets Mutual Fund Distributors Certification</p>
+            <p class="small text-muted mt-2"><small>Certified in investment advisory and financial markets knowledge</small></p>
+          </div>
+        </div>
+
+        <!-- SEBI -->
+        <div class="col-md-6 col-lg-4">
+          <div class="certification-badge">
+            <div class="certification-icon"><i class="fas fa-shield-alt"></i></div>
+            <h6 class="fw-bold mb-2">SEBI Registered</h6>
+            <p class="small text-muted mb-0">Securities and Exchange Board of India Regulated</p>
+            <p class="small text-muted mt-2"><small>Authorized mutual fund distributor</small></p>
+          </div>
+        </div>
+
+        <!-- ARN -->
+        <div class="col-md-6 col-lg-4">
+          <div class="certification-badge">
+            <div class="certification-icon"><i class="fas fa-id-card"></i></div>
+            <h6 class="fw-bold mb-2">ARN Authorized</h6>
+            <p class="small text-muted mb-0">ARN-330249 | Mutual Fund Distributor</p>
+            <p class="small text-muted mt-2"><small>Professional mutual fund advisory services</small></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Partnership ── -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="section-title text-center mb-5">Our Strategic Partnership</h2>
+
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+          <div class="partnership-card">
+            <img src="/assets/unnamed.png" alt="NJ E Wealth Logo" class="partnership-logo">
+            <h4 class="fw-bold mb-3">NJ E Wealth Partnership</h4>
+            <p class="text-muted mb-4">
+              RetireWise+ is a proud partner of NJ E Wealth, a leading digital wealth management platform.
+              This partnership enables us to provide institutional-grade investment solutions while maintaining
+              our focus on financial education.
+            </p>
+            <ul class="feature-list text-start">
+              <li>Access to comprehensive fund research</li>
+              <li>Institutional investment standards</li>
+              <li>Real-time portfolio monitoring</li>
+              <li>Professional advisory support</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <h3 class="subsection-title">What This Partnership Means For You</h3>
+
+          <div class="timeline-item">
+            <div>
+              <h6 class="fw-bold text-dark">Quality Assurance</h6>
+              <p class="text-muted small mb-0">Every recommendation meets institutional standards and regulatory compliance</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div>
+              <h6 class="fw-bold text-dark">Transparent Pricing</h6>
+              <p class="text-muted small mb-0">No hidden charges, direct fund access, and competitive fee structures</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div>
+              <h6 class="fw-bold text-dark">Expert Guidance</h6>
+              <p class="text-muted small mb-0">Access to NISM-certified advisors for personalized investment planning</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div>
+              <h6 class="fw-bold text-dark">Educational Resources</h6>
+              <p class="text-muted small mb-0">Regular workshops, webinars, and market insights from experienced professionals</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Core Philosophy ── -->
+  <section class="py-5" style="background: white;">
+    <div class="container" style="max-width: 900px;">
+      <h2 class="section-title text-center mb-5">Our Core Philosophy</h2>
+
+      <div class="row g-5 mb-5">
+        <div class="col-12">
+          <p class="text-muted fs-5 text-center">
+            We follow an advisor-led model. While tools are great for learning, real-world
+            decisions should be made with Pune's trusted mutual fund advisors who understand
+            your unique risk tolerance and financial goals.
+          </p>
+        </div>
+
+        <div class="col-md-6">
+          <h5 class="fw-bold text-dark mb-4">What We Do</h5>
+          <ul class="feature-list">
+            <li>Interactive SIP &amp; Goal Calculators</li>
+            <li>Jargon-free Investment Insights</li>
+            <li>Direct access to NJ E Wealth Advisors</li>
+            <li>Comprehensive Financial Planning</li>
+            <li>Regular Market Analysis &amp; Updates</li>
+            <li>Retirement &amp; Goal Planning Modules</li>
+          </ul>
+        </div>
+
+        <div class="col-md-6">
+          <h5 class="fw-bold text-dark mb-4">What We Don't Do</h5>
+          <ul class="list-unstyled">
+            <li class="mb-3 text-muted"><i class="fas fa-times text-danger me-2"></i> Charge hidden platform fees</li>
+            <li class="mb-3 text-muted"><i class="fas fa-times text-danger me-2"></i> Push products for commissions</li>
+            <li class="mb-3 text-muted"><i class="fas fa-times text-danger me-2"></i> Provide "get rich quick" schemes</li>
+            <li class="mb-3 text-muted"><i class="fas fa-times text-danger me-2"></i> Make promises about market returns</li>
+            <li class="mb-3 text-muted"><i class="fas fa-times text-danger me-2"></i> Sell unregulated products</li>
+            <li class="mb-3 text-muted"><i class="fas fa-times text-danger me-2"></i> Override professional judgment</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="disclosure-card">
+        <h6 class="fw-bold text-uppercase small mb-3" style="color: var(--brand-gold);">
+          <i class="fas fa-info-circle me-2"></i>Important Disclosure
+        </h6>
+        <p class="small text-muted mb-0">
+          Mutual fund investments are subject to market risks. Read all scheme-related documents carefully before investing.
+          Information and illustrations provided on this website should not be construed as investment advice. All investments
+          are facilitated through registered mutual fund distributors after professional consultation. Past performance is not
+          indicative of future results.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Three-Pillar Approach ── -->
+  <section id="our-approach" class="py-5">
+    <div class="container">
+      <h2 class="section-title text-center mb-5">Our Three-Pillar Approach</h2>
+
+      <div class="row g-4 mb-5">
+        <div class="col-md-4">
+          <div class="stat-card">
+            <div class="stat-number">Educate</div>
+            <div class="stat-label">Clarity Through Learning</div>
+            <p class="text-muted mt-3 small">
+              We believe informed investors make better decisions. Our modules break down complex concepts into digestible lessons.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="stat-card">
+            <div class="stat-number">Calculate</div>
+            <div class="stat-label">Tools That Work</div>
+            <p class="text-muted mt-3 small">
+              Use our interactive calculators to plan SIPs, track goals, and project retirement funds with real data.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="stat-card">
+            <div class="stat-number">Advise</div>
+            <div class="stat-label">Expert Guidance</div>
+            <p class="text-muted mt-3 small">
+              Connect with NISM-certified advisors for personalized recommendations tailored to your financial situation.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Why Choose RetireWise+ ── -->
+  <section class="py-5" style="background: white;">
+    <div class="container" style="max-width: 900px;">
+      <h2 class="section-title text-center mb-5">Why Choose RetireWise+</h2>
+
+      <div class="row g-5">
+        <div class="col-md-6">
+          <h5 class="fw-bold mb-4">For Beginners</h5>
+          <ul class="feature-list">
+            <li>Start from zero investment knowledge</li>
+            <li>Learn investing fundamentals step-by-step</li>
+            <li>Build confidence with simple examples</li>
+            <li>No jargon, only clarity</li>
+          </ul>
+        </div>
+
+        <div class="col-md-6">
+          <h5 class="fw-bold mb-4">For Active Investors</h5>
+          <ul class="feature-list">
+            <li>Advanced portfolio planning tools</li>
+            <li>Regular market insights &amp; analysis</li>
+            <li>Optimization strategies for your goals</li>
+            <li>Access to professional advisors</li>
+          </ul>
+        </div>
+
+        <div class="col-md-6">
+          <h5 class="fw-bold mb-4">For Families</h5>
+          <ul class="feature-list">
+            <li>Plan for children's education</li>
+            <li>Retirement corpus planning</li>
+            <li>Risk assessment tools</li>
+            <li>Long-term wealth building strategies</li>
+          </ul>
+        </div>
+
+        <div class="col-md-6">
+          <h5 class="fw-bold mb-4">For Pune Community</h5>
+          <ul class="feature-list">
+            <li>Local advisor network</li>
+            <li>Community webinars &amp; workshops</li>
+            <li>Personalized consultation</li>
+            <li>In-person advisory support</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<%- include('../partials/footer') %>

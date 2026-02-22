@@ -1,0 +1,1364 @@
+<%- include('../partials/header', { title: 'Fund Tracker' }) %>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="/css/style.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brand-green:   #1a3c31;
+      --brand-gold:    #b59b5d;
+      --emerald:       #10B981;
+      --red:           #EF4444;
+      --border:        #e5e7eb;
+      --bg:            #F8F9FA;
+      --text-primary:  #111827;
+      --text-secondary:#6b7280;
+      --text-tertiary: #9ca3af;
+      --card-bg:       #FFFFFF;
+      --glass-bg:      rgba(255,255,255,0.92);
+    }
+   body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 56px;
+    }
+
+  h1,h2,h3,.sora { font-family: 'Sora', sans-serif; letter-spacing: -0.02em; }
+
+  /* ── HERO ── */
+  .funds-hero {
+    background: var(--brand-green);
+    padding: 52px 0 40px;
+    position: relative; overflow: hidden;
+  }
+  .funds-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 80% 20%, rgba(181,155,93,0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--brand-gold);
+    margin-bottom: 10px; display: block; font-family: 'Sora', sans-serif;
+  }
+  .hero-title {
+    font-family: 'Sora', sans-serif; font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    color: #fff; letter-spacing: -1px; margin-bottom: 10px;
+  }
+  .hero-sub { color: rgba(255,255,255,0.6); font-size: 0.95rem; max-width: 520px; line-height: 1.6; margin-bottom: 0; }
+  .live-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3);
+    color: #10B981; border-radius: 100px; padding: 4px 12px;
+    font-size: 0.75rem; font-weight: 700; margin-top: 16px;
+  }
+  .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #10B981; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* ── SEARCH BAR ── */
+  .search-section {
+    background: white; border-bottom: 1px solid var(--border); padding: 14px 0;
+    position: sticky; top: 4.5rem; z-index: 100;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  }
+      .sticky-search {
+      position: sticky; top: 0; z-index: 999;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px) saturate(180%);
+      -webkit-backdrop-filter: blur(10px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+  .search-wrap { position: relative; margin-bottom: 10px; }
+  .search-input {
+    width: 100%; padding: 11px 44px 11px 44px;
+    border: 2px solid var(--border); border-radius: 14px;
+    font-size: 0.95rem; font-family: 'Inter', sans-serif;
+    background: var(--bg); color: #1e293b;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .search-input:focus { outline: none; border-color: var(--brand-green); background: white; box-shadow: 0 0 0 4px rgba(26,60,49,0.08); }
+  .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 0.9rem; }
+  .search-clear { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 0.85rem; cursor: pointer; display: none; }
+  .filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .filter-select {
+    padding: 6px 12px; border: 1.5px solid var(--border); border-radius: 100px;
+    font-size: 0.8rem; font-weight: 600; color: #3a4a41;
+    background: white; cursor: pointer; transition: border-color 0.2s;
+    font-family: 'Inter', sans-serif; flex: 1; min-width: 140px;
+  }
+  .filter-select:focus { outline: none; border-color: var(--brand-green); }
+  .result-count { font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
+
+
+    /* QUICK FILTER CHIPS */
+    .quick-filters {
+      display: flex; gap: 8px; overflow-x: auto;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    .quick-filters::-webkit-scrollbar { display: none; }
+    .filter-chip {
+      flex-shrink: 0; padding: 6px 16px; border: 1.5px solid var(--border);
+      border-radius: 100px; font-size: 13px; font-weight: 600;
+      color: var(--text-secondary); background: white; cursor: pointer;
+      transition: all 0.18s; min-height: 32px; white-space: nowrap;
+    }
+    .filter-chip.active {
+      background: var(--brand-green); color: white; border-color: var(--brand-green);
+    }
+    .result-count {
+      font-size: 12px; color: var(--text-tertiary);
+      margin-top: 8px; padding-left: 2px;
+    }
+
+  /* ── FUND TABLE (desktop) ── */
+  .funds-section { padding: 16px 0 80px; }
+  .fund-table-wrap {
+    background: white; border: 1px solid var(--border);
+    border-radius: 20px; overflow: hidden;
+  }
+  .fund-table { width: 100%; border-collapse: collapse; }
+  .fund-table thead th {
+    padding: 12px 16px; background: #f8f9f7;
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted);
+    border-bottom: 1px solid var(--border); white-space: nowrap;
+  }
+  .fund-table thead th.sortable { cursor: pointer; user-select: none; }
+  .fund-table thead th.sortable:hover { color: var(--brand-green); }
+  .fund-table thead th .sort-icon { margin-left: 4px; opacity: 0.4; font-size: 0.65rem; }
+  .fund-row { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  .fund-row:last-child { border-bottom: none; }
+  .fund-row:hover { background: #f8faf8; }
+  .fund-row td { padding: 12px 16px; vertical-align: middle; }
+  .fund-name-cell { max-width: 300px; }
+  .fund-name {
+    font-weight: 600; font-size: 0.88rem; color: #111a15;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    cursor: pointer;
+  }
+  .fund-name:hover { color: var(--brand-green); text-decoration: underline; }
+  .fund-house { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+
+  /* ── FUND CARDS (mobile) ── */
+  .fund-cards { display: none; }
+  .fund-card {
+    background: white; border: 1px solid var(--border); border-radius: 16px;
+    padding: 14px 16px; margin-bottom: 10px;
+    transition: box-shadow 0.2s;
+  }
+  .fund-card:active { box-shadow: 0 4px 16px rgba(26,60,49,0.1); }
+  .fund-card-top {
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;
+    margin-bottom: 10px;
+  }
+  .fund-card-name {
+    font-weight: 700; font-size: 0.88rem; color: #111a15;
+    line-height: 1.4; flex: 1; cursor: pointer;
+  }
+  .fund-card-name:active { color: var(--brand-green); }
+  .fund-card-house { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+  .fund-card-bottom {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    flex-wrap: wrap;
+  }
+  .fund-card-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .fund-card-nav { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1rem; color: #111a15; }
+  .fund-card-date { font-size: 0.7rem; color: var(--muted); }
+  .fund-card-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+
+  /* ── CATEGORY CHIP ── */
+  .category-chip {
+    display: inline-block; padding: 2px 9px; border-radius: 100px;
+    font-size: 0.68rem; font-weight: 700; white-space: nowrap;
+  }
+  .cat-equity   { background: rgba(79,70,229,0.08);  color: #4F46E5; }
+  .cat-debt     { background: rgba(8,145,178,0.08);  color: #0891B2; }
+  .cat-hybrid   { background: rgba(181,155,93,0.12); color: #b59b5d; }
+  .cat-solution { background: rgba(16,185,129,0.08); color: #059669; }
+  .cat-other    { background: rgba(100,116,139,0.1); color: #64748b; }
+  .cat-index    { background: rgba(26,60,49,0.08);   color: #1a3c31; }
+
+  .nav-value { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 0.95rem; }
+  .nav-date  { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+
+  /* ── COMPARE BUTTON ── */
+  .compare-btn {
+    padding: 6px 13px; border-radius: 8px;
+    font-size: 0.75rem; font-weight: 700;
+    border: 1.5px solid var(--border); background: white;
+    color: #3a4a41; cursor: pointer; transition: all 0.18s;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .compare-btn:hover { border-color: var(--brand-gold); color: var(--brand-gold); }
+  .compare-btn.in-tray { background: var(--brand-gold); color: white; border-color: var(--brand-gold); }
+  .compare-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* Detail button (mobile cards) */
+  .detail-btn {
+    width: 32px; height: 32px; border-radius: 8px;
+    border: 1.5px solid var(--border); background: white;
+    color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; flex-shrink: 0; transition: all 0.18s;
+  }
+  .detail-btn:hover { border-color: var(--brand-green); color: var(--brand-green); }
+
+  /* ── COMPARISON TRAY ── */
+  #comparisonTray {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+    background: var(--brand-green); color: white;
+    padding: 12px 16px; box-shadow: 0 -4px 24px rgba(0,0,0,0.25);
+    transform: translateY(100%); transition: transform 0.3s ease;
+  }
+  #comparisonTray.visible { transform: translateY(0); }
+  .tray-inner { display: flex; align-items: center; gap: 10px; flex-wrap: nowrap; }
+  .tray-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--brand-gold); white-space: nowrap; flex-shrink: 0; }
+  .tray-funds { display: flex; gap: 6px; flex: 1; overflow: hidden; }
+  .tray-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 100px; padding: 4px 10px; font-size: 0.75rem; font-weight: 600;
+    min-width: 0; max-width: 140px;
+  }
+  .tray-chip-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
+  .tray-chip-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .tray-chip-remove { cursor: pointer; opacity: 0.7; font-size: 0.65rem; flex-shrink: 0; }
+  .tray-chip-remove:hover { opacity: 1; }
+  .tray-actions { display: flex; gap: 8px; flex-shrink: 0; }
+  .btn-compare-now {
+    padding: 8px 16px; border-radius: 10px; font-size: 0.8rem; font-weight: 700;
+    background: var(--brand-gold); color: white; border: none; cursor: pointer;
+    transition: opacity 0.2s; white-space: nowrap;
+  }
+  .btn-compare-now:hover { opacity: 0.88; }
+  .btn-compare-now:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-clear-tray {
+    padding: 8px 12px; border-radius: 10px; font-size: 0.8rem; font-weight: 600;
+    background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer; transition: background 0.2s; white-space: nowrap;
+  }
+  .btn-clear-tray:hover { background: rgba(255,255,255,0.18); }
+
+  /* ── LOADING / EMPTY ── */
+  .loading-state, .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+  .spinner {
+    width: 32px; height: 32px; border: 3px solid var(--border);
+    border-top-color: var(--brand-green); border-radius: 50%;
+    animation: spin 0.7s linear infinite; margin: 0 auto 14px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── FUND DETAIL MODAL ── */
+  .fund-modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 1000; display: none; align-items: center; justify-content: center; padding: 12px;
+  }
+  .fund-modal-overlay.open { display: flex; }
+  .fund-modal {
+    background: white; border-radius: 20px; width: 100%; max-width: 860px;
+    max-height: 92vh; overflow-y: auto;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  .modal-header {
+    padding: 20px 20px 0;
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+    position: sticky; top: 0; background: white; z-index: 2;
+    border-bottom: 1px solid var(--border); padding-bottom: 16px;
+  }
+  .modal-close {
+    width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--border);
+    background: white; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background 0.2s;
+  }
+  .modal-close:hover { background: var(--bg); }
+  .modal-body { padding: 16px 20px 24px; }
+
+  /* 4-col → 2-col → 2-col on mobile */
+  .modal-stat-row {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;
+  }
+  .modal-stat {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 14px; text-align: center;
+  }
+  .modal-stat-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 4px; }
+  .modal-stat-value { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1rem; color: var(--brand-green); }
+  .chart-wrap { height: 240px; }
+
+  /* Plan toggle */
+  .plan-toggle-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .plan-toggle-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .plan-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 11px; border-radius: 100px; font-size: 0.72rem; font-weight: 700;
+    border: 1.5px solid; cursor: pointer; transition: all 0.18s;
+  }
+  .plan-badge.direct { border-color: #059669; color: #059669; background: rgba(5,150,105,0.07); }
+  .plan-badge.direct.active { background: #059669; color: white; }
+  .plan-badge.regular { border-color: #b59b5d; color: #b59b5d; background: rgba(181,155,93,0.07); }
+  .plan-badge.regular.active { background: #b59b5d; color: white; }
+
+  /* SIP Backtester */
+  .sip-section {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 14px; padding: 16px; margin-top: 16px;
+  }
+  .sip-section h6 { font-size: 0.88rem; font-weight: 800; margin-bottom: 14px; color: var(--brand-green); }
+  .sip-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .sip-input-group label {
+    display: block; font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.07em; color: var(--muted); margin-bottom: 4px;
+  }
+  .sip-input {
+    width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 10px;
+    font-size: 0.88rem; font-family: 'Inter', sans-serif; background: white; color: #1e293b;
+    transition: border-color 0.2s;
+  }
+  .sip-input:focus { outline: none; border-color: var(--brand-green); }
+  .btn-run-sip {
+    width: 100%; padding: 10px 18px; background: var(--brand-green); color: white;
+    border: none; border-radius: 10px; font-size: 0.85rem; font-weight: 700;
+    cursor: pointer; font-family: 'Inter', sans-serif; transition: opacity 0.2s;
+    grid-column: 1 / -1;
+  }
+  .btn-run-sip:hover { opacity: 0.88; }
+  .btn-run-sip:disabled { opacity: 0.5; cursor: not-allowed; }
+  .sip-results { display: none; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+  .sip-result-card {
+    background: white; border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 14px; text-align: center;
+  }
+  .sip-result-label { font-size: 0.64rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 4px; }
+  .sip-result-value { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 0.95rem; }
+  .sip-result-value.positive { color: #059669; }
+  .sip-result-value.negative { color: #DC2626; }
+  .sip-result-value.neutral  { color: var(--brand-green); }
+  .sip-loading { text-align: center; padding: 10px; color: var(--muted); font-size: 0.82rem; display: none; }
+
+  /* ── COMPARISON MODAL ── */
+  #compareModalOverlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+    z-index: 1050; display: none; align-items: center; justify-content: center; padding: 12px;
+  }
+  #compareModalOverlay.open { display: flex; }
+  #compareModal {
+    background: white; border-radius: 20px; width: 100%; max-width: 960px;
+    max-height: 92vh; overflow-y: auto;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.25); animation: slideUp 0.25s ease;
+  }
+  .compare-header {
+    padding: 20px 20px 0; display: flex; justify-content: space-between; align-items: flex-start;
+    position: sticky; top: 0; background: white; z-index: 2;
+    border-bottom: 1px solid var(--border); padding-bottom: 16px;
+  }
+  .compare-body { padding: 16px 20px 24px; }
+  .compare-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .compare-chart-wrap { height: 260px; margin-bottom: 20px; }
+  .compare-stats-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+  .compare-stats-table thead th {
+    padding: 9px 12px; background: var(--bg); border: 1px solid var(--border);
+    font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    white-space: nowrap;
+  }
+  .compare-stats-table tbody td {
+    padding: 9px 12px; border: 1px solid var(--border); vertical-align: middle;
+  }
+  .compare-stats-table tbody tr:hover { background: #f8faf8; }
+  .fund-color-bar { width: 4px; height: 28px; border-radius: 4px; display: inline-block; margin-right: 6px; vertical-align: middle; }
+
+  /* ── PAGINATION ── */
+  .pagination-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px; border-top: 1px solid var(--border);
+    background: #f8f9f7; border-radius: 0 0 20px 20px; flex-wrap: wrap; gap: 10px;
+  }
+  .page-info { font-size: 0.78rem; color: var(--muted); }
+  .page-btns { display: flex; gap: 5px; flex-wrap: wrap; }
+  .page-btn {
+    padding: 6px 12px; border: 1.5px solid var(--border); border-radius: 8px;
+    font-size: 0.8rem; font-weight: 600; color: #3a4a41;
+    background: white; cursor: pointer; transition: all 0.18s;
+  }
+  .page-btn:hover:not(:disabled) { border-color: var(--brand-green); color: var(--brand-green); }
+  .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .page-btn.active { background: var(--brand-green); color: white; border-color: var(--brand-green); }
+
+  /* ── DISCLAIMER ── */
+  .disclaimer-bar { background: #fff8ec; border-top: 1px solid #f0d990; padding: 12px 0; }
+  .disclaimer-text {
+    font-size: 0.74rem; color: #7a6430; line-height: 1.6;
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .disclaimer-text i { flex-shrink: 0; margin-top: 2px; color: #b59b5d; }
+
+  /* ── PERIOD BUTTONS (inside modals) ── */
+  .period-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  /* ════════════════════════════════════
+     MOBILE BREAKPOINTS
+     ════════════════════════════════════ */
+  @media (max-width: 767px) {
+    /* Switch table → cards */
+    .fund-table-wrap .fund-table,
+    .fund-table-wrap .pagination-row { display: none !important; }
+    .fund-table-wrap #loadingState,
+    .fund-table-wrap #emptyState { display: block; }
+    .fund-cards { display: block; padding: 10px; }
+
+    /* Tray: single line, compact */
+    .tray-inner { flex-wrap: nowrap; }
+    .tray-label { display: none; } /* hide label, save space */
+    .tray-funds { gap: 4px; }
+    .tray-chip { max-width: 110px; padding: 4px 8px; font-size: 0.7rem; }
+    .btn-compare-now { padding: 7px 12px; font-size: 0.75rem; }
+    .btn-clear-tray { padding: 7px 10px; font-size: 0.75rem; }
+
+    /* Detail modal */
+    .modal-stat-row { grid-template-columns: repeat(2, 1fr); }
+    .modal-stat-value { font-size: 0.9rem; }
+
+    /* SIP: single column */
+    .sip-inputs { grid-template-columns: 1fr; }
+    .sip-results { grid-template-columns: repeat(3, 1fr); }
+    .sip-result-label { font-size: 0.6rem; }
+    .sip-result-value { font-size: 0.85rem; }
+
+    /* Compare modal: scrollable table */
+    .compare-stats-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .compare-chart-wrap { height: 220px; }
+
+    /* Sticky modal header */
+    .modal-header, .compare-header { padding: 14px 14px 12px; }
+    .modal-body, .compare-body { padding: 12px 14px 20px; }
+
+    /* Hero */
+    .funds-hero { padding: 36px 0 28px; }
+  }
+
+  @media (max-width: 420px) {
+    .tray-chip { max-width: 85px; }
+    .btn-compare-now { padding: 7px 10px; font-size: 0.72rem; }
+    .sip-results { grid-template-columns: 1fr; }
+    .modal-stat-row { grid-template-columns: repeat(2, 1fr); }
+  }
+
+/* Additional tweaks for very small screens */
+    .tag-equity   { background: #dbeafe; color: #1e40af; }
+    .tag-debt     { background: #d1fae5; color: #065f46; }
+    .tag-hybrid   { background: #fef3c7; color: #92400e; }
+    .tag-index    { background: #e0e7ff; color: #3730a3; }
+    .tag-solution { background: #fce7f3; color: #9f1239; }
+    .tag-other    { background: #f3f4f6; color: #374151; }
+    .fund-house { font-size: 11px; color: var(--text-tertiary); font-weight: 500; }
+
+ 
+
+  
+
+</style>
+
+<!-- HERO -->
+<section class="funds-hero">
+  <div class="container">
+    <span class="hero-eyebrow">Live Data · Updated Daily</span>
+    <h1 class="hero-title">Mutual Fund NAV Tracker</h1>
+    <p class="hero-sub">Daily NAV for every fund in India. Compare funds and backtest SIP returns. Sourced from AMFI.</p>
+    <div class="live-badge">
+      <span class="live-dot"></span>
+      Auto-updated daily from AMFI
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH + FILTERS -->
+<div class="search-section">
+  <div class="container">
+    <div class="search-wrap">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" id="searchInput" class="search-input"
+        placeholder="Search fund name, fund house…" oninput="handleSearch()" autocomplete="off">
+      <i class="fas fa-times search-clear" id="searchClear" onclick="clearSearch()"></i>
+    </div>
+    <div class="filter-row">
+      <select class="filter-select" id="categoryFilter" onchange="applyFilters()">
+        <option value="">All Categories</option>
+        <option value="Equity">Equity</option>
+        <option value="Debt">Debt</option>
+        <option value="Hybrid">Hybrid</option>
+        <option value="Solution">Solution Oriented</option>
+        <option value="Index">Index / ETF</option>
+        <option value="FoF">Fund of Funds</option>
+      </select>
+      <select class="filter-select" id="sortFilter" onchange="applyFilters()">
+        <option value="name">Sort: Fund Name</option>
+        <option value="nav-high">Sort: NAV High → Low</option>
+        <option value="nav-low">Sort: NAV Low → High</option>
+      </select>
+    </div>
+    <div class="result-count" id="resultCount"></div>
+  </div>
+</div>
+
+<!-- FUND LIST -->
+<main class="container funds-section">
+
+  <!-- ── DESKTOP: table layout ── -->
+  <div class="fund-table-wrap" id="desktopTableWrap">
+    <div id="loadingState" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading funds from AMFI…</p>
+    </div>
+    <div id="emptyState" class="empty-state" style="display:none;">
+      <i class="fas fa-search" style="font-size:2rem; margin-bottom:12px; display:block;"></i>
+      <p>No funds match your search.</p>
+    </div>
+    <table class="fund-table" id="fundTable" style="display:none;">
+      <thead>
+        <tr>
+          <th class="sortable" onclick="sortBy('name')">Fund Name <i class="fas fa-sort sort-icon"></i></th>
+          <th>Category</th>
+          <th class="sortable" onclick="sortBy('nav')">NAV (₹) <i class="fas fa-sort sort-icon"></i></th>
+          <th>Updated</th>
+          <th style="text-align:center;">Compare</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="fundTableBody"></tbody>
+    </table>
+    <div class="pagination-row" id="paginationRow" style="display:none;">
+      <span class="page-info" id="pageInfo"></span>
+      <div class="page-btns" id="pageBtns"></div>
+    </div>
+  </div>
+
+  <!-- ── MOBILE: card layout ── -->
+  <div class="fund-cards" id="mobileCards">
+    <div id="mobileLoadingState" class="loading-state" style="display:none;">
+      <div class="spinner"></div><p>Loading…</p>
+    </div>
+    <div id="mobileEmptyState" class="empty-state" style="display:none;">
+      <i class="fas fa-search" style="font-size:2rem; margin-bottom:12px; display:block;"></i>
+      <p>No funds match your search.</p>
+    </div>
+    <div id="mobileCardList"></div>
+    <!-- Mobile pagination -->
+    <div id="mobilePaginationRow" style="display:none; margin-top:12px;">
+      <div class="pagination-row" style="border-radius:16px;">
+        <span class="page-info" id="mobilePageInfo"></span>
+        <div class="page-btns" id="mobilePageBtns"></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- FUND DETAIL MODAL -->
+<div class="fund-modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="fund-modal" id="fundModal">
+    <div class="modal-header">
+      <div style="flex:1; min-width:0;">
+        <p class="sora" id="modalFundHouse" style="font-size:0.74rem; color:var(--muted); margin-bottom:3px;"></p>
+        <h3 class="sora fw-bold" id="modalFundName" style="font-size:1rem; line-height:1.3; margin-bottom:8px;"></h3>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <span id="modalCategory" class="category-chip"></span>
+          <div class="plan-toggle-wrap">
+            <span class="plan-toggle-label">Plan:</span>
+            <span class="plan-badge direct active" id="badgeDirect" onclick="setPlanType('direct')" title="No distributor commission">
+              <i class="fas fa-check-circle" style="font-size:0.6rem;"></i> Direct
+            </span>
+            <span class="plan-badge regular" id="badgeRegular" onclick="setPlanType('regular')" title="Includes distributor commission">
+              Regular
+            </span>
+          </div>
+        </div>
+        <p style="font-size:0.68rem; color:var(--muted); margin-top:5px; margin-bottom:0;" id="planNote">
+          Showing <strong>Direct Plan</strong> data. Lower expense ratio, no distributor commission.
+        </p>
+      </div>
+      <button class="modal-close" onclick="closeModalDirect()">
+        <i class="fas fa-times" style="font-size:0.78rem; color:var(--muted);"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-stat-row">
+        <div class="modal-stat">
+          <div class="modal-stat-label">Current NAV</div>
+          <div class="modal-stat-value" id="modalNAV">—</div>
+        </div>
+        <div class="modal-stat">
+          <div class="modal-stat-label">As of Date</div>
+          <div class="modal-stat-value" id="modalDate" style="font-size:0.82rem;">—</div>
+        </div>
+        <div class="modal-stat">
+          <div class="modal-stat-label">Scheme Code</div>
+          <div class="modal-stat-value" id="modalCode" style="font-size:0.82rem;">—</div>
+        </div>
+        <div class="modal-stat">
+          <div class="modal-stat-label">1Y Return</div>
+          <div class="modal-stat-value" id="modal1YReturn" style="font-size:0.9rem;">—</div>
+        </div>
+      </div>
+
+      <!-- NAV History -->
+      <div id="modalChartWrap">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+          <h6 class="sora fw-bold mb-0" style="font-size:0.88rem;">NAV History</h6>
+          <div class="period-btns">
+            <button class="page-btn active" onclick="loadHistory(1,'month')" id="btn1m">1M</button>
+            <button class="page-btn" onclick="loadHistory(3,'month')" id="btn3m">3M</button>
+            <button class="page-btn" onclick="loadHistory(6,'month')" id="btn6m">6M</button>
+            <button class="page-btn" onclick="loadHistory(1,'year')"  id="btn1y">1Y</button>
+            <button class="page-btn" onclick="loadHistory(3,'year')"  id="btn3y">3Y</button>
+          </div>
+        </div>
+        <div id="chartLoading" style="text-align:center; padding:30px; color:var(--muted);">
+          <div class="spinner" style="margin-bottom:8px;"></div>Loading NAV history…
+        </div>
+        <div class="chart-wrap" id="chartWrap" style="display:none;">
+          <canvas id="navChart"></canvas>
+        </div>
+      </div>
+
+      <!-- SIP Backtester -->
+      <div class="sip-section">
+        <h6 class="sora"><i class="fas fa-calculator" style="color:var(--brand-gold); margin-right:6px;"></i>SIP Backtester</h6>
+        <div class="sip-inputs">
+          <div class="sip-input-group">
+            <label>Monthly SIP (₹)</label>
+            <input type="number" id="sipAmount" class="sip-input" value="5000" min="100" step="100">
+          </div>
+          <div class="sip-input-group">
+            <label>Duration</label>
+            <select id="sipDuration" class="sip-input">
+              <option value="1">1 Year</option>
+              <option value="3" selected>3 Years</option>
+              <option value="5">5 Years</option>
+              <option value="7">7 Years</option>
+              <option value="10">10 Years</option>
+            </select>
+          </div>
+          <button class="btn-run-sip" id="btnRunSip" onclick="runSIPBacktest()">
+            <i class="fas fa-play" style="margin-right:5px;"></i>Run Backtest
+          </button>
+        </div>
+        <div class="sip-loading" id="sipLoading">
+          <div class="spinner" style="width:20px;height:20px;border-width:2px;margin-bottom:4px;"></div>Calculating…
+        </div>
+        <div class="sip-results" id="sipResults">
+          <div class="sip-result-card">
+            <div class="sip-result-label">Total Invested</div>
+            <div class="sip-result-value neutral" id="sipInvested">—</div>
+          </div>
+          <div class="sip-result-card">
+            <div class="sip-result-label">Current Value</div>
+            <div class="sip-result-value" id="sipValue">—</div>
+          </div>
+          <div class="sip-result-card">
+            <div class="sip-result-label">XIRR p.a.</div>
+            <div class="sip-result-value" id="sipXIRR">—</div>
+          </div>
+        </div>
+        <p style="font-size:0.66rem; color:var(--muted); margin-top:8px; margin-bottom:0;">
+          <i class="fas fa-info-circle" style="margin-right:3px;"></i>
+          Illustrative only. XIRR via Newton-Raphson. Past performance ≠ future results.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARISON TRAY -->
+<div id="comparisonTray">
+  <div class="container">
+    <div class="tray-inner">
+      <span class="tray-label"><i class="fas fa-chart-line" style="margin-right:4px;"></i>Compare</span>
+      <div class="tray-funds" id="trayFunds"></div>
+      <div class="tray-actions">
+        <button class="btn-compare-now" id="btnCompareNow" onclick="openCompareModal()" disabled>
+          Compare <i class="fas fa-arrow-right" style="margin-left:4px;"></i>
+        </button>
+        <button class="btn-clear-tray" onclick="clearTray()">✕</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARISON MODAL -->
+<div id="compareModalOverlay" onclick="closeCompareModal(event)">
+  <div id="compareModal">
+    <div class="compare-header">
+      <div>
+        <h3 class="sora fw-bold" style="font-size:1.05rem; margin-bottom:3px;">Fund Comparison</h3>
+        <p style="font-size:0.76rem; color:var(--muted); margin:0;">Normalised % growth — comparable across different NAV levels.</p>
+      </div>
+      <button class="modal-close" onclick="closeCompareModalDirect()">
+        <i class="fas fa-times" style="font-size:0.78rem; color:var(--muted);"></i>
+      </button>
+    </div>
+    <div class="compare-body">
+      <div class="compare-legend" id="compareLegend"></div>
+      <div class="period-btns" style="margin-bottom:14px;">
+        <button class="page-btn active" id="cbtn1y" onclick="loadCompareChart(1,'year',this)">1Y</button>
+        <button class="page-btn" id="cbtn3y" onclick="loadCompareChart(3,'year',this)">3Y</button>
+        <button class="page-btn" id="cbtn5y" onclick="loadCompareChart(5,'year',this)">5Y</button>
+      </div>
+      <div id="compareChartLoading" style="text-align:center;padding:30px;color:var(--muted);display:none;">
+        <div class="spinner"></div>Fetching data…
+      </div>
+      <div class="compare-chart-wrap">
+        <canvas id="compareChart"></canvas>
+      </div>
+      <h6 class="sora fw-bold" style="font-size:0.86rem; margin-bottom:10px; margin-top:6px;">Key Metrics</h6>
+      <div class="compare-stats-wrap">
+        <table class="compare-stats-table" id="compareStatsTable">
+          <thead>
+            <tr>
+              <th>Fund</th>
+              <th>Plan</th>
+              <th>NAV</th>
+              <th>1Y Return</th>
+              <th>3Y Return</th>
+              <th>Category</th>
+            </tr>
+          </thead>
+          <tbody id="compareStatsTbody"></tbody>
+        </table>
+      </div>
+      <p style="font-size:0.7rem; color:var(--muted); margin-top:14px; margin-bottom:0;">
+        <i class="fas fa-info-circle" style="margin-right:3px;"></i>
+        Point-to-point returns. Past performance is not indicative of future results. Data: AMFI via mfapi.in.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- NISM DISCLAIMER -->
+<div class="disclaimer-bar">
+  <div class="container">
+    <div class="disclaimer-text">
+      <i class="fas fa-shield-alt"></i>
+      <span>
+        <strong>Regulatory Disclaimer (SEBI / AMFI):</strong>
+        Mutual Fund investments are subject to market risks. Please read all scheme-related documents carefully before investing.
+        Past performance is not an indicator of future results. RetireWise+ is a NISM VA certified distribution platform.
+        NAV data sourced from AMFI via mfapi.in. For informational purposes only — not financial advice.
+      </span>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
+
+<script>
+// ── State ─────────────────────────────────────────
+let allFunds       = [];
+let filteredFunds  = [];
+let currentPage    = 1;
+const PAGE_SIZE    = 50;
+let currentScheme  = null;
+let navChartInst   = null;
+let compareChartInst = null;
+let sortField      = 'name';
+let sortAsc        = true;
+let fullNavCache   = {};
+let currentPlanType = 'direct';
+const TRAY_COLORS  = ['#1a3c31', '#b59b5d', '#64748b'];
+let comparisonTray = [];
+
+const isMobile = () => window.innerWidth < 768;
+
+// ── Comparison Tray ───────────────────────────────
+function addToTray(code, name, catLabel, catClass) {
+  if (comparisonTray.find(f => f.code == code)) { removeFromTray(code); return; }
+  if (comparisonTray.length >= 3) { alert('Max 3 funds at a time.'); return; }
+  comparisonTray.push({ code, name, catLabel, catClass });
+  syncTrayUI();
+}
+function removeFromTray(code) {
+  comparisonTray = comparisonTray.filter(f => f.code != code);
+  syncTrayUI();
+}
+function clearTray() { comparisonTray = []; syncTrayUI(); }
+
+function syncTrayUI() {
+  const tray   = document.getElementById('comparisonTray');
+  const trayFunds = document.getElementById('trayFunds');
+  const btnNow = document.getElementById('btnCompareNow');
+
+  trayFunds.innerHTML = comparisonTray.map((f, i) => `
+    <span class="tray-chip" style="border-color:${TRAY_COLORS[i]}50;">
+      <span class="tray-chip-dot" style="background:${TRAY_COLORS[i]};"></span>
+      <span class="tray-chip-name">${f.name}</span>
+      <i class="fas fa-times tray-chip-remove" onclick="removeFromTray(${f.code})"></i>
+    </span>
+  `).join('');
+
+  comparisonTray.length > 0 ? tray.classList.add('visible') : tray.classList.remove('visible');
+  btnNow.disabled = comparisonTray.length < 2;
+
+  // Sync compare buttons on both desktop & mobile
+  document.querySelectorAll('.compare-btn').forEach(btn => {
+    const code = btn.dataset.code;
+    const inTray = comparisonTray.find(f => f.code == code);
+    const full   = comparisonTray.length >= 3 && !inTray;
+    btn.classList.toggle('in-tray', !!inTray);
+    btn.textContent = inTray ? '✓ Added' : 'Compare';
+    btn.disabled = full;
+  });
+}
+
+// ── Comparison Modal ──────────────────────────────
+async function openCompareModal() {
+  document.getElementById('compareModalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderCompareStats();
+  await loadCompareChart(1, 'year', document.getElementById('cbtn1y'));
+}
+function closeCompareModal(e) {
+  if (e.target === document.getElementById('compareModalOverlay')) closeCompareModalDirect();
+}
+function closeCompareModalDirect() {
+  document.getElementById('compareModalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  if (compareChartInst) { compareChartInst.destroy(); compareChartInst = null; }
+}
+
+async function renderCompareStats() {
+  const tbody  = document.getElementById('compareStatsTbody');
+  const legend = document.getElementById('compareLegend');
+  tbody.innerHTML = ''; legend.innerHTML = '';
+
+  for (let i = 0; i < comparisonTray.length; i++) {
+    const f = comparisonTray[i];
+    const color = TRAY_COLORS[i];
+    legend.innerHTML += `
+      <div class="legend-item">
+        <span class="legend-dot" style="background:${color};"></span>
+        <span>${f.name.length > 38 ? f.name.slice(0,38)+'…' : f.name}</span>
+      </div>`;
+
+    let nav1y = '—', nav3y = '—', navCur = '—';
+    try {
+      if (!fullNavCache[f.code]) {
+        const res = await fetch(`https://api.mfapi.in/mf/${f.code}`);
+        fullNavCache[f.code] = (await res.json()).data;
+      }
+      const data = fullNavCache[f.code];
+      if (data && data.length) {
+        navCur = '₹' + parseFloat(data[0].nav).toFixed(4);
+        const c1y = new Date(); c1y.setFullYear(c1y.getFullYear()-1);
+        const c3y = new Date(); c3y.setFullYear(c3y.getFullYear()-3);
+        const p1y = data.find(d => parseDate(d.date) <= c1y);
+        const p3y = data.find(d => parseDate(d.date) <= c3y);
+        if (p1y) { const r = (parseFloat(data[0].nav)-parseFloat(p1y.nav))/parseFloat(p1y.nav)*100; nav1y = `<span style="color:${r>=0?'#059669':'#DC2626'};font-weight:700;">${r>=0?'+':''}${r.toFixed(2)}%</span>`; }
+        if (p3y) { const r = (parseFloat(data[0].nav)-parseFloat(p3y.nav))/parseFloat(p3y.nav)*100; nav3y = `<span style="color:${r>=0?'#059669':'#DC2626'};font-weight:700;">${r>=0?'+':''}${r.toFixed(2)}%</span>`; }
+      }
+    } catch(e) {}
+
+    tbody.innerHTML += `
+      <tr>
+        <td><span class="fund-color-bar" style="background:${color};"></span><span style="font-weight:600;font-size:0.78rem;">${f.name.length>30?f.name.slice(0,30)+'…':f.name}</span></td>
+        <td><span style="font-size:0.68rem;background:#e8f4fd;color:#0891B2;padding:2px 7px;border-radius:100px;font-weight:700;">Direct</span></td>
+        <td style="font-family:'Sora',sans-serif;font-weight:700;font-size:0.82rem;">${navCur}</td>
+        <td>${nav1y}</td>
+        <td>${nav3y}</td>
+        <td><span class="category-chip ${f.catClass}">${f.catLabel}</span></td>
+      </tr>`;
+  }
+}
+
+async function loadCompareChart(amount, unit, btnEl) {
+  ['cbtn1y','cbtn3y','cbtn5y'].forEach(id => document.getElementById(id).classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+  document.getElementById('compareChartLoading').style.display = 'block';
+  if (compareChartInst) { compareChartInst.destroy(); compareChartInst = null; }
+
+  const cutoff = new Date();
+  unit === 'month' ? cutoff.setMonth(cutoff.getMonth()-amount) : cutoff.setFullYear(cutoff.getFullYear()-amount);
+
+  const datasets = [];
+  for (let i = 0; i < comparisonTray.length; i++) {
+    const f = comparisonTray[i];
+    try {
+      if (!fullNavCache[f.code]) {
+        const res = await fetch(`https://api.mfapi.in/mf/${f.code}`);
+        fullNavCache[f.code] = (await res.json()).data;
+      }
+      const filtered = fullNavCache[f.code].filter(d => parseDate(d.date) >= cutoff).reverse();
+      if (!filtered.length) continue;
+      const baseNAV = parseFloat(filtered[0].nav);
+      if (i === 0) datasets._labels = filtered.map(d => d.date);
+      datasets.push({
+        label: f.name.length > 28 ? f.name.slice(0,28)+'…' : f.name,
+        data: filtered.map(d => +((parseFloat(d.nav)/baseNAV-1)*100).toFixed(4)),
+        borderColor: TRAY_COLORS[i], backgroundColor: 'transparent',
+        fill: false, tension: 0.3, borderWidth: 2.5,
+        pointRadius: filtered.length > 60 ? 0 : 3, pointBackgroundColor: TRAY_COLORS[i]
+      });
+    } catch(e) {}
+  }
+
+  document.getElementById('compareChartLoading').style.display = 'none';
+  const masterLabels = datasets._labels || []; delete datasets._labels;
+  const ctx = document.getElementById('compareChart').getContext('2d');
+  compareChartInst = new Chart(ctx, {
+    type: 'line',
+    data: { labels: masterLabels, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: true, labels: { font: { family: 'Inter', size: 10 }, boxWidth: 10, padding: 12 } },
+        tooltip: { backgroundColor: '#1e293b', padding: 10, callbacks: { label: c => ` ${c.dataset.label}: ${c.raw>=0?'+':''}${c.raw.toFixed(2)}%` } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { maxTicksLimit: 5, font: { family: 'Inter', size: 10 } } },
+        y: { grid: { color: '#f1f5f9' }, ticks: { font: { family: 'Inter', size: 10 }, callback: v => (v>=0?'+':'')+v.toFixed(1)+'%' } }
+      }
+    }
+  });
+}
+
+// ── Plan Toggle ───────────────────────────────────
+function setPlanType(type) {
+  currentPlanType = type;
+  document.getElementById('badgeDirect').classList.toggle('active', type==='direct');
+  document.getElementById('badgeRegular').classList.toggle('active', type==='regular');
+  document.getElementById('planNote').innerHTML = type==='direct'
+    ? 'Showing <strong>Direct Plan</strong> data. Lower expense ratio, no distributor commission.'
+    : 'Showing <strong>Regular Plan</strong> data. Includes distributor commission, higher expense ratio.';
+}
+
+// ── Load Funds ────────────────────────────────────
+async function loadFunds() {
+  try {
+    const res  = await fetch('https://api.mfapi.in/mf');
+    allFunds   = await res.json();
+    applyFilters();
+    document.getElementById('loadingState').style.display = 'none';
+    if (!isMobile()) {
+      document.getElementById('fundTable').style.display    = 'table';
+      document.getElementById('paginationRow').style.display = 'flex';
+    }
+  } catch(e) {
+    const msg = `<i class="fas fa-exclamation-triangle" style="font-size:2rem;color:#DC2626;margin-bottom:12px;display:block;"></i>
+      <p>Could not load fund data. Check your connection.</p>
+      <button onclick="loadFunds()" style="padding:8px 20px;background:var(--brand-green);color:white;border:none;border-radius:8px;cursor:pointer;margin-top:8px;">Retry</button>`;
+    document.getElementById('loadingState').innerHTML = msg;
+    document.getElementById('mobileLoadingState').innerHTML = msg;
+  }
+}
+
+// ── Filter + Sort ─────────────────────────────────
+function handleSearch() {
+  const q = document.getElementById('searchInput').value;
+  document.getElementById('searchClear').style.display = q ? 'block' : 'none';
+  applyFilters();
+}
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchClear').style.display = 'none';
+  applyFilters();
+}
+
+function applyFilters() {
+  const q         = document.getElementById('searchInput').value.toLowerCase().trim();
+  const catFilter = document.getElementById('categoryFilter').value;
+  const sortVal   = document.getElementById('sortFilter').value;
+
+  let results = allFunds.filter(f => {
+    const name = f.schemeName.toLowerCase();
+    return (!q || name.includes(q)) && (!catFilter || getCategoryClass(f.schemeName).includes(catFilter.toLowerCase()));
+  });
+  if (sortVal === 'name') results.sort((a,b) => a.schemeName.localeCompare(b.schemeName));
+
+  filteredFunds = results;
+  currentPage   = 1;
+  document.getElementById('resultCount').textContent =
+    `${Math.min(results.length, PAGE_SIZE).toLocaleString('en-IN')} of ${results.length.toLocaleString('en-IN')} funds`;
+
+  const noResults = results.length === 0;
+  // Desktop
+  document.getElementById('fundTable').style.display      = noResults ? 'none' : 'table';
+  document.getElementById('paginationRow').style.display   = noResults ? 'none' : 'flex';
+  document.getElementById('emptyState').style.display     = noResults ? 'block' : 'none';
+  // Mobile
+  document.getElementById('mobileCardList').innerHTML      = '';
+  document.getElementById('mobileEmptyState').style.display = noResults ? 'block' : 'none';
+  document.getElementById('mobilePaginationRow').style.display = noResults ? 'none' : 'block';
+
+  renderPage();
+}
+
+function sortBy(field) {
+  if (sortField === field) sortAsc = !sortAsc;
+  else { sortField = field; sortAsc = true; }
+  document.getElementById('sortFilter').value = field==='nav'?(sortAsc?'nav-low':'nav-high'):'name';
+  renderPage();
+}
+
+// ── Render Page (desktop + mobile) ───────────────
+function renderPage() {
+  const start = (currentPage-1)*PAGE_SIZE;
+  const slice = filteredFunds.slice(start, start+PAGE_SIZE);
+
+  // ── Desktop table ──
+  const tbody = document.getElementById('fundTableBody');
+  tbody.innerHTML = slice.map(fund => {
+    const catClass = getCategoryClass(fund.schemeName);
+    const catLabel = getCategoryLabel(fund.schemeName);
+    const house    = getFundHouse(fund.schemeName);
+    const inTray   = comparisonTray.find(f => f.code == fund.schemeCode);
+    const trayFull = comparisonTray.length >= 3 && !inTray;
+    return `
+      <tr class="fund-row">
+        <td class="fund-name-cell">
+          <div class="fund-name" onclick="openModal(${fund.schemeCode},'${escHtml(fund.schemeName)}','${escHtml(house)}','${catLabel}','${catClass}')">${fund.schemeName}</div>
+          <div class="fund-house">${house}</div>
+        </td>
+        <td><span class="category-chip ${catClass}">${catLabel}</span></td>
+        <td>
+          <div class="nav-value" id="nav-${fund.schemeCode}">—</div>
+          <div class="nav-date" id="navdate-${fund.schemeCode}"></div>
+        </td>
+        <td><span id="change-${fund.schemeCode}" class="change-flat">—</span></td>
+        <td style="text-align:center;">
+          <button class="compare-btn ${inTray?'in-tray':''}" data-code="${fund.schemeCode}" ${trayFull?'disabled':''}
+            onclick="addToTray(${fund.schemeCode},'${escHtml(fund.schemeName)}','${catLabel}','${catClass}')">
+            ${inTray?'✓ Added':'Compare'}
+          </button>
+        </td>
+        <td style="text-align:right;">
+          <span style="font-size:0.75rem;color:var(--muted);cursor:pointer;"
+            onclick="openModal(${fund.schemeCode},'${escHtml(fund.schemeName)}','${escHtml(house)}','${catLabel}','${catClass}')">
+            <i class="fas fa-chevron-right"></i>
+          </span>
+        </td>
+      </tr>`;
+  }).join('');
+
+  // ── Mobile cards ──
+  const cardList = document.getElementById('mobileCardList');
+  cardList.innerHTML = slice.map(fund => {
+    const catClass = getCategoryClass(fund.schemeName);
+    const catLabel = getCategoryLabel(fund.schemeName);
+    const house    = getFundHouse(fund.schemeName);
+    const inTray   = comparisonTray.find(f => f.code == fund.schemeCode);
+    const trayFull = comparisonTray.length >= 3 && !inTray;
+    return `
+      <div class="fund-card">
+        <div class="fund-card-top">
+          <div style="flex:1;min-width:0;">
+            <div class="fund-card-name" onclick="openModal(${fund.schemeCode},'${escHtml(fund.schemeName)}','${escHtml(house)}','${catLabel}','${catClass}')">${fund.schemeName}</div>
+            <div class="fund-card-house">${house}</div>
+          </div>
+          <span class="category-chip ${catClass}" style="flex-shrink:0;">${catLabel}</span>
+        </div>
+        <div class="fund-card-bottom">
+          <div class="fund-card-meta">
+            <div>
+              <div class="fund-card-nav" id="mnav-${fund.schemeCode}">—</div>
+              <div class="fund-card-date" id="mnavdate-${fund.schemeCode}"></div>
+            </div>
+          </div>
+          <div class="fund-card-actions">
+            <button class="compare-btn ${inTray?'in-tray':''}" data-code="${fund.schemeCode}" ${trayFull?'disabled':''}
+              onclick="addToTray(${fund.schemeCode},'${escHtml(fund.schemeName)}','${catLabel}','${catClass}')">
+              ${inTray?'✓':'Compare'}
+            </button>
+            <button class="detail-btn" onclick="openModal(${fund.schemeCode},'${escHtml(fund.schemeName)}','${escHtml(house)}','${catLabel}','${catClass}')">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  slice.forEach(fund => fetchFundNAV(fund.schemeCode));
+  renderPagination();
+}
+
+// ── NAV Cache ─────────────────────────────────────
+const navCache = {};
+async function fetchFundNAV(code) {
+  if (navCache[code]) { updateNavRow(code, navCache[code]); return; }
+  try {
+    const res  = await fetch(`https://api.mfapi.in/mf/${code}/latest`);
+    const data = await res.json();
+    if (data.data && data.data.length > 0) {
+      navCache[code] = data.data[0];
+      updateNavRow(code, data.data[0]);
+    }
+  } catch(e) {}
+}
+
+function updateNavRow(code, d) {
+  // Desktop
+  const navEl  = document.getElementById(`nav-${code}`);
+  const dateEl = document.getElementById(`navdate-${code}`);
+  if (navEl)  navEl.textContent  = '₹' + parseFloat(d.nav).toFixed(4);
+  if (dateEl) dateEl.textContent = d.date;
+  // Mobile
+  const mNavEl  = document.getElementById(`mnav-${code}`);
+  const mDateEl = document.getElementById(`mnavdate-${code}`);
+  if (mNavEl)  mNavEl.textContent  = '₹' + parseFloat(d.nav).toFixed(4);
+  if (mDateEl) mDateEl.textContent = d.date;
+}
+
+// ── Pagination ────────────────────────────────────
+function renderPagination() {
+  const total = filteredFunds.length;
+  const pages = Math.ceil(total/PAGE_SIZE);
+  const start = (currentPage-1)*PAGE_SIZE+1;
+  const end   = Math.min(currentPage*PAGE_SIZE, total);
+  const info  = `${start.toLocaleString('en-IN')}–${end.toLocaleString('en-IN')} of ${total.toLocaleString('en-IN')}`;
+
+  document.getElementById('pageInfo').textContent       = 'Showing ' + info;
+  document.getElementById('mobilePageInfo').textContent = 'Showing ' + info;
+
+  const html = buildPaginationHTML(pages);
+  document.getElementById('pageBtns').innerHTML       = html;
+  document.getElementById('mobilePageBtns').innerHTML = html;
+
+  document.getElementById('mobilePaginationRow').style.display = total > 0 ? 'block' : 'none';
+}
+
+function buildPaginationHTML(pages) {
+  let html = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}><i class="fas fa-chevron-left"></i></button>`;
+  const range = [];
+  for (let i = Math.max(1,currentPage-2); i <= Math.min(pages,currentPage+2); i++) range.push(i);
+  if (range[0]>1) html += `<button class="page-btn" onclick="goPage(1)">1</button>${range[0]>2?'<span style="padding:0 3px;color:var(--muted)">…</span>':''}`;
+  range.forEach(p => { html += `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`; });
+  if (range[range.length-1]<pages) html += `${range[range.length-1]<pages-1?'<span style="padding:0 3px;color:var(--muted)">…</span>':''}<button class="page-btn" onclick="goPage(${pages})">${pages}</button>`;
+  html += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===pages?'disabled':''}><i class="fas fa-chevron-right"></i></button>`;
+  return html;
+}
+
+function goPage(p) {
+  const pages = Math.ceil(filteredFunds.length/PAGE_SIZE);
+  if (p<1||p>pages) return;
+  currentPage = p;
+  renderPage();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Modal ─────────────────────────────────────────
+function openModal(code, name, house, catLabel, catClass) {
+  currentScheme = code;
+  document.getElementById('modalFundName').textContent  = name;
+  document.getElementById('modalFundHouse').textContent = house;
+  document.getElementById('modalCode').textContent      = code;
+  const catEl = document.getElementById('modalCategory');
+  catEl.textContent = catLabel; catEl.className = `category-chip ${catClass}`;
+  document.getElementById('modalNAV').textContent       = navCache[code] ? '₹'+parseFloat(navCache[code].nav).toFixed(4) : 'Loading…';
+  document.getElementById('modalDate').textContent      = navCache[code] ? navCache[code].date : '—';
+  document.getElementById('modal1YReturn').textContent  = '—';
+  document.getElementById('sipResults').style.display   = 'none';
+  setPlanType('direct');
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  ['btn1m','btn3m','btn6m','btn1y','btn3y'].forEach(b => document.getElementById(b).classList.remove('active'));
+  document.getElementById('btn1m').classList.add('active');
+  loadHistory(1,'month');
+}
+function closeModal(e) { if (e.target===document.getElementById('modalOverlay')) closeModalDirect(); }
+function closeModalDirect() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  if (navChartInst) { navChartInst.destroy(); navChartInst = null; }
+}
+
+async function loadHistory(amount, unit) {
+  const btnMap = {'1month':'btn1m','3month':'btn3m','6month':'btn6m','1year':'btn1y','3year':'btn3y'};
+  Object.values(btnMap).forEach(b => document.getElementById(b).classList.remove('active'));
+  document.getElementById(btnMap[`${amount}${unit}`])?.classList.add('active');
+  document.getElementById('chartLoading').style.display = 'block';
+  document.getElementById('chartWrap').style.display    = 'none';
+
+  try {
+    if (!fullNavCache[currentScheme]) {
+      const res  = await fetch(`https://api.mfapi.in/mf/${currentScheme}`);
+      fullNavCache[currentScheme] = (await res.json()).data;
+    }
+    const nav    = fullNavCache[currentScheme];
+    const cutoff = new Date();
+    unit==='month' ? cutoff.setMonth(cutoff.getMonth()-amount) : cutoff.setFullYear(cutoff.getFullYear()-amount);
+    const filtered = nav.filter(d => parseDate(d.date)>=cutoff).reverse();
+
+    if (nav[0]) {
+      document.getElementById('modalNAV').textContent  = '₹'+parseFloat(nav[0].nav).toFixed(4);
+      document.getElementById('modalDate').textContent = nav[0].date;
+    }
+
+    const c1y = new Date(); c1y.setFullYear(c1y.getFullYear()-1);
+    const p1y = nav.find(d => parseDate(d.date)<=c1y);
+    if (p1y && nav[0]) {
+      const ret = (parseFloat(nav[0].nav)-parseFloat(p1y.nav))/parseFloat(p1y.nav)*100;
+      const el  = document.getElementById('modal1YReturn');
+      el.textContent = (ret>=0?'+':'')+ret.toFixed(2)+'%';
+      el.style.color = ret>=0?'#059669':'#DC2626';
+    }
+
+    const labels = filtered.map(d => d.date);
+    const values = filtered.map(d => parseFloat(d.nav));
+    const isUp   = values[values.length-1] >= values[0];
+    const lineColor = isUp ? '#059669' : '#DC2626';
+
+    document.getElementById('chartLoading').style.display = 'none';
+    document.getElementById('chartWrap').style.display    = 'block';
+    if (navChartInst) navChartInst.destroy();
+
+    const ctx = document.getElementById('navChart').getContext('2d');
+    const gradient = ctx.createLinearGradient(0,0,0,240);
+    gradient.addColorStop(0, isUp?'rgba(5,150,105,0.15)':'rgba(220,38,38,0.15)');
+    gradient.addColorStop(1,'rgba(255,255,255,0)');
+
+    navChartInst = new Chart(ctx, {
+      type: 'line',
+      data: { labels, datasets: [{ data: values, borderColor: lineColor, backgroundColor: gradient,
+        fill: true, tension: 0.3, borderWidth: 2,
+        pointRadius: filtered.length>60?0:3, pointBackgroundColor: lineColor }] },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { backgroundColor:'#1e293b', padding:10,
+          callbacks: { label: c => ` NAV: ₹${c.raw.toFixed(4)}` } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { maxTicksLimit: 5, font: { family:'Inter', size:10 } } },
+          y: { grid: { color:'#f1f5f9' }, ticks: { font: { family:'Inter', size:10 }, callback: v => '₹'+v.toFixed(2) } }
+        }
+      }
+    });
+  } catch(e) {
+    document.getElementById('chartLoading').innerHTML = '<p style="color:#DC2626;">Failed to load. Try again.</p>';
+  }
+}
+
+// ── SIP Backtester ────────────────────────────────
+async function runSIPBacktest() {
+  const monthlyAmount = parseFloat(document.getElementById('sipAmount').value);
+  const years         = parseInt(document.getElementById('sipDuration').value);
+  if (!monthlyAmount||monthlyAmount<=0) { alert('Enter a valid SIP amount.'); return; }
+  if (!currentScheme) return;
+
+  document.getElementById('sipLoading').style.display  = 'block';
+  document.getElementById('sipResults').style.display  = 'none';
+  document.getElementById('btnRunSip').disabled        = true;
+
+  try {
+    if (!fullNavCache[currentScheme]) {
+      const res = await fetch(`https://api.mfapi.in/mf/${currentScheme}`);
+      fullNavCache[currentScheme] = (await res.json()).data;
+    }
+    const navAsc    = [...fullNavCache[currentScheme]].reverse();
+    const startDate = new Date(); startDate.setFullYear(startDate.getFullYear()-years);
+    const window    = navAsc.filter(d => parseDate(d.date)>=startDate);
+
+    if (window.length < 2) {
+      alert('Not enough historical data. Try a shorter period.');
+      document.getElementById('sipLoading').style.display = 'none';
+      document.getElementById('btnRunSip').disabled = false;
+      return;
+    }
+
+    const cashflows = [];
+    let totalUnits = 0, lastBuyDate = null;
+    for (const d of window) {
+      const date = parseDate(d.date);
+      const nav  = parseFloat(d.nav);
+      if (!lastBuyDate || (date-lastBuyDate)>=28*86400000) {
+        totalUnits += monthlyAmount/nav;
+        cashflows.push({ date, amount: -monthlyAmount });
+        lastBuyDate = date;
+      }
+    }
+    const totalInvested = -cashflows.reduce((s,c)=>s+c.amount,0);
+    const currentNAV    = parseFloat(window[window.length-1].nav);
+    const currentValue  = totalUnits*currentNAV;
+    cashflows.push({ date: parseDate(window[window.length-1].date), amount: currentValue });
+
+    const xirr = computeXIRR(cashflows);
+    document.getElementById('sipInvested').textContent = '₹'+formatINR(totalInvested);
+    const vEl = document.getElementById('sipValue');
+    vEl.textContent = '₹'+formatINR(currentValue);
+    vEl.className   = 'sip-result-value '+(currentValue>=totalInvested?'positive':'negative');
+    const xEl = document.getElementById('sipXIRR');
+    if (xirr!==null&&isFinite(xirr)) {
+      xEl.textContent = (xirr>=0?'+':'')+(xirr*100).toFixed(2)+'%';
+      xEl.className   = 'sip-result-value '+(xirr>=0?'positive':'negative');
+    } else { xEl.textContent = 'N/A'; xEl.className = 'sip-result-value neutral'; }
+    document.getElementById('sipResults').style.display = 'grid';
+  } catch(e) { alert('Error: '+e.message); }
+  finally {
+    document.getElementById('sipLoading').style.display = 'none';
+    document.getElementById('btnRunSip').disabled       = false;
+  }
+}
+
+function computeXIRR(cfs, guess=0.1, maxIter=100, tol=1e-6) {
+  const base = cfs[0].date;
+  const npv  = r => cfs.reduce((s,c)=>s+c.amount/Math.pow(1+r,(c.date-base)/(365.25*86400000)),0);
+  const dnpv = r => cfs.reduce((s,c)=>{ const t=(c.date-base)/(365.25*86400000); return s-t*c.amount/Math.pow(1+r,t+1); },0);
+  let rate = guess;
+  for (let i=0; i<maxIter; i++) {
+    const df = dnpv(rate); if (Math.abs(df)<1e-12) break;
+    const nr = rate-npv(rate)/df;
+    if (Math.abs(nr-rate)<tol) return nr;
+    rate = nr; if (rate<=-1) rate=-0.99;
+  }
+  return null;
+}
+
+function formatINR(n) {
+  if (n>=1e7) return (n/1e7).toFixed(2)+' Cr';
+  if (n>=1e5) return (n/1e5).toFixed(2)+' L';
+  return n.toLocaleString('en-IN',{maximumFractionDigits:0});
+}
+
+// ── Helpers ───────────────────────────────────────
+function parseDate(str) {
+  const [d,m,y] = str.split('-'); return new Date(`${y}-${m}-${d}`);
+}
+function getFundHouse(name) {
+  const houses = ['SBI','HDFC','ICICI Prudential','Axis','Mirae Asset','Kotak','Nippon India',
+    'DSP','Franklin','UTI','Aditya Birla Sun Life','Tata','PGIM','Edelweiss','Motilal Oswal',
+    'Invesco','Sundaram','Canara Robeco','L&T','IDFC','Bandhan','Parag Parikh','Quant','WhiteOak'];
+  for (const h of houses) if (name.includes(h)) return h+' Mutual Fund';
+  return name.split(' ').slice(0,3).join(' ');
+}
+function getCategoryClass(name) {
+  const n = name.toLowerCase();
+  if (n.includes('index')||n.includes('etf')||n.includes('nifty')||n.includes('sensex')) return 'cat-index';
+  if (n.includes('equity')||n.includes('elss')||n.includes('flexi')||n.includes('large cap')||n.includes('mid cap')||n.includes('small cap')||n.includes('multi cap')||n.includes('bluechip')||n.includes('value fund')) return 'cat-equity';
+  if (n.includes('debt')||n.includes('liquid')||n.includes('overnight')||n.includes('gilt')||n.includes('credit')||n.includes('bond')||n.includes('income')||n.includes('money market')||n.includes('ultra short')||n.includes('short duration')||n.includes('medium duration')||n.includes('long duration')||n.includes('dynamic bond')) return 'cat-debt';
+  if (n.includes('hybrid')||n.includes('balanced')||n.includes('aggressive')||n.includes('conservative')||n.includes('arbitrage')||n.includes('equity savings')) return 'cat-hybrid';
+  if (n.includes('solution')||n.includes('retirement')||n.includes('children')) return 'cat-solution';
+  if (n.includes('fund of fund')||n.includes('fof')||n.includes('overseas')||n.includes('international')||n.includes('global')) return 'cat-other';
+  return 'cat-other';
+}
+function getCategoryLabel(name) {
+  const map = {'cat-equity':'Equity','cat-debt':'Debt','cat-hybrid':'Hybrid','cat-solution':'Solution','cat-index':'Index/ETF','cat-other':'Other'};
+  return map[getCategoryClass(name)]||'Other';
+}
+function escHtml(str) { return str.replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+
+// ── Init ──────────────────────────────────────────
+loadFunds();
+</script>

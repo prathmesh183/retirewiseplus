@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title + ' | RetireWise+' : 'RetireWise+ | Investment with clarity' %></title>
+  <meta name="description" content="<%= (typeof description !== 'undefined' && description) ? description : 'RetireWise+ - NISM-Certified Mutual Fund Distribution | Helping you build a secure retirement through disciplined SIPs' %>">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Your Global Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!-- Page-specific CSS (optional - pass customCSS variable from route) -->
+  <% if (typeof customCSS !== 'undefined') { %>
+    <link rel="stylesheet" href="<%= customCSS %>">
+  <% } %>
+</head>
+<body>
+
+<header class="rw-fixed-header">
+  <div class="rw-nav-container">
+    <div class="rw-logo-group">
+      <a href="/" class="rw-logo rw-logo-svg-wrap" aria-label="RetireWise+ Home">
+        <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="38" height="38" rx="10" fill="#1a3c31"/>
+          <rect x="7"  y="22" width="5" height="9"  rx="1.5" fill="#b59b5d"/>
+          <rect x="14" y="16" width="5" height="15" rx="1.5" fill="#b59b5d" opacity="0.75"/>
+          <rect x="21" y="10" width="5" height="21" rx="1.5" fill="#ffffff"/>
+          <polyline points="7,24 14,18 21,12 31,7" stroke="#b59b5d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline points="26,6 31,7 30,12" stroke="#b59b5d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="rw-logo-text">RetireWise<span class="rw-gold-plus">+</span></span>
+      </a>
+      <span class="rw-header-tagline">Investment with clarity</span>
+    </div>
+
+    <nav class="rw-nav-desktop">
+      <a href="/learn">Learn</a>
+      <a href="/calculators">Calculators</a>
+      <a href="/newsletter">Newsletter</a>
+      <a href="/about">About</a>
+      <a href="/funds">Funds</a>
+      <a href="/lead" class="rw-header-btn">Request a Call</a>
+  
+    </nav>
+
+    <button class="rw-mobile-trigger" id="rw-mobile-trigger" aria-label="Open Menu" type="button">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <div class="rw-drawer" id="rw-mobile-drawer">
+    <div class="rw-drawer-top">
+      <a href="/" class="rw-logo">RetireWise<span class="rw-gold-plus">+</span></a>
+      <button class="rw-drawer-close" id="rw-drawer-close" type="button">✕</button>
+    </div>
+    <nav class="rw-drawer-links">
+      <a href="/"><i class="fas fa-home"></i> Home</a>
+      <a href="/learn"> <i class="fas fa-graduation-cap"></i> Learn</a>
+      <a href="/calculators"> <i class="fas fa-calculator"></i> Calculators</a>
+      <a href="/newsletter"> <i class="fas fa-envelope"></i> Newsletter</a>
+      <a href="/about"> <i class="fas fa-info-circle"></i> About</a>
+      <a href="/funds"> <i class="fas fa-chart-line"></i> Funds</a>
+      <a href="/lead" class="rw-drawer-cta"> <i class="fas fa-phone-alt"></i> Request a Call</a>
+    </nav>
+  </div>
+
+  <div class="rw-drawer-overlay" id="rw-drawer-overlay"></div>
+</header>
+
+<!-- Spacer so page content doesn't go under fixed header -->
+<div style="height: var(--header-height, 4.5rem);"></div>
+
+<style>
+:root {
+  --rw-green: #1a3c31;
+  --rw-gold: #b59b5d;
+  --rw-white: #ffffff;
+  --rw-text: #1c1917;
+  --header-height: 4.5rem;
+}
+
+.rw-fixed-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-height);
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+}
+.rw-nav-container {
+  width: 100%; max-width: 1440px;
+  margin: 0 auto; padding: 0 1.5rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.rw-logo {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.5rem; font-weight: 800;
+  color: var(--rw-green); text-decoration: none;
+  letter-spacing: -0.02em; flex-shrink: 0;
+}
+.rw-gold-plus { color: var(--rw-gold); }
+.rw-logo-svg-wrap {
+  display: flex; align-items: center; gap: 0.6rem;
+  text-decoration: none;
+}
+.rw-logo-svg-wrap svg {
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 6px rgba(26,60,49,0.25));
+  transition: transform 0.2s ease;
+}
+.rw-logo-svg-wrap:hover svg { transform: scale(1.05); }
+.rw-logo-text {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.45rem; font-weight: 800;
+  color: var(--rw-green);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.rw-logo-group { display: flex; align-items: center; gap: 1rem; }
+.rw-header-tagline {
+  font-size: 0.75rem; color: #78716c;
+  text-transform: uppercase; font-weight: 500;
+  letter-spacing: 0.5px; white-space: nowrap;
+}
+.rw-nav-desktop { display: flex; gap: 2rem; align-items: center; flex-wrap: wrap; }
+.rw-nav-desktop a {
+  text-decoration: none; color: #57534e;
+  font-size: 0.95rem; font-weight: 500; transition: 0.2s;
+  display: flex; align-items: center; gap: 6px; white-space: nowrap;
+}
+.rw-nav-desktop a:hover { color: var(--rw-green); }
+.rw-header-btn {
+  background: var(--rw-green); color: white !important;
+  padding: 0.6rem 1.25rem; border-radius: 8px; font-weight: 600;
+  box-shadow: 0 4px 12px rgba(26,60,49,0.15); transition: all 0.3s ease;
+}
+.rw-header-btn:hover {
+  box-shadow: 0 6px 16px rgba(26,60,49,0.25);
+  transform: translateY(-2px);
+}
+.rw-admin-btn { background: linear-gradient(135deg, var(--rw-green), #2d5e4f); }
+.rw-mobile-trigger {
+  display: none; flex-direction: column; gap: 5px;
+  background: none; border: 1px solid #e5e7eb;
+  padding: 8px; border-radius: 6px; cursor: pointer;
+  flex-shrink: 0; z-index: 2200; position: relative;
+}
+.rw-mobile-trigger:hover { background: #f5f5f5; border-color: var(--rw-green); }
+.rw-mobile-trigger span {
+  width: 22px; height: 2px; background: var(--rw-text);
+  display: block; transition: 0.3s; pointer-events: none;
+}
+.rw-drawer {
+  position: fixed; top: 0; right: 0;
+  width: 300px; height: 100vh; background: white;
+  z-index: 2100; transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  display: flex; flex-direction: column;
+  box-shadow: -10px 0 30px rgba(0,0,0,0.1); overflow-y: auto;
+}
+.rw-drawer.active { transform: translateX(0); }
+.rw-drawer-top {
+  padding: 1.25rem 1.5rem; display: flex;
+  justify-content: space-between; align-items: center;
+  border-bottom: 1px solid #f3f4f6; flex-shrink: 0;
+}
+.rw-drawer-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; padding: 5px; }
+.rw-drawer-links { display: flex; flex-direction: column; padding: 1rem 0; flex: 1; }
+.rw-drawer-links a {
+  padding: 1.1rem 1.5rem; text-decoration: none;
+  color: var(--rw-text); font-weight: 500;
+  border-bottom: 1px solid #f9fafb; transition: background 0.2s;
+}
+.rw-drawer-links a:hover { background: #f9fbff; }
+.rw-drawer-cta {
+  background: var(--rw-green); color: white !important;
+  margin: 1.5rem; border-radius: 10px;
+  text-align: center; border-bottom: none !important;
+}
+.rw-drawer-admin {
+  background: linear-gradient(135deg, var(--rw-green), #2d5e4f);
+  color: white !important; margin: 0.5rem 1.5rem !important;
+  border-radius: 10px; text-align: center !important; border-bottom: none !important;
+}
+.rw-drawer-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4); z-index: 2050; display: none;
+  backdrop-filter: blur(2px); opacity: 0; transition: opacity 0.3s ease;
+}
+.rw-drawer-overlay.active { display: block; opacity: 1; }
+
+@media (max-width: 991px) {
+  .rw-nav-desktop { display: none; }
+  .rw-mobile-trigger { display: flex; }
+}
+@media (max-width: 768px) {
+  .rw-header-tagline { display: none; }
+  .rw-drawer { width: 100%; }
+  .rw-logo-group { gap: 0; }
+}
+@media (max-width: 480px) {
+  .rw-nav-container { padding: 0 1rem; }
+  .rw-logo { font-size: 1.3rem; }
+}
+</style>
+
+<script>
+(function() {
+  'use strict';
+
+  function closeDrawer(drawer, overlay) {
+    drawer.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function openDrawer(drawer, overlay) {
+    drawer.classList.add('active');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function initMobileMenu() {
+    const drawer   = document.getElementById('rw-mobile-drawer');
+    const overlay  = document.getElementById('rw-drawer-overlay');
+    const trigger  = document.getElementById('rw-mobile-trigger');
+    const closeBtn = document.getElementById('rw-drawer-close');
+    const links    = document.querySelectorAll('.rw-drawer-links a');
+
+    if (!drawer || !overlay || !trigger) return;
+
+    // Hamburger — TOGGLE open/close on every click
+    trigger.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (drawer.classList.contains('active')) {
+        closeDrawer(drawer, overlay);
+      } else {
+        openDrawer(drawer, overlay);
+      }
+    });
+
+    // ✕ close button inside drawer
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeDrawer(drawer, overlay);
+      });
+    }
+
+    // Dark overlay behind drawer
+    overlay.addEventListener('click', function(e) {
+      e.stopPropagation();
+      closeDrawer(drawer, overlay);
+    });
+
+    // Any nav link — close before navigating
+    links.forEach(function(link) {
+      link.addEventListener('click', function() {
+        closeDrawer(drawer, overlay);
+      });
+    });
+
+    // Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && drawer.classList.contains('active')) {
+        closeDrawer(drawer, overlay);
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileMenu);
+  } else {
+    initMobileMenu();
+  }
+})();
+</script>

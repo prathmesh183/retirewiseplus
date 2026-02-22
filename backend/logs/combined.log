@@ -1,0 +1,254 @@
+2026-02-19 17:08:54 [info]: RetireWise+ running on port 5000 [development]
+2026-02-19 20:49:20 [info]: RetireWise+ running on port 5000 [development]
+2026-02-19 20:49:29 [error]: Unhandled error on GET /lead: TypeError: Cannot set property query of #<IncomingMessage> which has only a getter
+    at D:\RetireWise\backend\node_modules\express-mongo-sanitize\index.js:113:18
+    at Array.forEach (<anonymous>)
+    at D:\RetireWise\backend\node_modules\express-mongo-sanitize\index.js:110:44
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (D:\RetireWise\backend\node_modules\router\index.js:342:13)
+    at D:\RetireWise\backend\node_modules\router\index.js:297:9
+    at processParams (D:\RetireWise\backend\node_modules\router\index.js:582:12)
+    at next (D:\RetireWise\backend\node_modules\router\index.js:291:5)
+    at compression (D:\RetireWise\backend\node_modules\compression\index.js:243:5)
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+2026-02-19 20:49:31 [error]: Unhandled error on GET /lead: TypeError: Cannot set property query of #<IncomingMessage> which has only a getter
+    at D:\RetireWise\backend\node_modules\express-mongo-sanitize\index.js:113:18
+    at Array.forEach (<anonymous>)
+    at D:\RetireWise\backend\node_modules\express-mongo-sanitize\index.js:110:44
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (D:\RetireWise\backend\node_modules\router\index.js:342:13)
+    at D:\RetireWise\backend\node_modules\router\index.js:297:9
+    at processParams (D:\RetireWise\backend\node_modules\router\index.js:582:12)
+    at next (D:\RetireWise\backend\node_modules\router\index.js:291:5)
+    at compression (D:\RetireWise\backend\node_modules\compression\index.js:243:5)
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+2026-02-19 20:49:34 [error]: Unhandled error on GET /lead: TypeError: Cannot set property query of #<IncomingMessage> which has only a getter
+    at D:\RetireWise\backend\node_modules\express-mongo-sanitize\index.js:113:18
+    at Array.forEach (<anonymous>)
+    at D:\RetireWise\backend\node_modules\express-mongo-sanitize\index.js:110:44
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (D:\RetireWise\backend\node_modules\router\index.js:342:13)
+    at D:\RetireWise\backend\node_modules\router\index.js:297:9
+    at processParams (D:\RetireWise\backend\node_modules\router\index.js:582:12)
+    at next (D:\RetireWise\backend\node_modules\router\index.js:291:5)
+    at compression (D:\RetireWise\backend\node_modules\compression\index.js:243:5)
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+2026-02-19 20:49:36 [error]: Unhandled error on GET /lead: TypeError: Cannot set property query of #<IncomingMessage> which has only a getter
+    at D:\RetireWise\backend\node_modules\express-mongo-sanitize\index.js:113:18
+    at Array.forEach (<anonymous>)
+    at D:\RetireWise\backend\node_modules\express-mongo-sanitize\index.js:110:44
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (D:\RetireWise\backend\node_modules\router\index.js:342:13)
+    at D:\RetireWise\backend\node_modules\router\index.js:297:9
+    at processParams (D:\RetireWise\backend\node_modules\router\index.js:582:12)
+    at next (D:\RetireWise\backend\node_modules\router\index.js:291:5)
+    at compression (D:\RetireWise\backend\node_modules\compression\index.js:243:5)
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+2026-02-19 20:51:09 [info]: RetireWise+ running on port 5000 [development]
+2026-02-19 20:51:59 [error]: Unhandled error on POST /api/leads: Error: CORS: origin not allowed
+    at origin (D:\RetireWise\backend\app.js:133:16)
+    at D:\RetireWise\backend\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (D:\RetireWise\backend\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (D:\RetireWise\backend\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (D:\RetireWise\backend\node_modules\router\index.js:342:13)
+    at D:\RetireWise\backend\node_modules\router\index.js:297:9
+    at processParams (D:\RetireWise\backend\node_modules\router\index.js:582:12)
+    at next (D:\RetireWise\backend\node_modules\router\index.js:291:5)
+    at logger (D:\RetireWise\backend\node_modules\morgan\index.js:144:5)
+2026-02-19 20:53:20 [info]: RetireWise+ running on port 5000 [development]
+2026-02-19 20:53:26 [info]: New lead — ID: 4 | Phone: 1234567890
+2026-02-19 20:56:30 [warn]: 404 — GET /cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js from IP ::1
+2026-02-19 20:56:43 [warn]: 404 — GET /cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js from IP ::1
+2026-02-19 22:37:43 [warn]: 404 — GET /favicon.ico from IP ::ffff:192.168.1.103
+2026-02-20 15:42:39 [info]: RetireWise+ running on port 5000 [development]
+2026-02-20 15:42:43 [warn]: 404 — GET /favicon.ico from IP ::1
+2026-02-20 19:44:20 [info]: RetireWise+ running on port 5000 [development]
+2026-02-20 20:32:34 [info]: RetireWise+ running on port 5000 [development]
+2026-02-20 21:42:13 [info]: RetireWise+ running on port 5000 [development]
+2026-02-20 21:43:31 [info]: RetireWise+ running on port 5000 [development]
+2026-02-20 21:44:49 [info]: RetireWise+ running on port 5000 [development]
+2026-02-20 21:55:34 [info]: RetireWise+ running on port 5000 [development]
+2026-02-20 21:55:38 [warn]: 404 — GET /favicon.ico from IP ::1
+2026-02-20 21:55:50 [info]: New subscriber: prathmeshsakore@gmail.com
+2026-02-20 21:55:50 [info]: n8n webhook fired for: prathmeshsakore@gmail.com
+2026-02-20 21:57:33 [info]: Admin login: prathmeshsakore@gmail.com from IP ::1
+2026-02-20 22:00:32 [info]: Blog published: "SIP vs Lump Sum: The Mathematical Truth Every Indian Investor Must Know" (id: 3)
+2026-02-20 22:00:32 [info]: Broadcasting blog "SIP vs Lump Sum: The Mathematical Truth Every Indian Investor Must Know" to 1 subscriber(s)...
+2026-02-20 22:00:33 [info]: n8n broadcast webhook fired for blog id: 3
+2026-02-20 22:27:48 [info]: RetireWise+ running on port 5000 [development]
+2026-02-20 22:27:53 [info]: Blog published: "The Magic of Compounding: How ₹5,000/Month Becomes ₹1 Crore" (id: 4)
+2026-02-20 22:27:53 [info]: Broadcasting blog "The Magic of Compounding: How ₹5,000/Month Becomes ₹1 Crore" to 1 subscriber(s)...
+2026-02-20 22:27:53 [info]: n8n broadcast webhook fired for blog id: 4
+2026-02-20 22:37:51 [info]: Blog published: "The Magic of Compounding: How ₹5,000/Month Becomes ₹1 Crore" (id: 5)
+2026-02-20 22:37:51 [info]: Broadcasting blog "The Magic of Compounding: How ₹5,000/Month Becomes ₹1 Crore" to 1 subscriber(s)...
+2026-02-20 22:37:51 [info]: n8n broadcast webhook fired for blog id: 5
+2026-02-20 22:54:30 [info]: RetireWise+ running on port 5000 [development]
+2026-02-20 22:54:57 [info]: Blog deleted: id 5
+2026-02-20 22:55:28 [info]: New subscriber: deanartic@gmail.com
+2026-02-20 22:55:28 [info]: n8n webhook fired for: deanartic@gmail.com
+2026-02-20 22:58:58 [info]: Blog published: "Market Volatility: Why Panic Selling Is the Most Expensive Mistake Indian Investors Make" (id: 6)
+2026-02-20 22:58:58 [info]: Broadcasting blog "Market Volatility: Why Panic Selling Is the Most Expensive Mistake Indian Investors Make" to 2 subscriber(s)...
+2026-02-20 22:58:58 [info]: n8n broadcast webhook fired for blog id: 6
+2026-02-20 23:07:43 [warn]: 404 — GET /favicon.ico from IP ::ffff:192.168.1.105
+2026-02-20 23:08:28 [error]: Unhandled error on POST /api/admin/login: Error: CORS blocked: http://192.168.1.102:5000
+    at origin (D:\RetireWise\backend\app.js:136:14)
+    at D:\RetireWise\backend\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (D:\RetireWise\backend\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (D:\RetireWise\backend\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (D:\RetireWise\backend\node_modules\router\index.js:342:13)
+    at D:\RetireWise\backend\node_modules\router\index.js:297:9
+    at processParams (D:\RetireWise\backend\node_modules\router\index.js:582:12)
+    at next (D:\RetireWise\backend\node_modules\router\index.js:291:5)
+    at logger (D:\RetireWise\backend\node_modules\morgan\index.js:144:5)
+2026-02-20 23:08:55 [info]: RetireWise+ running on port 5000 [development]
+2026-02-20 23:08:56 [error]: Unhandled error on POST /api/admin/login: Error: CORS blocked: http://192.168.1.102:5000
+    at origin (D:\RetireWise\backend\app.js:136:14)
+    at D:\RetireWise\backend\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (D:\RetireWise\backend\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (D:\RetireWise\backend\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (D:\RetireWise\backend\node_modules\router\index.js:342:13)
+    at D:\RetireWise\backend\node_modules\router\index.js:297:9
+    at processParams (D:\RetireWise\backend\node_modules\router\index.js:582:12)
+    at next (D:\RetireWise\backend\node_modules\router\index.js:291:5)
+    at logger (D:\RetireWise\backend\node_modules\morgan\index.js:144:5)
+2026-02-20 23:09:46 [error]: Unhandled error on POST /api/admin/login: Error: CORS blocked: http://192.168.1.102:5000
+    at origin (D:\RetireWise\backend\app.js:136:14)
+    at D:\RetireWise\backend\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (D:\RetireWise\backend\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (D:\RetireWise\backend\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (D:\RetireWise\backend\node_modules\router\index.js:342:13)
+    at D:\RetireWise\backend\node_modules\router\index.js:297:9
+    at processParams (D:\RetireWise\backend\node_modules\router\index.js:582:12)
+    at next (D:\RetireWise\backend\node_modules\router\index.js:291:5)
+    at logger (D:\RetireWise\backend\node_modules\morgan\index.js:144:5)
+2026-02-21 22:00:32 [info]: RetireWise+ running on port 5000 [development]
+2026-02-21 22:02:33 [warn]: 404 — GET /favicon.ico from IP ::1
+2026-02-21 22:02:43 [info]: Admin login: prathmeshsakore@gmail.com from IP ::1
+2026-02-21 22:38:36 [info]: RetireWise+ running on port 5000 [development]
+2026-02-21 22:39:19 [info]: Blog deleted: id 1
+2026-02-21 22:54:26 [info]: RetireWise+ running on port 5000 [development]
+2026-02-21 22:57:40 [warn]: 404 — GET /favicon.ico from IP ::1
+2026-02-21 23:00:14 [warn]: 404 — GET /admin-logn from IP ::1
+2026-02-21 23:03:07 [warn]: 404 — GET /.well-known/appspecific/com.chrome.devtools.json from IP ::1
+2026-02-21 23:03:17 [warn]: 404 — GET /.well-known/appspecific/com.chrome.devtools.json from IP ::1
+2026-02-21 23:05:50 [warn]: 404 — GET /.well-known/appspecific/com.chrome.devtools.json from IP ::1
+2026-02-21 23:07:02 [warn]: 404 — GET /.well-known/appspecific/com.chrome.devtools.json from IP ::1
+2026-02-21 23:08:42 [warn]: 404 — GET /.well-known/appspecific/com.chrome.devtools.json from IP ::1
+2026-02-21 23:11:54 [warn]: 404 — GET /.well-known/appspecific/com.chrome.devtools.json from IP ::1
+2026-02-21 23:13:25 [warn]: 404 — GET /.well-known/appspecific/com.chrome.devtools.json from IP ::1
+2026-02-21 23:13:30 [warn]: 404 — GET /favicon.ico from IP ::1
+2026-02-21 23:13:59 [warn]: 404 — GET /.well-known/appspecific/com.chrome.devtools.json from IP ::1
+2026-02-21 23:18:47 [info]: RetireWise+ running on port 5000 [development]
+2026-02-21 23:19:38 [info]: RetireWise+ running on port 5000 [development]
+2026-02-21 23:22:03 [info]: RetireWise+ running on port 5000 [development]
+2026-02-21 23:22:17 [warn]: 404 — GET /public/assets/logos/SBI_Mutual_Fund_Logo%20(1).svg from IP ::1
+2026-02-21 23:22:17 [warn]: 404 — GET /public/assets/logos/Hdfc-Logo-Main.svg from IP ::1
+2026-02-21 23:22:17 [warn]: 404 — GET /public/assets/logos/icici%20prudential.jpg from IP ::1
+2026-02-21 23:22:17 [warn]: 404 — GET /public/assets/logos/uti.jpg from IP ::1
+2026-02-21 23:22:17 [warn]: 404 — GET /public/assets/logos/nipponindia-mutual-fund-logo.webp from IP ::1
+2026-02-21 23:22:17 [warn]: 404 — GET /public/assets/logos/kotak-mf-logo.svg from IP ::1
+2026-02-21 23:22:17 [warn]: 404 — GET /public/assets/logos/Axis-Mutual-Fund1-copy.jpg from IP ::1
+2026-02-21 23:22:17 [warn]: 404 — GET /public/assets/logos/adityabirla.png from IP ::1
+2026-02-21 23:22:17 [warn]: 404 — GET /public/assets/logos/dspmf.webp from IP ::1
+2026-02-21 23:22:17 [warn]: 404 — GET /public/assets/logos/mirae-asset-mutual-fund-logo.jpg from IP ::1
+2026-02-21 23:22:22 [warn]: 404 — GET /public/assets/logos/SBI_Mutual_Fund_Logo%20(1).svg from IP ::1
+2026-02-21 23:22:22 [warn]: 404 — GET /public/assets/logos/Hdfc-Logo-Main.svg from IP ::1
+2026-02-21 23:22:22 [warn]: 404 — GET /public/assets/logos/icici%20prudential.jpg from IP ::1
+2026-02-21 23:22:22 [warn]: 404 — GET /public/assets/logos/nipponindia-mutual-fund-logo.webp from IP ::1
+2026-02-21 23:22:22 [warn]: 404 — GET /public/assets/logos/kotak-mf-logo.svg from IP ::1
+2026-02-21 23:22:22 [warn]: 404 — GET /public/assets/logos/Axis-Mutual-Fund1-copy.jpg from IP ::1
+2026-02-21 23:22:22 [warn]: 404 — GET /public/assets/logos/uti.jpg from IP ::1
+2026-02-21 23:22:22 [warn]: 404 — GET /public/assets/logos/adityabirla.png from IP ::1
+2026-02-21 23:22:22 [warn]: 404 — GET /public/assets/logos/dspmf.webp from IP ::1
+2026-02-21 23:22:22 [warn]: 404 — GET /public/assets/logos/mirae-asset-mutual-fund-logo.jpg from IP ::1
+2026-02-21 23:22:51 [info]: RetireWise+ running on port 5000 [development]
+2026-02-21 23:24:04 [warn]: 404 — GET /favicon.ico from IP ::1
+2026-02-21 23:24:07 [warn]: 404 — GET /favicon.ico from IP ::1
+2026-02-21 23:24:10 [warn]: 404 — GET /favicon.ico from IP ::1
+2026-02-21 23:24:10 [warn]: 404 — GET /favicon.ico from IP ::1
+2026-02-21 23:24:11 [warn]: 404 — GET /favicon.ico from IP ::1
+2026-02-21 23:24:11 [warn]: 404 — GET /favicon.ico from IP ::1
+2026-02-21 23:24:11 [warn]: 404 — GET /favicon.ico from IP ::1
+2026-02-21 23:24:12 [warn]: 404 — GET /favicon.ico from IP ::1
+2026-02-21 23:24:12 [warn]: 404 — GET /favicon.ico from IP ::1
+2026-02-21 23:24:12 [warn]: 404 — GET /favicon.ico from IP ::1
+2026-02-21 23:24:14 [warn]: 404 — GET /favicon.ico from IP ::1
+2026-02-21 23:26:51 [warn]: 404 — GET /.well-known/appspecific/com.chrome.devtools.json from IP ::1
+2026-02-21 23:28:34 [warn]: 404 — GET /.well-known/appspecific/com.chrome.devtools.json from IP ::1
+2026-02-21 23:31:32 [warn]: 404 — GET /.well-known/appspecific/com.chrome.devtools.json from IP ::1
+2026-02-21 23:32:27 [warn]: 404 — GET /.well-known/appspecific/com.chrome.devtools.json from IP ::1
+2026-02-21 23:32:29 [warn]: 404 — GET /.well-known/appspecific/com.chrome.devtools.json from IP ::1
+2026-02-21 23:34:35 [info]: RetireWise+ running on port 5000 [development]
+2026-02-21 23:34:50 [warn]: 404 — GET /public/assets/logos/Hdfc-Logo-Main.svg from IP ::1
+2026-02-21 23:34:50 [warn]: 404 — GET /public/assets/logos/SBI_Mutual_Fund_Logo%20(1).svg from IP ::1
+2026-02-21 23:34:50 [warn]: 404 — GET /public/assets/logos/icici%20prudential.jpg from IP ::1
+2026-02-21 23:34:50 [warn]: 404 — GET /public/assets/logos/nipponindia-mutual-fund-logo.webp from IP ::1
+2026-02-21 23:34:50 [warn]: 404 — GET /public/assets/logos/kotak-mf-logo.svg from IP ::1
+2026-02-21 23:34:50 [warn]: 404 — GET /public/assets/logos/Axis-Mutual-Fund1-copy.jpg from IP ::1
+2026-02-21 23:34:50 [warn]: 404 — GET /public/assets/logos/uti.jpg from IP ::1
+2026-02-21 23:34:50 [warn]: 404 — GET /public/assets/logos/adityabirla.png from IP ::1
+2026-02-21 23:34:50 [warn]: 404 — GET /public/assets/logos/dspmf.webp from IP ::1
+2026-02-21 23:34:50 [warn]: 404 — GET /public/assets/logos/mirae-asset-mutual-fund-logo.jpg from IP ::1
+2026-02-21 23:35:21 [info]: RetireWise+ running on port 5000 [development]
+2026-02-21 23:35:32 [warn]: 404 — GET /public/assets/logos/SBI_Mutual_Fund_Logo%20(1).svg from IP ::1
+2026-02-21 23:35:32 [warn]: 404 — GET /public/assets/logos/Hdfc-Logo-Main.svg from IP ::1
+2026-02-21 23:35:32 [warn]: 404 — GET /public/assets/logos/icici%20prudential.jpg from IP ::1
+2026-02-21 23:35:32 [warn]: 404 — GET /public/assets/logos/nipponindia-mutual-fund-logo.webp from IP ::1
+2026-02-21 23:35:32 [warn]: 404 — GET /public/assets/logos/kotak-mf-logo.svg from IP ::1
+2026-02-21 23:35:32 [warn]: 404 — GET /public/assets/logos/Axis-Mutual-Fund1-copy.jpg from IP ::1
+2026-02-21 23:35:32 [warn]: 404 — GET /public/assets/logos/adityabirla.png from IP ::1
+2026-02-21 23:35:32 [warn]: 404 — GET /public/assets/logos/uti.jpg from IP ::1
+2026-02-21 23:35:32 [warn]: 404 — GET /public/assets/logos/dspmf.webp from IP ::1
+2026-02-21 23:35:32 [warn]: 404 — GET /public/assets/logos/mirae-asset-mutual-fund-logo.jpg from IP ::1
+2026-02-21 23:37:50 [info]: RetireWise+ running on port 5000 [development]
+2026-02-21 23:41:02 [info]: RetireWise+ running on port 5000 [development]
+2026-02-21 23:46:19 [warn]: 404 — GET /.well-known/appspecific/com.chrome.devtools.json from IP ::1
+2026-02-21 23:46:26 [warn]: 404 — GET /.well-known/appspecific/com.chrome.devtools.json from IP ::1
+2026-02-21 23:56:55 [info]: RetireWise+ running on port 5000 [development]
+2026-02-21 23:58:52 [info]: RetireWise+ running on port 5000 [development]
+2026-02-22 00:01:44 [warn]: 404 — GET /public/assets/logos/SBI_Mutual_Fund_Logo%20(1).svg from IP ::1
+2026-02-22 00:01:44 [warn]: 404 — GET /public/assets/logos/Hdfc-Logo-Main.svg from IP ::1
+2026-02-22 00:01:44 [warn]: 404 — GET /public/assets/logos/icici%20prudential.jpg from IP ::1
+2026-02-22 00:01:44 [warn]: 404 — GET /public/assets/logos/uti.jpg from IP ::1
+2026-02-22 00:01:44 [warn]: 404 — GET /public/assets/logos/nipponindia-mutual-fund-logo.webp from IP ::1
+2026-02-22 00:01:44 [warn]: 404 — GET /public/assets/logos/kotak-mf-logo.svg from IP ::1
+2026-02-22 00:01:44 [warn]: 404 — GET /public/assets/logos/Axis-Mutual-Fund1-copy.jpg from IP ::1
+2026-02-22 00:01:44 [warn]: 404 — GET /public/assets/logos/adityabirla.png from IP ::1
+2026-02-22 00:01:44 [warn]: 404 — GET /public/assets/logos/dspmf.webp from IP ::1
+2026-02-22 00:01:44 [warn]: 404 — GET /public/assets/logos/mirae-asset-mutual-fund-logo.jpg from IP ::1
+2026-02-22 00:03:48 [info]: Admin login: prathmeshsakore@gmail.com from IP ::1
+2026-02-22 00:06:03 [info]: Blog published: "Why Flexi Cap Funds Are the Smartest SIP Choice in 2026" (id: 7)
+2026-02-22 00:06:03 [info]: Broadcasting blog "Why Flexi Cap Funds Are the Smartest SIP Choice in 2026" to 2 subscriber(s)...
+2026-02-22 00:06:03 [info]: n8n broadcast webhook fired for blog id: 7
+2026-02-22 00:14:44 [info]: Blog deleted: id 7
+2026-02-22 00:16:51 [info]: Blog published: "demo for n8n blog automation" (id: 8)
+2026-02-22 00:16:51 [info]: Broadcasting blog "demo for n8n blog automation" to 2 subscriber(s)...
+2026-02-22 00:16:51 [info]: n8n broadcast webhook fired for blog id: 8
+2026-02-22 00:18:26 [info]: Blog deleted: id 8
+2026-02-22 00:22:16 [info]: RetireWise+ running on port 5000 [development]
+2026-02-22 00:22:52 [info]: Blog published: "Demo to check for n8n connection" (id: 9)
+2026-02-22 00:22:52 [info]: Broadcasting blog "Demo to check for n8n connection" to 2 subscriber(s)...
+2026-02-22 00:22:52 [info]: n8n broadcast webhook fired for blog id: 9
+2026-02-22 00:25:05 [info]: RetireWise+ running on port 5000 [development]
+2026-02-22 00:26:02 [info]: RetireWise+ running on port 5000 [development]
+2026-02-22 00:26:15 [info]: Blog deleted: id 9
+2026-02-22 00:26:47 [info]: Blog published: "Demo to check n8n connection" (id: 10)
+2026-02-22 00:26:47 [info]: Broadcasting blog "Demo to check n8n connection" to 2 subscriber(s)...
+2026-02-22 00:26:47 [info]: n8n broadcast webhook fired for blog id: 10
+2026-02-22 00:33:31 [info]: Blog deleted: id 10
+2026-02-22 00:35:17 [info]: Blog published: "Demo for n8n automation" (id: 11)
+2026-02-22 00:35:17 [info]: Broadcasting blog "Demo for n8n automation" to 2 subscriber(s)...
+2026-02-22 00:35:17 [info]: n8n broadcast webhook fired for blog id: 11
+2026-02-22 00:39:34 [info]: Blog deleted: id 11
+2026-02-22 00:40:27 [info]: Blog published: "n8n automation testing" (id: 12)
+2026-02-22 00:40:27 [info]: Broadcasting blog "n8n automation testing" to 2 subscriber(s)...
+2026-02-22 00:40:27 [info]: n8n broadcast webhook fired for blog id: 12
+2026-02-22 00:46:37 [info]: Blog deleted: id 12
+2026-02-22 00:46:55 [info]: Blog published: "n8n automation test" (id: 13)
+2026-02-22 00:46:55 [info]: Broadcasting blog "n8n automation test" to 2 subscriber(s)...
+2026-02-22 00:46:55 [info]: n8n broadcast webhook fired for blog id: 13
+2026-02-22 00:51:09 [info]: Blog deleted: id 13
