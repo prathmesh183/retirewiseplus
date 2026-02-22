@@ -71,9 +71,7 @@ if (process.env.NODE_ENV !== "production") {
 
 // Make logger available everywhere — replace all console.error / console.warn below
 global.logger = logger;
-console.log("DIR:", __dirname);
-console.log("FRONTEND:", frontendPath);
-console.log("INDEX EXISTS:", require("fs").existsSync(path.join(frontendPath, "views/pages/index.html")));
+
 // ─────────────────────────────────────────
 //  SECURITY: HELMET
 // ─────────────────────────────────────────
@@ -180,6 +178,10 @@ const fs = require("fs");
 const frontendPath = fs.existsSync(path.join(__dirname, "../frontend"))
   ? path.join(__dirname, "../frontend")
   : path.join(__dirname, "../../frontend");
+
+console.log("DIR:", __dirname);
+console.log("FRONTEND:", frontendPath);
+console.log("INDEX EXISTS:", fs.existsSync(path.join(frontendPath, "views/pages/index.html")));
 
 app.use(express.static(path.join(frontendPath, "public")));
 
