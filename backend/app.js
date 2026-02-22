@@ -174,7 +174,12 @@ const newsletterLimiter = rateLimit({
 // ─────────────────────────────────────────
 //  GENERAL MIDDLEWARE
 // ─────────────────────────────────────────
-app.use(express.static(path.join(__dirname, "../frontend/public")));
+const fs = require("fs");
+const frontendPath = fs.existsSync(path.join(__dirname, "../frontend"))
+  ? path.join(__dirname, "../frontend")
+  : path.join(__dirname, "../../frontend");
+
+app.use(express.static(path.join(frontendPath, "public")));
 
 app.use(express.json({ limit: "50kb" }));
 app.use(bodyParser.json({ limit: "50kb" }));
@@ -183,7 +188,7 @@ app.use(cookieParser());
 
 // EJS view engine
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "../frontend/views"));
+app.set("views", path.join(frontendPath, "views"));
 
 // ─────────────────────────────────────────
 //  AUTH MIDDLEWARE
@@ -278,7 +283,7 @@ app.get("/robots.txt", (req, res) => {
 // ─────────────────────────────────────────
 //  PUBLIC PAGE ROUTES
 // ─────────────────────────────────────────
-app.get("/",           (req, res) => res.sendFile(path.join(__dirname, "../frontend/views/pages/index.html")));
+app.get("/",           (req, res) => res.sendFile(path.join(frontendPath, "views/pages/index.html")));
 app.get("/index",      (req, res) => res.redirect("/"));
 app.get("/about",      (req, res) => res.render("pages/about"));
 app.get("/newsletter", (req, res) => res.render("pages/newsletter"));
