@@ -86,3 +86,36 @@
     at processParams (D:\RetireWise\backend\node_modules\router\index.js:582:12)
     at next (D:\RetireWise\backend\node_modules\router\index.js:291:5)
     at logger (D:\RetireWise\backend\node_modules\morgan\index.js:144:5)
+2026-02-22 16:11:12 [error]: Unhandled error on POST /api/leads: Error: CORS blocked: http://192.168.1.104:5000
+    at origin (D:\RetireWise\backend\app.js:134:14)
+    at D:\RetireWise\backend\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (D:\RetireWise\backend\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (D:\RetireWise\backend\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (D:\RetireWise\backend\node_modules\router\index.js:342:13)
+    at D:\RetireWise\backend\node_modules\router\index.js:297:9
+    at processParams (D:\RetireWise\backend\node_modules\router\index.js:582:12)
+    at next (D:\RetireWise\backend\node_modules\router\index.js:291:5)
+    at logger (D:\RetireWise\backend\node_modules\morgan\index.js:144:5)
+2026-02-22 16:11:25 [error]: Unhandled error on POST /api/leads: Error: CORS blocked: http://192.168.1.104:5000
+    at origin (D:\RetireWise\backend\app.js:134:14)
+    at D:\RetireWise\backend\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (D:\RetireWise\backend\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (D:\RetireWise\backend\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (D:\RetireWise\backend\node_modules\router\index.js:342:13)
+    at D:\RetireWise\backend\node_modules\router\index.js:297:9
+    at processParams (D:\RetireWise\backend\node_modules\router\index.js:582:12)
+    at next (D:\RetireWise\backend\node_modules\router\index.js:291:5)
+    at logger (D:\RetireWise\backend\node_modules\morgan\index.js:144:5)
+2026-02-22 16:11:38 [error]: Unhandled error on POST /api/leads: Error: CORS blocked: http://192.168.1.104:5000
+    at origin (D:\RetireWise\backend\app.js:134:14)
+    at D:\RetireWise\backend\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (D:\RetireWise\backend\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (D:\RetireWise\backend\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (D:\RetireWise\backend\node_modules\router\index.js:342:13)
+    at D:\RetireWise\backend\node_modules\router\index.js:297:9
+    at processParams (D:\RetireWise\backend\node_modules\router\index.js:582:12)
+    at next (D:\RetireWise\backend\node_modules\router\index.js:291:5)
+    at logger (D:\RetireWise\backend\node_modules\morgan\index.js:144:5)

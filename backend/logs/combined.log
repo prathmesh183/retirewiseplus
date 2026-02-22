@@ -264,3 +264,99 @@
 2026-02-22 14:00:09 [warn]: 404 — GET /public/assets/logos/Axis-Mutual-Fund1-copy.jpg from IP ::1
 2026-02-22 14:00:09 [warn]: 404 — GET /public/assets/logos/dspmf.webp from IP ::1
 2026-02-22 14:00:09 [warn]: 404 — GET /public/assets/logos/mirae-asset-mutual-fund-logo.jpg from IP ::1
+2026-02-22 14:24:26 [info]: Admin login: prathmeshsakore@gmail.com from IP ::1
+2026-02-22 14:24:34 [warn]: 404 — GET /public/assets/logos/SBI_Mutual_Fund_Logo%20(1).svg from IP ::1
+2026-02-22 14:24:34 [warn]: 404 — GET /public/assets/logos/Hdfc-Logo-Main.svg from IP ::1
+2026-02-22 14:24:34 [warn]: 404 — GET /public/assets/logos/icici%20prudential.jpg from IP ::1
+2026-02-22 14:24:34 [warn]: 404 — GET /public/assets/logos/nipponindia-mutual-fund-logo.webp from IP ::1
+2026-02-22 14:24:34 [warn]: 404 — GET /public/assets/logos/kotak-mf-logo.svg from IP ::1
+2026-02-22 14:24:34 [warn]: 404 — GET /public/assets/logos/Axis-Mutual-Fund1-copy.jpg from IP ::1
+2026-02-22 14:24:34 [warn]: 404 — GET /public/assets/logos/uti.jpg from IP ::1
+2026-02-22 14:24:34 [warn]: 404 — GET /public/assets/logos/adityabirla.png from IP ::1
+2026-02-22 14:24:34 [warn]: 404 — GET /public/assets/logos/dspmf.webp from IP ::1
+2026-02-22 14:24:34 [warn]: 404 — GET /public/assets/logos/mirae-asset-mutual-fund-logo.jpg from IP ::1
+2026-02-22 15:14:52 [warn]: 404 — GET /public/assets/logos/SBI_Mutual_Fund_Logo%20(1).svg from IP ::1
+2026-02-22 15:14:52 [warn]: 404 — GET /public/assets/logos/Hdfc-Logo-Main.svg from IP ::1
+2026-02-22 15:14:52 [warn]: 404 — GET /public/assets/logos/icici%20prudential.jpg from IP ::1
+2026-02-22 15:14:52 [warn]: 404 — GET /public/assets/logos/kotak-mf-logo.svg from IP ::1
+2026-02-22 15:14:52 [warn]: 404 — GET /public/assets/logos/nipponindia-mutual-fund-logo.webp from IP ::1
+2026-02-22 15:14:52 [warn]: 404 — GET /public/assets/logos/Axis-Mutual-Fund1-copy.jpg from IP ::1
+2026-02-22 15:14:52 [warn]: 404 — GET /public/assets/logos/uti.jpg from IP ::1
+2026-02-22 15:14:52 [warn]: 404 — GET /public/assets/logos/adityabirla.png from IP ::1
+2026-02-22 15:14:52 [warn]: 404 — GET /public/assets/logos/dspmf.webp from IP ::1
+2026-02-22 15:14:52 [warn]: 404 — GET /public/assets/logos/mirae-asset-mutual-fund-logo.jpg from IP ::1
+2026-02-22 15:46:48 [info]: RetireWise+ running on port 5000 [development]
+2026-02-22 15:49:04 [info]: Blog published: "n8n newsletter automation demo" (id: 14)
+2026-02-22 15:49:04 [info]: Broadcasting blog "n8n newsletter automation demo" to 2 subscriber(s)...
+2026-02-22 15:49:04 [info]: n8n broadcast webhook fired for blog id: 14
+2026-02-22 15:57:15 [warn]: 404 — GET /.well-known/appspecific/com.chrome.devtools.json from IP ::1
+2026-02-22 16:07:53 [warn]: 404 — GET /public/assets/logos/icici%20prudential.jpg from IP ::ffff:192.168.1.100
+2026-02-22 16:07:53 [warn]: 404 — GET /public/assets/logos/SBI_Mutual_Fund_Logo%20(1).svg from IP ::ffff:192.168.1.100
+2026-02-22 16:07:53 [warn]: 404 — GET /public/assets/logos/Hdfc-Logo-Main.svg from IP ::ffff:192.168.1.100
+2026-02-22 16:07:53 [warn]: 404 — GET /public/assets/logos/nipponindia-mutual-fund-logo.webp from IP ::ffff:192.168.1.100
+2026-02-22 16:07:53 [warn]: 404 — GET /public/assets/logos/Axis-Mutual-Fund1-copy.jpg from IP ::ffff:192.168.1.100
+2026-02-22 16:07:53 [warn]: 404 — GET /public/assets/logos/kotak-mf-logo.svg from IP ::ffff:192.168.1.100
+2026-02-22 16:07:53 [warn]: 404 — GET /public/assets/logos/adityabirla.png from IP ::ffff:192.168.1.100
+2026-02-22 16:07:53 [warn]: 404 — GET /public/assets/logos/dspmf.webp from IP ::ffff:192.168.1.100
+2026-02-22 16:07:53 [warn]: 404 — GET /public/assets/logos/uti.jpg from IP ::ffff:192.168.1.100
+2026-02-22 16:07:53 [warn]: 404 — GET /public/assets/logos/mirae-asset-mutual-fund-logo.jpg from IP ::ffff:192.168.1.100
+2026-02-22 16:07:53 [warn]: 404 — GET /favicon.ico from IP ::ffff:192.168.1.100
+2026-02-22 16:07:57 [warn]: 404 — GET /public/assets/logos/SBI_Mutual_Fund_Logo%20(1).svg from IP ::ffff:192.168.1.100
+2026-02-22 16:07:57 [warn]: 404 — GET /public/assets/logos/Hdfc-Logo-Main.svg from IP ::ffff:192.168.1.100
+2026-02-22 16:07:57 [warn]: 404 — GET /public/assets/logos/icici%20prudential.jpg from IP ::ffff:192.168.1.100
+2026-02-22 16:07:57 [warn]: 404 — GET /public/assets/logos/nipponindia-mutual-fund-logo.webp from IP ::ffff:192.168.1.100
+2026-02-22 16:07:57 [warn]: 404 — GET /public/assets/logos/kotak-mf-logo.svg from IP ::ffff:192.168.1.100
+2026-02-22 16:07:57 [warn]: 404 — GET /public/assets/logos/Axis-Mutual-Fund1-copy.jpg from IP ::ffff:192.168.1.100
+2026-02-22 16:07:57 [warn]: 404 — GET /public/assets/logos/uti.jpg from IP ::ffff:192.168.1.100
+2026-02-22 16:07:57 [warn]: 404 — GET /public/assets/logos/dspmf.webp from IP ::ffff:192.168.1.100
+2026-02-22 16:07:57 [warn]: 404 — GET /public/assets/logos/mirae-asset-mutual-fund-logo.jpg from IP ::ffff:192.168.1.100
+2026-02-22 16:07:57 [warn]: 404 — GET /public/assets/logos/adityabirla.png from IP ::ffff:192.168.1.100
+2026-02-22 16:08:01 [warn]: 404 — GET /public/assets/logos/SBI_Mutual_Fund_Logo%20(1).svg from IP ::ffff:192.168.1.100
+2026-02-22 16:08:01 [warn]: 404 — GET /public/assets/logos/Hdfc-Logo-Main.svg from IP ::ffff:192.168.1.100
+2026-02-22 16:08:01 [warn]: 404 — GET /public/assets/logos/icici%20prudential.jpg from IP ::ffff:192.168.1.100
+2026-02-22 16:08:01 [warn]: 404 — GET /public/assets/logos/nipponindia-mutual-fund-logo.webp from IP ::ffff:192.168.1.100
+2026-02-22 16:08:01 [warn]: 404 — GET /public/assets/logos/kotak-mf-logo.svg from IP ::ffff:192.168.1.100
+2026-02-22 16:08:01 [warn]: 404 — GET /public/assets/logos/Axis-Mutual-Fund1-copy.jpg from IP ::ffff:192.168.1.100
+2026-02-22 16:08:01 [warn]: 404 — GET /public/assets/logos/uti.jpg from IP ::ffff:192.168.1.100
+2026-02-22 16:08:01 [warn]: 404 — GET /public/assets/logos/adityabirla.png from IP ::ffff:192.168.1.100
+2026-02-22 16:08:01 [warn]: 404 — GET /public/assets/logos/dspmf.webp from IP ::ffff:192.168.1.100
+2026-02-22 16:08:01 [warn]: 404 — GET /public/assets/logos/mirae-asset-mutual-fund-logo.jpg from IP ::ffff:192.168.1.100
+2026-02-22 16:11:12 [error]: Unhandled error on POST /api/leads: Error: CORS blocked: http://192.168.1.104:5000
+    at origin (D:\RetireWise\backend\app.js:134:14)
+    at D:\RetireWise\backend\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (D:\RetireWise\backend\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (D:\RetireWise\backend\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (D:\RetireWise\backend\node_modules\router\index.js:342:13)
+    at D:\RetireWise\backend\node_modules\router\index.js:297:9
+    at processParams (D:\RetireWise\backend\node_modules\router\index.js:582:12)
+    at next (D:\RetireWise\backend\node_modules\router\index.js:291:5)
+    at logger (D:\RetireWise\backend\node_modules\morgan\index.js:144:5)
+2026-02-22 16:11:25 [error]: Unhandled error on POST /api/leads: Error: CORS blocked: http://192.168.1.104:5000
+    at origin (D:\RetireWise\backend\app.js:134:14)
+    at D:\RetireWise\backend\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (D:\RetireWise\backend\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (D:\RetireWise\backend\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (D:\RetireWise\backend\node_modules\router\index.js:342:13)
+    at D:\RetireWise\backend\node_modules\router\index.js:297:9
+    at processParams (D:\RetireWise\backend\node_modules\router\index.js:582:12)
+    at next (D:\RetireWise\backend\node_modules\router\index.js:291:5)
+    at logger (D:\RetireWise\backend\node_modules\morgan\index.js:144:5)
+2026-02-22 16:11:38 [error]: Unhandled error on POST /api/leads: Error: CORS blocked: http://192.168.1.104:5000
+    at origin (D:\RetireWise\backend\app.js:134:14)
+    at D:\RetireWise\backend\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (D:\RetireWise\backend\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (D:\RetireWise\backend\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (D:\RetireWise\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (D:\RetireWise\backend\node_modules\router\index.js:342:13)
+    at D:\RetireWise\backend\node_modules\router\index.js:297:9
+    at processParams (D:\RetireWise\backend\node_modules\router\index.js:582:12)
+    at next (D:\RetireWise\backend\node_modules\router\index.js:291:5)
+    at logger (D:\RetireWise\backend\node_modules\morgan\index.js:144:5)
+2026-02-22 16:14:05 [info]: RetireWise+ running on port 5000 [development]
+2026-02-22 16:14:11 [info]: New lead — ID: 5 | Phone: 6969696969
+2026-02-22 16:15:05 [info]: Blog deleted: id 14
+2026-02-22 16:16:39 [warn]: 404 — GET /favicon.ico from IP ::1
+2026-02-22 16:19:19 [info]: RetireWise+ running on port 5000 [development]
+2026-02-22 16:51:58 [info]: RetireWise+ running on port 5000 [development]
