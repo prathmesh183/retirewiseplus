@@ -71,7 +71,9 @@ if (process.env.NODE_ENV !== "production") {
 
 // Make logger available everywhere — replace all console.error / console.warn below
 global.logger = logger;
-
+console.log("DIR:", __dirname);
+console.log("FRONTEND:", frontendPath);
+console.log("INDEX EXISTS:", require("fs").existsSync(path.join(frontendPath, "views/pages/index.html")));
 // ─────────────────────────────────────────
 //  SECURITY: HELMET
 // ─────────────────────────────────────────
