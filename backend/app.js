@@ -915,7 +915,7 @@ app.use((err, req, res, next) => {
 // ─────────────────────────────────────────
 //  START SERVER
 // ─────────────────────────────────────────
-const PORT = process.env.PORT || 5000;
+/*const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   logger.info(`RetireWise+ running on port ${PORT} [${process.env.NODE_ENV || "development"}]`);
   console.log(`\n✅  RetireWise+ running on port ${PORT} [${process.env.NODE_ENV || "development"}]`);
@@ -923,6 +923,17 @@ app.listen(PORT, () => {
   console.log(`🔒  Admin:   http://localhost:${PORT}/admin-login`);
   console.log(`❤️   Health:  http://localhost:${PORT}/health`);
   console.log(`📋  Logs:    ./logs/combined.log\n`);
-});
+});*/
 
+const PORT = process.env.PORT || 5000;
+
+// We add "0.0.0.0" as the host to ensure Railway can route traffic to the container
+app.listen(PORT, "0.0.0.0", () => {
+  logger.info(`RetireWise+ running on port ${PORT} [${process.env.NODE_ENV || "development"}]`);
+  console.log(`\n✅  RetireWise+ running on port ${PORT} [${process.env.NODE_ENV || "development"}]`);
+  console.log(`🌐  Open:    http://0.0.0.0:${PORT}`);
+  console.log(`🔒  Admin:   http://0.0.0.0:${PORT}/admin-login`);
+  console.log(`❤️   Health:  http://0.0.0.0:${PORT}/health`);
+  console.log(`📋  Logs:    ./logs/combined.log\n`);
+});
 module.exports = app;
