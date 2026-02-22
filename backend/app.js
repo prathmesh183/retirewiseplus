@@ -121,9 +121,15 @@ if (process.env.NODE_ENV === "production") {
 // ─────────────────────────────────────────
 //  SECURITY: CORS
 // ─────────────────────────────────────────
+const productionOrigins = [
+  process.env.FRONTEND_URL,                          // e.g. custom domain
+  process.env.APP_URL,                               // Railway public URL
+  "https://retirewiseplus-production.up.railway.app",// fallback hardcoded Railway URL
+].filter(Boolean); // remove any undefined values
+
 const allowedOrigins =
   process.env.NODE_ENV === "production"
-    ? [process.env.FRONTEND_URL]
+    ? productionOrigins
     : ["http://localhost:5000", "http://localhost:3000",
        "http://127.0.0.1:5000", "http://127.0.0.1:3000",
        "http://192.168.1.100:5000", "http://192.168.1.104:5000"];
@@ -132,6 +138,7 @@ app.use(cors({
   origin: (origin, callback) => {
     // Allow non-browser requests (Postman, n8n, mobile) and allowed origins
     if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    logger.warn(`CORS blocked request from: ${origin}`);
     callback(new Error(`CORS blocked: ${origin}`));
   },
   credentials: true,
