@@ -252,3 +252,15 @@
 2026-02-22 00:46:55 [info]: Broadcasting blog "n8n automation test" to 2 subscriber(s)...
 2026-02-22 00:46:55 [info]: n8n broadcast webhook fired for blog id: 13
 2026-02-22 00:51:09 [info]: Blog deleted: id 13
+2026-02-22 13:45:24 [info]: RetireWise+ running on port 5000 [development]
+2026-02-22 13:45:39 [warn]: 404 — GET /favicon.ico from IP ::ffff:127.0.0.1
+2026-02-22 14:00:09 [warn]: 404 — GET /public/assets/logos/SBI_Mutual_Fund_Logo%20(1).svg from IP ::1
+2026-02-22 14:00:09 [warn]: 404 — GET /public/assets/logos/Hdfc-Logo-Main.svg from IP ::1
+2026-02-22 14:00:09 [warn]: 404 — GET /public/assets/logos/icici%20prudential.jpg from IP ::1
+2026-02-22 14:00:09 [warn]: 404 — GET /public/assets/logos/kotak-mf-logo.svg from IP ::1
+2026-02-22 14:00:09 [warn]: 404 — GET /public/assets/logos/uti.jpg from IP ::1
+2026-02-22 14:00:09 [warn]: 404 — GET /public/assets/logos/adityabirla.png from IP ::1
+2026-02-22 14:00:09 [warn]: 404 — GET /public/assets/logos/nipponindia-mutual-fund-logo.webp from IP ::1
+2026-02-22 14:00:09 [warn]: 404 — GET /public/assets/logos/Axis-Mutual-Fund1-copy.jpg from IP ::1
+2026-02-22 14:00:09 [warn]: 404 — GET /public/assets/logos/dspmf.webp from IP ::1
+2026-02-22 14:00:09 [warn]: 404 — GET /public/assets/logos/mirae-asset-mutual-fund-logo.jpg from IP ::1
