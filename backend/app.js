@@ -7,7 +7,6 @@ require("dotenv").config({ override: false });
 // ─────────────────────────────────────────
 //  IMPORTS
 // ─────────────────────────────────────────
-const axios        = require("axios");
 const express      = require("express");
 const path         = require("path");
 const cors         = require("cors");
@@ -17,7 +16,6 @@ const bodyParser   = require("body-parser");
 const cookieParser = require("cookie-parser");
 const jwt          = require("jsonwebtoken");
 const bcrypt       = require("bcryptjs");
-const crypto       = require("crypto");                // ← moved to top (was inline in .map — caused silent crash)
 const compression  = require("compression");
 const morgan       = require("morgan");
 const winston      = require("winston");
@@ -136,7 +134,7 @@ const allowedOrigins =
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow non-browser requests (Postman, n8n, mobile) and allowed origins
+  // Allow non-browser requests (Postman, mobile) and allowed origins
     if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
     logger.warn(`CORS blocked request from: ${origin}`);
     callback(new Error(`CORS blocked: ${origin}`));
@@ -163,13 +161,6 @@ const leadLimiter = rateLimit({
   legacyHeaders:   false,
 });
 
-const newsletterLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000,
-  max: 3,
-  message: { error: "Too many signup attempts. Please try again later." },
-  standardHeaders: true,
-  legacyHeaders:   false,
-});
 
 // ─────────────────────────────────────────
 //  GENERAL MIDDLEWARE
@@ -178,10 +169,6 @@ const fs = require("fs");
 const frontendPath = fs.existsSync(path.join(__dirname, "../frontend"))
   ? path.join(__dirname, "../frontend")
   : path.join(__dirname, "../../frontend");
-
-console.log("DIR:", __dirname);
-console.log("FRONTEND:", frontendPath);
-console.log("INDEX EXISTS:", fs.existsSync(path.join(frontendPath, "views/pages/index.html")));
 
 app.use(express.static(path.join(frontendPath, "public")));
 
@@ -290,7 +277,7 @@ app.get("/robots.txt", (req, res) => {
 app.get("/",           (req, res) => res.sendFile(path.join(frontendPath, "views/pages/index.html")));
 app.get("/index",      (req, res) => res.redirect("/"));
 app.get("/about",      (req, res) => res.render("pages/about"));
-app.get("/newsletter", (req, res) => res.render("pages/newsletter"));
+app.get("/blog",       (req, res) => res.render("pages/blog"));
 app.get("/lead",       (req, res) => res.render("pages/lead"));
 app.get("/terms",      (req, res) => res.render("pages/terms"));
 app.get("/privacy",    (req, res) => res.render("pages/privacy"));
@@ -366,7 +353,8 @@ app.get("/cagr.html",       (req, res) => res.redirect(301, "/calculator/cagr"))
 app.get("/fd.html",         (req, res) => res.redirect(301, "/calculator/fd"));
 app.get("/stepupsip.html",  (req, res) => res.redirect(301, "/calculator/step-up-sip"));
 app.get("/about.html",      (req, res) => res.redirect(301, "/about"));
-app.get("/newsletter.html", (req, res) => res.redirect(301, "/newsletter"));
+app.get("/newsletter.html", (req, res) => res.redirect(301, "/blog"));
+app.get("/newsletter",     (req, res) => res.redirect(301, "/blog"));
 app.get("/lead.html",       (req, res) => res.redirect(301, "/lead"));
 app.get("/terms.html",      (req, res) => res.redirect(301, "/terms"));
 app.get("/privacy.html",    (req, res) => res.redirect(301, "/privacy"));
@@ -560,238 +548,20 @@ app.post("/api/blogs/post", requireAuth, (req, res) => {
       const blogId = result.insertId;
       logger.info(`Blog published: "${title}" (id: ${blogId})`);
 
-      // Respond to admin immediately — don't block on n8n
       res.json({ message: "Post successful", blog_id: blogId });
-
-
-
-      // ── NEWSLETTER BROADCAST ──────────────────────────────────────
-      // Only fire if the env var is configured
-      const broadcastUrl = process.env.N8N_BROADCAST_WEBHOOK;
-      if (!broadcastUrl) {
-        logger.warn("N8N_BROADCAST_WEBHOOK not set — skipping newsletter broadcast.");
-        return;
-      }
-
-      // Fetch all active subscribers from MySQL
-      db.query(
-        "SELECT id, full_name, email, frequency, topics FROM newsletter_subscribers WHERE status = 'active'",
-        (subErr, subscribers) => {
-          if (subErr) {
-            logger.error("Failed to fetch subscribers for broadcast:", subErr);
-            return;
-          }
-
-          if (!subscribers.length) {
-            logger.info("No active subscribers — skipping broadcast.");
-            return;
-          }
-
-          logger.info(`Broadcasting blog "${title}" to ${subscribers.length} subscriber(s)...`);
-
-          // Fire ONE webhook call with the blog + full subscriber list
-          // n8n's "Split in Batches" node will loop through subscribers[]
-          axios.post(broadcastUrl, {
-            blog: {
-              id:             blogId,
-              title,
-              category:       category   || "",
-              content:        cleanContent,
-              image_url:      image_url  || "",
-              reference_link: reference_link || "",
-              nj_link:        nj_link    || "",
-              published_at:   new Date().toISOString(),
-            },
-           // Attach a personal unsubscribe URL to each subscriber
-subscribers: subscribers.map(sub => {
-  const secret = process.env.UNSUBSCRIBE_SECRET || "fallback-secret";
-  const appUrl = process.env.APP_URL || "http://localhost:5000";
-  const token  = crypto
-    .createHmac("sha256", secret)
-    .update(sub.email.toLowerCase())
-    .digest("hex");
-  return {
-    ...sub,
-    unsubscribe_url: `${appUrl}/unsubscribe?email=${encodeURIComponent(sub.email)}&token=${token}`,
-  };
-}),
-          }, {
-            headers: { "Content-Type": "application/json" },
-            timeout: 8000,
-          })
-          .then(() => logger.info(`n8n broadcast webhook fired for blog id: ${blogId}`))
-          .catch(e  => logger.warn(`n8n broadcast webhook failed: ${e.message}`));
-        }
-      );
-      // ─────────────────────────────────────────────────────────────
     }
   );
 });
 
 // ─────────────────────────────────────────
-//  UNSUBSCRIBE
+//  BLOGS API — Read all (public)
 // ─────────────────────────────────────────
-
-// Helper — generates a tamper-proof token tied to the subscriber's email
-function generateUnsubToken(email) {
-  return crypto
-    .createHmac("sha256", process.env.UNSUBSCRIBE_SECRET)
-    .update(email.toLowerCase())
-    .digest("hex");
-}
-
-// GET /unsubscribe?email=x&token=y
-// Clicked from inside the email
-app.get("/unsubscribe", (req, res) => {
-  const { email, token } = req.query;
-
-  if (!email || !token)
-    return res.status(400).send(unsubPage("Invalid link.", false));
-
-  const expected = generateUnsubToken(email);
-  if (token !== expected)
-    return res.status(403).send(unsubPage("This unsubscribe link is invalid or has expired.", false));
-
-  db.query(
-    "UPDATE newsletter_subscribers SET status = 'unsubscribed', updated_at = NOW() WHERE email = ?",
-    [email],
-    (err, result) => {
-      if (err) {
-        logger.error("Unsubscribe DB error:", err);
-        return res.status(500).send(unsubPage("Server error. Please try again later.", false));
-      }
-      if (!result.affectedRows)
-        return res.status(404).send(unsubPage("Email not found in our list.", false));
-
-      logger.info(`Unsubscribed: ${email}`);
-      res.send(unsubPage(`You've been unsubscribed. We're sorry to see you go.`, true));
-    }
-  );
-});
-
-// API — admin can also unsubscribe someone manually from the dashboard
-app.post("/api/newsletter/unsubscribe", requireAuth, (req, res) => {
-  const { email } = req.body;
-  if (!email) return res.status(400).json({ error: "Email required." });
-
-  db.query(
-    "UPDATE newsletter_subscribers SET status = 'unsubscribed', updated_at = NOW() WHERE email = ?",
-    [email],
-    (err, result) => {
-      if (err)                  return res.status(500).json({ error: "DB error." });
-      if (!result.affectedRows) return res.status(404).json({ error: "Email not found." });
-      res.json({ success: true, message: `${email} unsubscribed.` });
-    }
-  );
-});
-
-// Simple branded confirmation page — no EJS needed
-function unsubPage(message, success) {
-  const icon  = success ? "✅" : "❌";
-  const color = success ? "#1a3c31" : "#dc2626";
-  return `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unsubscribe — RetireWise+</title>
-</head>
-<body style="margin:0;padding:0;background:#fdfaf3;font-family:'Inter',Arial,sans-serif;">
-  <div style="max-width:480px;margin:80px auto;text-align:center;padding:40px 30px;
-              background:white;border-radius:12px;border:1px solid #e8e2d5;
-              box-shadow:0 10px 30px rgba(26,60,49,0.08);">
-    <div style="font-size:3rem;margin-bottom:20px;">${icon}</div>
-    <h1 style="color:#1a3c31;font-size:1.4rem;margin:0 0 12px;font-weight:700;">
-      RetireWise<span style="color:#b59b5d;">+</span>
-    </h1>
-    <p style="color:${color};font-size:1rem;line-height:1.6;margin:0 0 28px;">
-      ${message}
-    </p>
-    <a href="/" style="display:inline-block;padding:12px 28px;background:#1a3c31;
-                       color:#fdfaf3;text-decoration:none;border-radius:6px;
-                       font-weight:700;font-size:0.9rem;letter-spacing:1px;">
-      Back to RetireWise+
-    </a>
-  </div>
-</body>
-</html>`;
-}
-
-// Read all blogs — public
 app.get("/api/blogs", (req, res) => {
   db.query(
     "SELECT id, title, content, author, image_url, reference_link, category, nj_link, created_at FROM blogs ORDER BY created_at DESC",
     (err, results) => {
       if (err) return res.status(500).json({ error: "Could not fetch blogs." });
       res.json(results);
-    }
-  );
-});
-
-// ─────────────────────────────────────────
-//  NEWSLETTER API
-// ─────────────────────────────────────────
-app.post("/api/newsletter/subscribe", newsletterLimiter, (req, res) => {
-  const { fullName, email, frequency, topics } = req.body;
-
-  if (!fullName || !email)
-    return res.status(400).json({ error: "Name and email are required." });
-
-  const topicsStr = Array.isArray(topics) ? topics.join(", ") : (topics || "");
-
-  db.query(
-    "INSERT INTO newsletter_subscribers (full_name, email, frequency, topics, subscribed_at, status) VALUES (?, ?, ?, ?, NOW(), 'active')",
-    [fullName, email, frequency || "weekly", topicsStr],
-    (err, result) => {
-      if (err) {
-        if (err.code === "ER_DUP_ENTRY")
-          return res.status(400).json({ error: "You're already in the club!" });
-        logger.error("DB error subscribing:", err);
-        return res.status(500).json({ error: "Server error." });
-      }
-
-      logger.info(`New subscriber: ${email}`);
-      res.status(200).json({ message: "Welcome to the RetireWise+ Club!", subscriber_id: result.insertId });
-
-      const webhookUrl = process.env.N8N_WEBHOOK_URL;
-      if (webhookUrl) {
-        axios
-          .post(webhookUrl, {
-            name: fullName, email,
-            frequency:     frequency || "weekly",
-            topics:        topicsStr,
-            subscriber_id: result.insertId,
-            timestamp:     new Date().toISOString(),
-          }, { timeout: 5000 })
-          .then(() => logger.info(`n8n webhook fired for: ${email}`))
-          .catch(e  => logger.warn(`n8n webhook failed (user still saved): ${e.message}`));
-      } else {
-        logger.warn("N8N_WEBHOOK_URL not set in .env — skipping webhook.");
-      }
-    }
-  );
-});
-
-// View subscribers — admin only
-app.get("/api/newsletter/subscribers", requireAuth, (req, res) => {
-  db.query(
-    "SELECT id, full_name, email, frequency, topics FROM newsletter_subscribers WHERE status = 'active'",
-    (err, results) => {
-      if (err) return res.status(500).json({ error: "Failed to fetch subscribers." });
-      res.json(results);
-    }
-  );
-});
-
-// Log email sent — admin only
-app.post("/api/newsletter/email-log", requireAuth, (req, res) => {
-  const { subscriber_id, subject, status } = req.body;
-  db.query(
-    "INSERT INTO newsletter_email_logs (subscriber_id, subject, status, sent_at) VALUES (?, ?, ?, NOW())",
-    [subscriber_id, subject, status],
-    (err) => {
-      if (err) return res.status(500).json({ error: "Logging failed." });
-      res.json({ success: true });
     }
   );
 });
@@ -811,7 +581,7 @@ app.get("/blog/:id", (req, res) => {
           <html><head><title>Not Found — RetireWise+</title></head>
           <body style="font-family:Inter,sans-serif;text-align:center;padding:5rem;background:#faf8f3;">
             <h1 style="color:#1a3c31;">Insight not found</h1>
-            <a href="/newsletter" style="color:#c4a962;font-weight:700;">← Back to Insights</a>
+            <a href="/blog" style="color:#c4a962;font-weight:700;">← Back to Insights</a>
           </body></html>`);
       }
 
@@ -883,7 +653,7 @@ app.get("/blog/:id", (req, res) => {
 </head>
 <body>
   <div class="container">
-    <a href="/newsletter" class="back-link">← Back to Insights</a>
+    <a href="/blog" class="back-link">← Back to Insights</a>
     <div class="cat-badge">${blog.category || 'Market Insight'}</div>
     <h1>${blog.title}</h1>
     <div class="meta">Published ${new Date(blog.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})} &nbsp;·&nbsp; RetireWise+ &nbsp;·&nbsp; NISM VA Certified MFD</div>
@@ -931,16 +701,6 @@ app.use((err, req, res, next) => {
 // ─────────────────────────────────────────
 //  START SERVER
 // ─────────────────────────────────────────
-/*const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  logger.info(`RetireWise+ running on port ${PORT} [${process.env.NODE_ENV || "development"}]`);
-  console.log(`\n✅  RetireWise+ running on port ${PORT} [${process.env.NODE_ENV || "development"}]`);
-  console.log(`🌐  Open:    http://localhost:${PORT}`);
-  console.log(`🔒  Admin:   http://localhost:${PORT}/admin-login`);
-  console.log(`❤️   Health:  http://localhost:${PORT}/health`);
-  console.log(`📋  Logs:    ./logs/combined.log\n`);
-});*/
-
 const PORT = process.env.PORT || 5000;
 
 // We add "0.0.0.0" as the host to ensure Railway can route traffic to the container
